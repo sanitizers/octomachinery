@@ -1,11 +1,11 @@
 """Models representing objects in GitHub API."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 import typing
 
 import attr
 
-from .utils import convert_datetime
+from .utils import convert_datetime, SecretStr
 
 
 @attr.dataclass  # pylint: disable=too-few-public-methods
@@ -51,3 +51,18 @@ class GitHubAppInstallation:
     """URL for controlling the GitHub App Installation."""
     repositories_url: str = attr.ib(converter=str)
     """API endpoint listing repositories accissible by this Installation."""
+
+
+@attr.dataclass  # pylint: disable=too-few-public-methods
+class GitHubInstallationAccessToken:
+    """Struct for installation access token response from GitHub API."""
+
+    token: SecretStr = attr.ib(converter=SecretStr)
+    """Access token for GitHub App Installation."""
+    expires_at: datetime = attr.ib(converter=convert_datetime)
+    """Token expiration time."""
+
+    @property
+    def expired(self):
+        """Check whether this token has expired already."""
+        return datetime.now(timezone.utc) > self.expires_at

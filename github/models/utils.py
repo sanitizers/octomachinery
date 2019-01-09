@@ -2,6 +2,7 @@
 
 from datetime import datetime, timezone
 from functools import singledispatch
+import sys
 
 
 @singledispatch
@@ -27,3 +28,25 @@ def _(date_string: str) -> datetime:
 
     # datetime.fromisoformat() doesn't understand microseconds
     return datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ%z')
+
+
+class SecretStr(str):
+    """String that censors its __repr__ if called from another repr."""
+
+    def __repr__(self):
+        """Produce a string representation."""
+        frame_depth = 1
+
+        try:
+            while True:
+                frame = sys._getframe(  # pylint: disable=protected-access
+                    frame_depth,
+                )
+                frame_depth += 1
+
+                if frame.f_code.co_name == '__repr__':
+                    return '<SECRET>'
+        except ValueError:
+            pass
+
+        return super().__repr__()
