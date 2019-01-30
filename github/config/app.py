@@ -2,7 +2,7 @@
 import environ
 
 
-from ...models.utils import SecretStr
+from ..models.utils import SecretStr
 from .utils import USER_AGENT
 
 
