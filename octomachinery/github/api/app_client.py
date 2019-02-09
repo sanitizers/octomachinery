@@ -13,8 +13,6 @@ from gidgethub.sansio import Event
 import jwt
 
 # pylint: disable=relative-beyond-top-level
-from ...app.runtime.context import RUNTIME_CONTEXT
-# pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import (
     amap, dict_to_kwargs_cb,
 )
@@ -63,6 +61,9 @@ class GitHubApp(AbstractAsyncContextManager):
 
     async def __aenter__(self) -> 'GitHubApp':
         """Store all installations data before starting."""
+        # pylint: disable=relative-beyond-top-level
+        from ...app.runtime.context import RUNTIME_CONTEXT
+
         RUNTIME_CONTEXT.github_app = self
         # pylint: disable=attribute-defined-outside-init
         try:
@@ -131,6 +132,9 @@ class GitHubApp(AbstractAsyncContextManager):
 
     async def get_installation(self, event):
         """Retrieve an installation creds from store."""
+        # pylint: disable=relative-beyond-top-level
+        from ...app.runtime.context import RUNTIME_CONTEXT
+
         if event.event == 'ping':
             return GitHubAppInstallation(None)
 
