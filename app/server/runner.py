@@ -31,7 +31,7 @@ def run():
     if config.runtime.debug:  # pylint: disable=no-member
         logging.basicConfig(level=logging.DEBUG)
 
-        from octomachinery.github.config.utils import APP_VERSION
+        from ...github.config.utils import APP_VERSION
         logger.debug(
             ' App version: %s '.center(50, '='),
             APP_VERSION,
