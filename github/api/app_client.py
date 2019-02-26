@@ -68,6 +68,17 @@ class GitHubApp(AbstractAsyncContextManager):
                 client_error,
             )
             self._installations = defaultdict(dict)
+
+        logger.info('This GitHub App is installed into:')
+        # pylint: disable=protected-access
+        for install_id, install_val in self._installations.items():
+            logger.info(
+                '* Installation id %s (expires at %s, installed to %s)',
+                install_id,
+                install_val['access'].expires_at,
+                install_val['data'].account['login'],
+            )
+
         return self
 
     async def __aexit__(

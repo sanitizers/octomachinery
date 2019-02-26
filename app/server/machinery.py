@@ -47,15 +47,6 @@ async def run_forever(config):
             '* user agent: %s',
             github_app._config.user_agent,  # pylint: disable=protected-access
         )
-        logger.info('It is installed into:')
-        # pylint: disable=protected-access
-        for install_id, install_val in github_app._installations.items():
-            logger.info(
-                '* Installation id %s (expires at %s, installed to %s)',
-                install_id,
-                install_val['access'].expires_at,
-                install_val['data'].account['login'],
-            )
         RUNTIME_CONTEXT.github_app = (  # pylint: disable=assigning-non-slot
             github_app
         )
