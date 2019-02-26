@@ -2,7 +2,9 @@
 import environ
 
 
+# pylint: disable=relative-beyond-top-level
 from ..models.utils import SecretStr
+# pylint: disable=relative-beyond-top-level
 from .utils import USER_AGENT
 
 

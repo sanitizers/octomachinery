@@ -7,6 +7,7 @@ import logging
 from aiohttp import web
 from gidgethub import BadRequest, ValidationFailure
 
+# pylint: disable=relative-beyond-top-level
 from ..runtime.context import RUNTIME_CONTEXT
 from . import dispatch_event
 

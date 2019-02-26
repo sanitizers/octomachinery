@@ -6,9 +6,13 @@ import sys
 
 import attr
 
+# pylint: disable=relative-beyond-top-level
 from ...app.config import BotAppConfig
+# pylint: disable=relative-beyond-top-level
 from ...app.runtime.context import RUNTIME_CONTEXT
+# pylint: disable=relative-beyond-top-level
 from .config import WebServerConfig
+# pylint: disable=relative-beyond-top-level
 from .machinery import run_forever as run_server_forever
 
 

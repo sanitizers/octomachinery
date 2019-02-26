@@ -12,11 +12,15 @@ import attr
 from gidgethub.sansio import Event
 import jwt
 
+# pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import (
     amap, dict_to_kwargs_cb,
 )
+# pylint: disable=relative-beyond-top-level
 from ..api.client import GitHubAPIClient
+# pylint: disable=relative-beyond-top-level
 from ..config.app import GitHubAppIntegrationConfig
+# pylint: disable=relative-beyond-top-level
 from ..models import (
     GitHubAppInstallation, GitHubInstallationAccessToken,
 )

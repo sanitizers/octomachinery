@@ -5,10 +5,13 @@ import logging
 
 from aiohttp import web
 
+# pylint: disable=relative-beyond-top-level
 from ...github.api.app_client import GitHubApp
+# pylint: disable=relative-beyond-top-level
 from ..routing.webhooks_dispatcher import (
     route_github_webhook_event,
 )
+# pylint: disable=relative-beyond-top-level
 from ..runtime.context import RUNTIME_CONTEXT
 
 

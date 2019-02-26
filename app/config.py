@@ -5,8 +5,11 @@ from functools import lru_cache
 import environ
 import envparse
 
+# pylint: disable=relative-beyond-top-level
 from ..github.config.app import GitHubAppIntegrationConfig
+# pylint: disable=relative-beyond-top-level
 from .runtime.config import RuntimeConfig
+# pylint: disable=relative-beyond-top-level
 from .server.config import WebServerConfig
 
 

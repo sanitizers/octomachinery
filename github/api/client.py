@@ -8,6 +8,7 @@ import aiohttp
 import attr
 import gidgethub.aiohttp
 
+# pylint: disable=relative-beyond-top-level
 from ..config.utils import USER_AGENT
 
 
