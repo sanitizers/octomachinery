@@ -30,10 +30,13 @@ EVENT_LOG_VALID_MSG = EVENT_LOG_TMPL.format(EVENT_VALID_CHUNK)
 EVENT_LOG_INVALID_MSG = EVENT_LOG_TMPL.format(EVENT_INVALID_CHUNK)
 
 
-async def route_github_webhook_event(request, *, config, github_app):
+async def route_github_webhook_event(request):
     """Dispatch incoming webhook events to corresponsing handlers."""
-    if config.debug:
-        logger.debug('Running a GitHub App under env=%s', config.env)
+    if RUNTIME_CONTEXT.config.runtime.debug:
+        logger.debug(
+            'Running a GitHub App under env=%s',
+            RUNTIME_CONTEXT.config.runtime.env,
+        )
 
     if request.method != 'POST':
         raise web.HTTPMethodNotAllowed(
@@ -45,7 +48,7 @@ async def route_github_webhook_event(request, *, config, github_app):
         'X-Hub-Signature', '<MISSING>',
     )
     try:
-        event = await github_app.event_from_request(request)
+        event = await RUNTIME_CONTEXT.github_app.event_from_request(request)
     except ValidationFailure as no_signature_exc:
         logger.info(
             EVENT_LOG_INVALID_MSG,
@@ -62,7 +65,7 @@ async def route_github_webhook_event(request, *, config, github_app):
             webhook_event_signature,
         )
 
-    app_installation = await github_app.get_installation(event)
+    app_installation = await RUNTIME_CONTEXT.github_app.get_installation(event)
     RUNTIME_CONTEXT.app_installation = (  # pylint: disable=assigning-non-slot
         app_installation
     )
