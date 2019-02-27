@@ -12,6 +12,7 @@ from .utils import _ContextMap
 
 RUNTIME_CONTEXT = _ContextMap(
     app_installation='app installation',
+    app_installation_client='app installation client',
     config='config context',
     github_app='github app',
 )

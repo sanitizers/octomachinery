@@ -8,6 +8,8 @@ from aiohttp import web
 from gidgethub import BadRequest, ValidationFailure
 
 # pylint: disable=relative-beyond-top-level
+from ...github.api.client import GitHubAPIClient
+# pylint: disable=relative-beyond-top-level
 from ..runtime.context import RUNTIME_CONTEXT
 from . import dispatch_event
 
@@ -72,5 +74,6 @@ async def route_github_webhook_event(request):
     )
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
-    await dispatch_event(event)
+    async with GitHubAPIClient():
+        await dispatch_event(event)
     return web.Response(text=f'OK: GitHub event received. It is {event!r}')

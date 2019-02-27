@@ -9,6 +9,8 @@ import attr
 import gidgethub.aiohttp
 
 # pylint: disable=relative-beyond-top-level
+from ...app.runtime.context import RUNTIME_CONTEXT
+# pylint: disable=relative-beyond-top-level
 from ..config.utils import USER_AGENT
 
 
@@ -41,10 +43,12 @@ class GitHubAPIClient(AbstractAsyncContextManager):
     async def __aenter__(self) -> gidgethub.aiohttp.GitHubAPI:
         """Return a GitHub API wrapper."""
         self._open_session()
-        return gidgethub.aiohttp.GitHubAPI(
+        gh_api_client = gidgethub.aiohttp.GitHubAPI(
             self._current_session,
             USER_AGENT,
         )
+        RUNTIME_CONTEXT.app_installation_client = gh_api_client
+        return gh_api_client
 
     async def __aexit__(
             self,
