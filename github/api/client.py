@@ -10,6 +10,7 @@ import gidgethub.aiohttp
 
 # pylint: disable=relative-beyond-top-level
 from ...app.runtime.context import RUNTIME_CONTEXT
+from .installation_client import GitHubAppInstallationAPIClient
 
 
 @attr.dataclass
@@ -46,7 +47,10 @@ class GitHubAPIClient(AbstractAsyncContextManager):
             self._current_session,
             RUNTIME_CONTEXT.config.github.user_agent,
         )
-        RUNTIME_CONTEXT.app_installation_client = gh_api_client
+        async with GitHubAppInstallationAPIClient(
+                self._current_session,
+        ) as gh_api_install_client:
+            RUNTIME_CONTEXT.app_installation_client = gh_api_install_client
         return gh_api_client
 
     async def __aexit__(
