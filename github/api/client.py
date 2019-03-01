@@ -30,8 +30,9 @@ class GitHubAPIClient(AbstractAsyncContextManager):
             aiohttp.ClientSession() if self._external_session is None
             else self._external_session
         )
+        return self._current_session
 
-    async def _close_session(self) -> aiohttp.ClientSession:
+    async def _close_session(self) -> None:
         """Free up the current session."""
         assert self._current_session is not None
         if self._external_session is None:
