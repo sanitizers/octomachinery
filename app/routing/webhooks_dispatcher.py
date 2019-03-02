@@ -8,8 +8,6 @@ from aiohttp import web
 from gidgethub import BadRequest, ValidationFailure
 
 # pylint: disable=relative-beyond-top-level
-from ...github.api.client import GitHubAPIClient
-# pylint: disable=relative-beyond-top-level
 from ..runtime.context import RUNTIME_CONTEXT
 from . import dispatch_event
 
@@ -35,6 +33,8 @@ EVENT_LOG_INVALID_MSG = EVENT_LOG_TMPL.format(EVENT_INVALID_CHUNK)
 
 async def route_github_webhook_event(request):
     """Dispatch incoming webhook events to corresponsing handlers."""
+    github_app = RUNTIME_CONTEXT.github_app
+
     if RUNTIME_CONTEXT.config.runtime.debug:
         logger.debug(
             'Running a GitHub App under env=%s',
@@ -68,12 +68,12 @@ async def route_github_webhook_event(request):
             webhook_event_signature,
         )
 
-    app_installation = await RUNTIME_CONTEXT.github_app.get_installation(event)
+    app_installation = await github_app.get_installation(event)
     RUNTIME_CONTEXT.app_installation = (  # pylint: disable=assigning-non-slot
         app_installation
     )
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
-    async with GitHubAPIClient():
+    async with github_app.github_client:
         await dispatch_event(event)
     return web.Response(text=f'OK: GitHub event received. It is {event!r}')

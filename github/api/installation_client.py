@@ -37,7 +37,7 @@ class GitHubAppInstallationAPIClient(AbstractAsyncContextManager):
                 RUNTIME_CONTEXT.config.github.user_agent,
                 oauth_token=RUNTIME_CONTEXT.app_installation['access'].token,
             )
-        except AttributeError:
+        except (AttributeError, TypeError):
             pass
 
     def _open_session(self) -> ClientSession:

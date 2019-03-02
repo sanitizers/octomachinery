@@ -17,13 +17,13 @@ from ...utils.asynctools import (
     amap, dict_to_kwargs_cb,
 )
 # pylint: disable=relative-beyond-top-level
-from ..api.client import GitHubAPIClient
-# pylint: disable=relative-beyond-top-level
 from ..config.app import GitHubAppIntegrationConfig
 # pylint: disable=relative-beyond-top-level
 from ..models import (
     GitHubAppInstallation, GitHubInstallationAccessToken,
 )
+from .client import GitHubAPIClient
+from .tokens import GitHubJWTToken
 
 
 logger = logging.getLogger(__name__)
@@ -104,19 +104,24 @@ class GitHubApp(AbstractAsyncContextManager):
             'exp': now + 60,
             'iss': self._config.app_id,
         }
-        return jwt.encode(
+        token = jwt.encode(
             payload,
             key=self._config.private_key,
             algorithm='RS256',
         ).decode('utf-8')
+        return GitHubJWTToken(token)
+
+    @property
+    def github_client(self):  # noqa: D401
+        """The GitHub App client with an async CM interface."""
+        return GitHubAPIClient(self.gh_jwt)
 
     async def get_install_token(self, *, access_token_url):
         """Retrieve installation access token from GitHub API."""
-        async with GitHubAPIClient() as gh_api:
+        async with self.github_client as gh_api:
             return GitHubInstallationAccessToken(**(await gh_api.post(
                 access_token_url,
                 data=b'',
-                jwt=self.gh_jwt,
                 accept='application/vnd.github.machine-man-preview+json',
             )))
 
@@ -143,12 +148,11 @@ class GitHubApp(AbstractAsyncContextManager):
     async def get_installations(self):
         """Retrieve all installations with access tokens via API."""
         installations = defaultdict(dict)
-        async with GitHubAPIClient() as gh_api:
+        async with self.github_client as gh_api:
             async for install in amap(
                     dict_to_kwargs_cb(GitHubAppInstallation),
                     gh_api.getiter(
                         '/app/installations',
-                        jwt=self.gh_jwt,
                         accept=''
                         'application/vnd.github.machine-man-preview+json',
                     ),

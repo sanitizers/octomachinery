@@ -6,17 +6,19 @@ import typing
 
 import aiohttp
 import attr
-import gidgethub.aiohttp
 
 # pylint: disable=relative-beyond-top-level
 from ...app.runtime.context import RUNTIME_CONTEXT
 from .installation_client import GitHubAppInstallationAPIClient
+from .raw_client import RawGitHubAPI
+from .tokens import GitHubToken
 
 
 @attr.dataclass
 class GitHubAPIClient(AbstractAsyncContextManager):
     """A client to the GitHub API with an asynchronous CM support."""
 
+    _github_token: GitHubToken
     _external_session: typing.Optional[aiohttp.ClientSession] = (
         attr.ib(default=None)
     )
@@ -40,10 +42,11 @@ class GitHubAPIClient(AbstractAsyncContextManager):
             await self._current_session.close()
         self._current_session = None
 
-    async def __aenter__(self) -> gidgethub.aiohttp.GitHubAPI:
+    async def __aenter__(self) -> RawGitHubAPI:
         """Return a GitHub API wrapper."""
         self._open_session()
-        gh_api_client = gidgethub.aiohttp.GitHubAPI(
+        gh_api_client = RawGitHubAPI(
+            self._github_token,
             self._current_session,
             RUNTIME_CONTEXT.config.github.user_agent,
         )
