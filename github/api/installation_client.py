@@ -7,10 +7,11 @@ import typing
 
 from aiohttp import ClientSession
 import attr
-from gidgethub.aiohttp import GitHubAPI
 
 # pylint: disable=relative-beyond-top-level
 from ...app.runtime.context import RUNTIME_CONTEXT
+from .raw_client import RawGitHubAPI
+from .tokens import GitHubOAuthToken
 
 
 logger = logging.getLogger(__name__)
@@ -26,16 +27,18 @@ class GitHubAppInstallationAPIClient(AbstractAsyncContextManager):
     """A session created externally."""
     _current_session: ClientSession = attr.ib(init=False, default=None)
     """A session created per CM if there's no external one."""
-    _api_client: GitHubAPI = attr.ib(init=False, default=None)
+    _api_client: RawGitHubAPI = attr.ib(init=False, default=None)
     """A Gidgethub client for GitHub API."""
 
     def __attrs_post_init__(self):
         """Gidgethub instance initializer."""
         try:
-            self._api_client = GitHubAPI(
+            self._api_client = RawGitHubAPI(
+                GitHubOAuthToken(
+                    RUNTIME_CONTEXT.app_installation['access'].token,
+                ),
                 self._open_session(),
                 RUNTIME_CONTEXT.config.github.user_agent,
-                oauth_token=RUNTIME_CONTEXT.app_installation['access'].token,
             )
         except (AttributeError, TypeError):
             pass
@@ -49,7 +52,7 @@ class GitHubAppInstallationAPIClient(AbstractAsyncContextManager):
         )
         return self._current_session
 
-    async def __aenter__(self) -> GitHubAPI:
+    async def __aenter__(self) -> RawGitHubAPI:
         """Return a GitHub API wrapper."""
         return self._api_client
 
