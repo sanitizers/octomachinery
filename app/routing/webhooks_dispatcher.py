@@ -31,16 +31,8 @@ EVENT_LOG_VALID_MSG = EVENT_LOG_TMPL.format(EVENT_VALID_CHUNK)
 EVENT_LOG_INVALID_MSG = EVENT_LOG_TMPL.format(EVENT_INVALID_CHUNK)
 
 
-async def route_github_webhook_event(request):
-    """Dispatch incoming webhook events to corresponsing handlers."""
-    github_app = RUNTIME_CONTEXT.github_app
-
-    if request.method != 'POST':
-        raise web.HTTPMethodNotAllowed(
-            method=request.method,
-            allowed_methods=('POST'),
-        ) from BadRequest(HTTPStatus.METHOD_NOT_ALLOWED)
-
+async def get_event_from_request(request):
+    """Retrieve Event out of HTTP request if it's valid."""
     webhook_event_signature = request.headers.get(
         'X-Hub-Signature', '<MISSING>',
     )
@@ -61,6 +53,20 @@ async def route_github_webhook_event(request):
             event.delivery_id,
             webhook_event_signature,
         )
+        return event
+
+
+async def route_github_webhook_event(request):
+    """Dispatch incoming webhook events to corresponsing handlers."""
+    github_app = RUNTIME_CONTEXT.github_app
+
+    if request.method != 'POST':
+        raise web.HTTPMethodNotAllowed(
+            method=request.method,
+            allowed_methods=('POST'),
+        ) from BadRequest(HTTPStatus.METHOD_NOT_ALLOWED)
+
+    event = await get_event_from_request(request)
 
     app_installation = await github_app.get_installation(event)
     RUNTIME_CONTEXT.app_installation = (  # pylint: disable=assigning-non-slot
