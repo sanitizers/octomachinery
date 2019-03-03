@@ -1,6 +1,7 @@
 """GitHub webhook events dispatching logic."""
 
 import asyncio
+from functools import wraps
 from http import HTTPStatus
 import logging
 
@@ -56,15 +57,30 @@ async def get_event_from_request(request):
         return event
 
 
+def validate_allowed_http_methods(*allowed_methods):
+    """Block disallowed HTTP methods."""
+    if not allowed_methods:
+        allowed_methods = {'POST'}
+    else:
+        allowed_methods = set(allowed_methods)
+
+    def decorator(wrapped_function):
+        @wraps(wrapped_function)
+        async def wrapper(request):
+            if request.method not in allowed_methods:
+                raise web.HTTPMethodNotAllowed(
+                    method=request.method,
+                    allowed_methods=allowed_methods,
+                ) from BadRequest(HTTPStatus.METHOD_NOT_ALLOWED)
+            return await wrapped_function(request)
+        return wrapper
+    return decorator
+
+
+@validate_allowed_http_methods('POST')
 async def route_github_webhook_event(request):
     """Dispatch incoming webhook events to corresponsing handlers."""
     github_app = RUNTIME_CONTEXT.github_app
-
-    if request.method != 'POST':
-        raise web.HTTPMethodNotAllowed(
-            method=request.method,
-            allowed_methods=('POST'),
-        ) from BadRequest(HTTPStatus.METHOD_NOT_ALLOWED)
 
     event = await get_event_from_request(request)
 
