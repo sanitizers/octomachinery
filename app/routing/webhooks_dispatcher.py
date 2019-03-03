@@ -76,4 +76,6 @@ async def route_github_webhook_event(request):
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
     async with github_app.github_client:
         await dispatch_event(event)
-    return web.Response(text=f'OK: GitHub event received. It is {event!r}')
+    return web.Response(
+        text=f'OK: GitHub event received. It is {event.event!s} ({event!r})',
+    )
