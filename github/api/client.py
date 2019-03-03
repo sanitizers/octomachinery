@@ -9,9 +9,8 @@ import attr
 
 # pylint: disable=relative-beyond-top-level
 from ...app.runtime.context import RUNTIME_CONTEXT
-from .installation_client import GitHubAppInstallationAPIClient
 from .raw_client import RawGitHubAPI
-from .tokens import GitHubToken
+from .tokens import GitHubToken, GitHubOAuthToken
 
 
 @attr.dataclass
@@ -25,6 +24,19 @@ class GitHubAPIClient(AbstractAsyncContextManager):
     """A session created externally."""
     _current_session: aiohttp.ClientSession = attr.ib(init=False, default=None)
     """A session created per CM if there's no external one."""
+    _api_client: RawGitHubAPI = attr.ib(init=False, default=None)
+    """A Gidgethub client for GitHub API."""
+
+    def __attrs_post_init__(self):
+        """Gidgethub API client instance initializer."""
+        try:
+            self._api_client = RawGitHubAPI(
+                token=self._github_token,
+                session=self._open_session(),
+                user_agent=RUNTIME_CONTEXT.config.github.user_agent,
+            )
+        except (AttributeError, TypeError):
+            pass
 
     def _open_session(self) -> aiohttp.ClientSession:
         """Return a session to use with GitHub API."""
@@ -44,17 +56,17 @@ class GitHubAPIClient(AbstractAsyncContextManager):
 
     async def __aenter__(self) -> RawGitHubAPI:
         """Return a GitHub API wrapper."""
-        self._open_session()
-        gh_api_client = RawGitHubAPI(
-            self._github_token,
-            self._current_session,
-            RUNTIME_CONTEXT.config.github.user_agent,
-        )
-        async with GitHubAppInstallationAPIClient(
-                self._current_session,
-        ) as gh_api_install_client:
-            RUNTIME_CONTEXT.app_installation_client = gh_api_install_client
-        return gh_api_client
+        try:
+            RUNTIME_CONTEXT.app_installation_client = RawGitHubAPI(
+                token=GitHubOAuthToken(
+                    RUNTIME_CONTEXT.app_installation['access'].token,
+                ),
+                session=self._current_session,
+                user_agent=RUNTIME_CONTEXT.config.github.user_agent,
+            )
+        except (AttributeError, TypeError):
+            pass
+        return self._api_client
 
     async def __aexit__(
             self,

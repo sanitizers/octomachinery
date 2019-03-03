@@ -6,6 +6,8 @@ from aiohttp import ClientSession
 from gidgethub.aiohttp import GitHubAPI
 
 # pylint: disable=relative-beyond-top-level
+from ...app.runtime.context import RUNTIME_CONTEXT
+# pylint: disable=relative-beyond-top-level
 from .tokens import GitHubToken, GitHubOAuthToken, GitHubJWTToken
 
 
@@ -13,14 +15,22 @@ class RawGitHubAPI(GitHubAPI):
     """A low-level GitHub API client with a pre-populated token."""
 
     def __init__(
-            self, token: GitHubToken, session: ClientSession,
-            *args: Any, **kwargs: Any,
+            self,
+            token: GitHubToken,
+            *,
+            session: Optional[ClientSession] = None,
+            user_agent: Optional[str] = None,
+            **kwargs: Any,
     ) -> None:
         """Initialize the GitHub client with token."""
         self._token = token
         kwargs.pop('oauth_token', None)
         kwargs.pop('jwt', None)
-        super().__init__(session, *args, **kwargs)
+        super().__init__(
+            requester=user_agent or RUNTIME_CONTEXT.config.github.user_agent,
+            session=session or ClientSession(),
+            **kwargs,
+        )
 
     # pylint: disable=arguments-differ
     # pylint: disable=keyword-arg-before-vararg
