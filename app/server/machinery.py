@@ -59,6 +59,13 @@ async def run_forever(config):
         aiohttp_tcp_site = await start_tcp_site(
             config.server, aiohttp_server_runner,
         )
+
+        if RUNTIME_CONTEXT.config.runtime.debug:
+            logger.debug(
+                'Running a GitHub App under env=%s',
+                RUNTIME_CONTEXT.config.runtime.env,
+            )
+
         try:
             await asyncio.get_event_loop().create_future()  # block
         except asyncio.CancelledError:

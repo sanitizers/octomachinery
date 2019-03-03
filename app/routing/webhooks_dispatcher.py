@@ -35,12 +35,6 @@ async def route_github_webhook_event(request):
     """Dispatch incoming webhook events to corresponsing handlers."""
     github_app = RUNTIME_CONTEXT.github_app
 
-    if RUNTIME_CONTEXT.config.runtime.debug:
-        logger.debug(
-            'Running a GitHub App under env=%s',
-            RUNTIME_CONTEXT.config.runtime.env,
-        )
-
     if request.method != 'POST':
         raise web.HTTPMethodNotAllowed(
             method=request.method,
