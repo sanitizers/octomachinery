@@ -11,8 +11,10 @@ import attr
 from ...app.runtime.context import RUNTIME_CONTEXT
 from .raw_client import RawGitHubAPI
 from .tokens import GitHubToken, GitHubOAuthToken
+from .utils import mark_uninitialized_in_repr
 
 
+@mark_uninitialized_in_repr
 @attr.dataclass
 class GitHubAPIClient(AbstractAsyncContextManager):
     """A client to the GitHub API with an asynchronous CM support."""
@@ -37,6 +39,11 @@ class GitHubAPIClient(AbstractAsyncContextManager):
             )
         except (AttributeError, TypeError):
             pass
+
+    @property
+    def is_initialized(self):
+        """Return GitHub token presence."""
+        return self._github_token is not None
 
     def _open_session(self) -> aiohttp.ClientSession:
         """Return a session to use with GitHub API."""

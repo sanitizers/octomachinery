@@ -9,8 +9,10 @@ from gidgethub.aiohttp import GitHubAPI
 from ...app.runtime.context import RUNTIME_CONTEXT
 # pylint: disable=relative-beyond-top-level
 from .tokens import GitHubToken, GitHubOAuthToken, GitHubJWTToken
+from .utils import mark_uninitialized_in_repr
 
 
+@mark_uninitialized_in_repr
 class RawGitHubAPI(GitHubAPI):
     """A low-level GitHub API client with a pre-populated token."""
 
@@ -31,6 +33,21 @@ class RawGitHubAPI(GitHubAPI):
             session=session or ClientSession(),
             **kwargs,
         )
+
+    @property
+    def is_initialized(self):
+        """Return GitHub token presence."""
+        return self._token is not None
+
+    def __repr__(self):
+        """Render a class instance representation."""
+        cls_name = self.__class__.__name__
+        init_args = (
+            f'token={self._token!r}, '
+            f'session={self._session!r}, '
+            f'user_agent={self.requester!r}'
+        )
+        return f'{cls_name}({init_args})'
 
     # pylint: disable=arguments-differ
     # pylint: disable=keyword-arg-before-vararg
