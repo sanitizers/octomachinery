@@ -3,9 +3,9 @@ import environ
 
 
 # pylint: disable=relative-beyond-top-level
-from ..models.utils import SecretStr
+from ...app.runtime.context import RUNTIME_CONTEXT
 # pylint: disable=relative-beyond-top-level
-from .utils import USER_AGENT
+from ..models.utils import SecretStr
 
 
 @environ.config  # pylint: disable=too-few-public-methods
@@ -22,4 +22,10 @@ class GitHubAppIntegrationConfig:
         converter=lambda s: SecretStr(s) if s is not None else s,
     )
 
-    user_agent = USER_AGENT
+    @property
+    def user_agent(self):  # noqa: D401
+        """The User-Agent value to use when hitting GitHub API."""
+        name = RUNTIME_CONTEXT.config.runtime.app_name
+        version = RUNTIME_CONTEXT.config.runtime.app_version
+        url = RUNTIME_CONTEXT.config.runtime.app_url
+        return f'{name}/{version} (+{url})'

@@ -1,6 +1,8 @@
 """GitHub App/bot configuration."""
 
 from functools import lru_cache
+import os
+from typing import Optional
 
 import environ
 import envparse
@@ -30,16 +32,39 @@ class BotAppConfig:
 
     @classmethod
     @lru_cache(maxsize=1)
-    def from_dotenv(cls):
+    def from_dotenv(
+            cls,
+            *,
+            app_name: Optional[str] = None,
+            app_version: Optional[str] = None,
+            app_url: Optional[str] = None,
+    ):
         """Return an initialized dev config instance.
 
         Read .env into env vars before that.
         """
         envparse.Env.read_envfile()
-        return cls.from_env()
+        return cls.from_env(
+            app_name=app_name,
+            app_version=app_version,
+            app_url=app_url,
+        )
 
     @classmethod
     @lru_cache(maxsize=1)
-    def from_env(cls):
+    def from_env(
+            cls,
+            *,
+            app_name: Optional[str] = None,
+            app_version: Optional[str] = None,
+            app_url: Optional[str] = None,
+    ):
         """Return an initialized config instance."""
-        return environ.to_config(cls)
+        env_vars = dict(os.environ)
+        if app_name is not None:
+            env_vars['OCTOMACHINERY_APP_NAME'] = app_name
+        if app_version is not None:
+            env_vars['OCTOMACHINERY_APP_VERSION'] = app_version
+        if app_url is not None:
+            env_vars['OCTOMACHINERY_APP_URL'] = app_url
+        return environ.to_config(cls, environ=env_vars)

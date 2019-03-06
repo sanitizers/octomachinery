@@ -12,3 +12,7 @@ class RuntimeConfig:
         'prod', name='ENV',
         validator=attr.validators.in_(('dev', 'prod')),
     )
+
+    app_name = environ.var(None, name='OCTOMACHINERY_APP_NAME')
+    app_version = environ.var(None, name='OCTOMACHINERY_APP_VERSION')
+    app_url = environ.var(None, name='OCTOMACHINERY_APP_URL')
