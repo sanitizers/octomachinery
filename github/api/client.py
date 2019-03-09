@@ -10,7 +10,7 @@ import attr
 # pylint: disable=relative-beyond-top-level
 from ...app.runtime.context import RUNTIME_CONTEXT
 from .raw_client import RawGitHubAPI
-from .tokens import GitHubToken, GitHubOAuthToken
+from .tokens import GitHubToken
 from .utils import mark_uninitialized_in_repr
 
 
@@ -63,16 +63,6 @@ class GitHubAPIClient(AbstractAsyncContextManager):
 
     async def __aenter__(self) -> RawGitHubAPI:
         """Return a GitHub API wrapper."""
-        try:
-            RUNTIME_CONTEXT.app_installation_client = RawGitHubAPI(
-                token=GitHubOAuthToken(
-                    RUNTIME_CONTEXT.app_installation['access'].token,
-                ),
-                session=self._current_session,
-                user_agent=RUNTIME_CONTEXT.config.github.user_agent,
-            )
-        except (AttributeError, TypeError):
-            pass
         return self._api_client
 
     async def __aexit__(

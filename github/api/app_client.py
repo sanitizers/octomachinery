@@ -63,6 +63,7 @@ class GitHubApp(AbstractAsyncContextManager):
 
     async def __aenter__(self) -> 'GitHubApp':
         """Store all installations data before starting."""
+        RUNTIME_CONTEXT.github_app = self
         # pylint: disable=attribute-defined-outside-init
         try:
             self._installations = await self.get_installations()
@@ -114,7 +115,7 @@ class GitHubApp(AbstractAsyncContextManager):
         return GitHubJWTToken(token)
 
     @property
-    def github_client(self):  # noqa: D401
+    def github_app_client(self):  # noqa: D401
         """The GitHub App client with an async CM interface."""
         return GitHubAPIClient(self.gh_jwt)
 
@@ -144,7 +145,7 @@ class GitHubApp(AbstractAsyncContextManager):
     async def get_installations(self):
         """Retrieve all installations with access tokens via API."""
         installations = defaultdict(dict)
-        async with self.github_client as gh_api:
+        async with self.github_app_client as gh_api:
             async for install in amap(
                     dict_to_kwargs_cb(GitHubAppInstallationModel),
                     gh_api.getiter(
