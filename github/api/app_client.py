@@ -153,8 +153,7 @@ class GitHubApp(AbstractAsyncContextManager):
                     dict_to_kwargs_cb(GitHubAppInstallation),
                     gh_api.getiter(
                         '/app/installations',
-                        accept=''
-                        'application/vnd.github.machine-man-preview+json',
+                        preview_api_version='machine-man',
                     ),
             ):
                 installations[install.id] = {

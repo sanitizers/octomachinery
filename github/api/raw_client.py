@@ -9,7 +9,7 @@ from gidgethub.aiohttp import GitHubAPI
 from ...app.runtime.context import RUNTIME_CONTEXT
 # pylint: disable=relative-beyond-top-level
 from .tokens import GitHubToken, GitHubOAuthToken, GitHubJWTToken
-from .utils import mark_uninitialized_in_repr
+from .utils import accept_preview_version, mark_uninitialized_in_repr
 
 
 @mark_uninitialized_in_repr
@@ -70,3 +70,10 @@ class RawGitHubAPI(GitHubAPI):
             data, accept,
             *args, **kwargs,
         )
+
+    getitem = accept_preview_version(GitHubAPI.getitem)
+    getiter = accept_preview_version(GitHubAPI.getiter)
+    post = accept_preview_version(GitHubAPI.post)
+    patch = accept_preview_version(GitHubAPI.patch)
+    put = accept_preview_version(GitHubAPI.put)
+    delete = accept_preview_version(GitHubAPI.delete)
