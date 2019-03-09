@@ -54,21 +54,24 @@ class RawGitHubAPI(GitHubAPI):
     # pylint: disable=too-many-arguments
     async def _make_request(
             self, method: str, url: str, url_vars: Dict[str, str],
-            data: Any, accept: str,
+            data: Any, accept: str = None,
             jwt: Optional[str] = None,
             oauth_token: Optional[str] = None,
-            *args: Any, **kwargs: Any,
     ) -> Tuple[bytes, Optional[str]]:
-        kwargs.pop('oauth_token', None)
-        kwargs.pop('jwt', None)
         if isinstance(self._token, GitHubOAuthToken):
-            kwargs['oauth_token'] = str(self._token)
+            oauth_token = str(self._token)
+            jwt = None
         if isinstance(self._token, GitHubJWTToken):
-            kwargs['jwt'] = str(self._token)
+            jwt = str(self._token)
+            oauth_token = None
         return await super()._make_request(
-            method, url, url_vars,
-            data, accept,
-            *args, **kwargs,
+            method=method,
+            url=url,
+            url_vars=url_vars,
+            data=data,
+            accept=accept,
+            oauth_token=oauth_token,
+            jwt=jwt,
         )
 
     getitem = accept_preview_version(GitHubAPI.getitem)
