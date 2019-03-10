@@ -62,8 +62,8 @@ async def run_forever(config):
 
         if RUNTIME_CONTEXT.config.runtime.debug:
             logger.debug(
-                'Running a GitHub App under env_mode=%s',
-                RUNTIME_CONTEXT.config.runtime.env_mode,
+                'Running a GitHub App under env=%s',
+                RUNTIME_CONTEXT.config.runtime.env,
             )
 
         try:

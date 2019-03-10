@@ -8,8 +8,8 @@ class RuntimeConfig:
     """Config of runtime env."""
 
     debug = environ.bool_var(False, name='DEBUG')
-    env_mode = environ.var(
-        'prod', name='ENV_MODE',
+    env = environ.var(
+        'prod', name='ENV',
         validator=attr.validators.in_(('dev', 'prod')),
     )
 
