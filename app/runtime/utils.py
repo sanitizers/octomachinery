@@ -1,4 +1,7 @@
 """GitHub App runtime context helpers."""
+
+import os
+
 from contextvars import ContextVar
 
 
@@ -35,3 +38,19 @@ class _ContextMap:
         reset_token = self.__token_map__[name]
         self.__map__[name].reset(reset_token)
         del self.__token_map__[name]
+
+
+def detect_env_mode():
+    """Figure out whether we're under GitHub Action environment."""
+    for var_suffix in {
+            'WORKFLOW',
+            'ACTION', 'ACTOR',
+            'REPOSITORY',
+            'EVENT_NAME', 'EVENT_PATH',
+            'WORKSPACE',
+            'SHA', 'REF',
+            'TOKEN',
+    }:
+        if f'GITHUB_{var_suffix}' not in os.environ:
+            return 'app'
+    return 'action'
