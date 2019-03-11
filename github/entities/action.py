@@ -1,8 +1,11 @@
 """GitHub Action wrapper."""
 
+import json
 import logging
+from uuid import uuid4
 
 import attr
+from gidgethub.sansio import Event
 
 # pylint: disable=relative-beyond-top-level
 from ...app.action.config import GitHubActionConfig
@@ -23,9 +26,21 @@ class GitHubAction:
     """A GitHub Action metadata from envronment vars."""
 
     @property
-    def event(self):
-        """Return GitHub Action event."""
-        return self._metadata.event
+    def event(self):  # noqa: D401
+        """Parsed GitHub Action event data."""
+        try:
+            # NOTE: This could be async but it probably doesn't matter
+            # NOTE: since it's called just once during init and GitHub
+            # NOTE: Action runtime only has one event to process
+            # pylint: disable=no-member
+            with self._metadata.event_path.open() as event_source:
+                return Event(
+                    json.load(event_source),
+                    event=self._metadata.event_name,
+                    delivery_id=uuid4(),
+                )
+        except TypeError:
+            return None
 
     @property
     def token(self):
