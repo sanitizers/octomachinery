@@ -5,6 +5,10 @@ import os
 from contextvars import ContextVar
 
 
+class ContextLookupError(AttributeError):
+    """Context var lookup error."""
+
+
 class _ContextMap:
     __slots__ = '__map__', '__token_map__'
 
@@ -21,7 +25,7 @@ class _ContextMap:
         try:
             return self.__map__[name].get()
         except LookupError:
-            raise AttributeError
+            raise ContextLookupError(f'No `{name}` present in the context')
 
     def __setattr__(self, name, value):
         if name in ('__map__', '__token_map__'):
@@ -30,11 +34,11 @@ class _ContextMap:
             reset_token = self.__map__[name].set(value)
             self.__token_map__[name] = reset_token
         else:
-            raise AttributeError
+            raise ContextLookupError(f'No `{name}` present in the context')
 
     def __delattr__(self, name):
         if name not in self.__map__:
-            raise AttributeError
+            raise ContextLookupError(f'No `{name}` present in the context')
         reset_token = self.__token_map__[name]
         self.__map__[name].reset(reset_token)
         del self.__token_map__[name]
