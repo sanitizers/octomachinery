@@ -52,6 +52,9 @@ class GitHubActionConfig:
     def event(self):  # noqa: D401
         """Return parsed event data."""
         try:
+            # NOTE: This could be async but it probably doesn't matter
+            # NOTE: since it's called just once during init and GitHub
+            # NOTE: Action runtime only has one event to process
             # pylint: disable=no-member
             with self.event_path.open() as event_source:
                 return Event(
