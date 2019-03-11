@@ -50,3 +50,11 @@ class SecretStr(str):
             pass
 
         return super().__repr__()
+
+
+class SuperSecretStr(SecretStr):
+    """String that always censors its __repr__."""
+
+    def __repr__(self):
+        """Produce a string representation."""
+        return '<SUPER_SECRET>'
