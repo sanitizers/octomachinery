@@ -8,7 +8,7 @@ import environ
 from gidgethub.sansio import Event
 
 # pylint: disable=relative-beyond-top-level
-from ...github.models.utils import SuperSecretStr
+from ...github.models.utils import SecretStr
 
 
 @environ.config  # pylint: disable=too-few-public-methods
@@ -45,7 +45,7 @@ class GitHubActionConfig:
     )
     token = environ.var(
         None, name='GITHUB_TOKEN',
-        converter=lambda t: t if t is None else SuperSecretStr(t),
+        converter=lambda t: t if t is None else SecretStr(t),
     )
 
     @property
