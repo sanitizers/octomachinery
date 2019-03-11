@@ -13,7 +13,7 @@ from ..runtime.context import RUNTIME_CONTEXT
 from . import dispatch_event
 
 
-__all__ = ('route_github_webhook_event', )
+__all__ = ('route_github_action_event', 'route_github_webhook_event', )
 
 
 logger = logging.getLogger(__name__)
@@ -97,3 +97,11 @@ async def route_github_webhook_event(request):
     return web.Response(
         text=f'OK: GitHub event received. It is {event.event!s} ({event!r})',
     )
+
+
+async def route_github_action_event(github_action):
+    """Dispatch a GitHub action event to corresponsing handlers."""
+    async with github_action.github_installation_client as gh_install_client:
+        # pylint: disable=assigning-non-slot
+        RUNTIME_CONTEXT.app_installation_client = gh_install_client
+        await dispatch_event(github_action.event)
