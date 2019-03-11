@@ -6,7 +6,9 @@ import logging
 # pylint: disable=relative-beyond-top-level
 from ...github.entities.action import GitHubAction
 # pylint: disable=relative-beyond-top-level
-from ...github.models.action_outcomes import ActionSuccess, ActionNeutral
+from ...github.models.action_outcomes import (
+    ActionSuccess, ActionNeutral, ActionFailure,
+)
 # pylint: disable=relative-beyond-top-level
 from ..config import BotAppConfig
 # pylint: disable=relative-beyond-top-level
@@ -44,5 +46,9 @@ def run():
         processing_outcome = asyncio.run(process_github_action(config))
     except KeyboardInterrupt:
         ActionNeutral('Action processing interrupted by user').raise_it()
+    except Exception:  # pylint: disable=broad-except
+        err_msg = 'Action processing failed unexpectedly'
+        logger.exception(err_msg)
+        ActionFailure(err_msg).raise_it()
     else:
         processing_outcome.raise_it()
