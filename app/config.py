@@ -10,6 +10,8 @@ import envparse
 # pylint: disable=relative-beyond-top-level
 from ..github.config.app import GitHubAppIntegrationConfig
 # pylint: disable=relative-beyond-top-level
+from .action.config import GitHubActionConfig
+# pylint: disable=relative-beyond-top-level
 from .runtime.config import RuntimeConfig
 # pylint: disable=relative-beyond-top-level
 from .server.config import WebServerConfig
@@ -27,6 +29,7 @@ class BotAppConfig:
     """
 
     github = environ.group(GitHubAppIntegrationConfig)
+    action = environ.group(GitHubActionConfig)
     server = environ.group(WebServerConfig)
     runtime = environ.group(RuntimeConfig)
 
