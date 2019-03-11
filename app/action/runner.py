@@ -6,6 +6,8 @@ import logging
 # pylint: disable=relative-beyond-top-level
 from ...github.entities.action import GitHubAction
 # pylint: disable=relative-beyond-top-level
+from ...github.models.action_outcomes import ActionSuccess, ActionNeutral
+# pylint: disable=relative-beyond-top-level
 from ..config import BotAppConfig
 # pylint: disable=relative-beyond-top-level
 from ..routing.webhooks_dispatcher import (
@@ -26,6 +28,7 @@ async def process_github_action(config):
     logger.info('GitHub Action=%r', config.action)
 
     await route_github_action_event(github_action)
+    return ActionSuccess('GitHub Action has been processed')
 
 
 def run():
@@ -38,9 +41,8 @@ def run():
         else logging.INFO,
     )
     try:
-        asyncio.run(process_github_action(config))
+        processing_outcome = asyncio.run(process_github_action(config))
     except KeyboardInterrupt:
-        logger.info(
-            ' Terminating the GitHub Action event processing flow '.
-            center(50, '='),
-        )
+        ActionNeutral('Action processing interrupted by user').raise_it()
+    else:
+        processing_outcome.raise_it()

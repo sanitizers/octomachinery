@@ -1,9 +1,14 @@
 """Processing outcomes for use from within GitHub Action env."""
 
+import logging
+
 import attr
 
 
 __all__ = ('ActionSuccess', 'ActionNeutral', 'ActionFailure', )
+
+
+logger = logging.getLogger(__name__)
 
 
 @attr.dataclass  # pylint: disable=too-few-public-methods
@@ -12,6 +17,14 @@ class ActionOutcome:
 
     message: str
     return_code: int
+
+    def raise_it(self):
+        """Print the message and exit the program with current code."""
+        logger.info(
+            'Terminating the GitHub Action processing: %s',
+            self.message,
+        )
+        raise SystemExit(self.return_code)
 
 
 @attr.dataclass  # pylint: disable=too-few-public-methods
