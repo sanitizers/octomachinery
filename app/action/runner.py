@@ -6,6 +6,8 @@ import logging
 # pylint: disable=relative-beyond-top-level
 from ...github.entities.action import GitHubAction
 # pylint: disable=relative-beyond-top-level
+from ...github.errors import GitHubActionError
+# pylint: disable=relative-beyond-top-level
 from ...github.models.action_outcomes import (
     ActionSuccess, ActionNeutral, ActionFailure,
 )
@@ -44,6 +46,8 @@ def run():
     )
     try:
         processing_outcome = asyncio.run(process_github_action(config))
+    except GitHubActionError as action_error:
+        action_error.terminate_action()
     except KeyboardInterrupt:
         ActionNeutral('Action processing interrupted by user').raise_it()
     except Exception:  # pylint: disable=broad-except
