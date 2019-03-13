@@ -1,0 +1,60 @@
+---
+conditions: v1
+dist: xenial
+language: python
+
+git:
+  depth: 200
+
+cache:
+  pip: true
+
+python:
+- "3.7"
+
+before_install:
+- pip install tox-venv
+install:
+- tox --notest
+
+script:
+- tox
+
+jobs:
+  include:
+  - python: "3.7"
+    name: Checking docs build
+    env:
+      TOXENV: build-docs
+  - &deploy-job
+    stage: Upload a new version of python package to PYPI
+    name: Publishing current Git tagged version of dist to PyPI
+    if: repo == "sanitizers/octomachinery" AND tag IS present
+    python: "3.7"
+    env:
+      TOXENV: build-dists
+    before_deploy:
+    - echo > setup.py
+    deploy: &deploy-step
+      provider: pypi
+      on:
+        all_branches: true
+        tags: true
+      user: octomachinery-bot
+      password:
+        secure: >-
+          XXX
+      distributions: clean --all sdist bdist_wheel
+      skip-cleanup: true
+  - <<: *deploy-job
+    name: >-
+      Publishing current (unstable) Git revision of dist to Test PyPI
+      on every commit
+    if: >-  # Always run, except if PR or cron
+      repo == "sanitizers/octomachinery" AND
+      type NOT IN (cron, pull_request)
+    deploy:
+      <<: *deploy-step
+      server: https://test.pypi.org/legacy/
+      on:
+        all_branches: true
