@@ -8,8 +8,9 @@ import logging
 from aiohttp import web
 from gidgethub import BadRequest, ValidationFailure
 
-# pylint: disable=relative-beyond-top-level
+# pylint: disable=relative-beyond-top-level,import-error
 from ..runtime.context import RUNTIME_CONTEXT
+# pylint: disable=import-error
 from . import dispatch_event
 
 
