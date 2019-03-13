@@ -23,6 +23,10 @@ script:
 jobs:
   include:
   - python: "3.7"
+    name: Checking pre-commit linter compliance
+    env:
+      TOXENV: pre-commit
+  - python: "3.7"
     name: Checking docs build
     env:
       TOXENV: build-docs
