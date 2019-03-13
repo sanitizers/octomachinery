@@ -1,0 +1,63 @@
+---
+repos:
+- repo: git://github.com/asottile/add-trailing-comma
+  rev: v0.7.1
+  hooks:
+  - id: add-trailing-comma
+
+- repo: git://github.com/Lucas-C/pre-commit-hooks
+  sha: v1.1.1
+  hooks:
+  - id: remove-tabs
+
+- repo: git://github.com/Lucas-C/pre-commit-hooks-markup
+  sha: v1.0.0
+  hooks:
+  - id: rst-linter
+    files: README.rst
+
+- repo: git://github.com/pre-commit/pre-commit-hooks
+  sha: v2.0.0
+  hooks:
+  # Side-effects:
+  - id: trailing-whitespace
+  - id: check-merge-conflict
+  - id: double-quote-string-fixer
+  - id: end-of-file-fixer
+  - id: requirements-txt-fixer
+
+  # Non-modifying checks:
+  - id: name-tests-test
+  - id: check-added-large-files
+  - id: check-byte-order-marker
+  - id: check-case-conflict
+  # disabled due to pre-commit/pre-commit-hooks#159
+  #- id: check-docstring-first
+  - id: check-json
+  - id: check-symlinks
+  - id: check-yaml
+  - id: detect-private-key
+
+  # Heavy checks:
+  - id: check-ast
+  - id: debug-statements
+  - id: flake8
+
+- repo: git://github.com/chewse/pre-commit-mirrors-pydocstyle
+  sha: v2.1.1
+  hooks:
+  - id: pydocstyle
+
+- repo: local
+  hooks:
+  - id: pylint
+    language: system
+    name: PyLint
+    files: \.py$
+    entry: python -m pylint.__main__
+    args:
+    - --msg-template={path}:L {line:3d}:({symbol}) {msg} (C {column:2d}), ::{msg_id}
+    - --output-format=colorized
+    - --known-standard-library=contextvars
+    - --min-similarity-lines=6
+    - --good-names=logger
