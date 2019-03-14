@@ -55,12 +55,14 @@ jobs:
       Publishing current (unstable) Git revision of dist to Test PyPI
       on every commit
     if: >-  # Always run, except if PR or cron
+      repo == "sanitizers/octomachinery" AND
       (
-        repo == "sanitizers/octomachinery" AND
-        branch == "master" AND
-        type == "push"
-      ) OR
-      tag IS present
+        (
+          branch == "master" AND
+          type == "push"
+        ) OR
+        tag IS present
+      )
     deploy:
       <<: *deploy-step
       server: https://test.pypi.org/legacy/
