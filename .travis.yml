@@ -56,7 +56,8 @@ jobs:
       on every commit
     if: >-  # Always run, except if PR or cron
       repo == "sanitizers/octomachinery" AND
-      type NOT IN (cron, pull_request)
+      branch == "master" AND
+      type == "push"
     deploy:
       <<: *deploy-step
       server: https://test.pypi.org/legacy/
