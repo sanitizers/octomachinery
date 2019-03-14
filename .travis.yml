@@ -48,7 +48,7 @@ jobs:
       password:
         secure: >-
           Q7r3VqzMsJst2lAN9rFVcqJAAx27pb/YUo4nK//+pCIRzRqQr8xRA5gCwT+Js5WCP2BFqR9mr1FjSX6WON3Q/oxnRpZrVN5bhYNvHFoEX4BZvJez26k2TxnudSD1yVnurv61oimxVgOP/WA/hvB4V+U2lkcsa/GK6sHhBoczUh78qgydl134dHYsKsES3PRfKTvYCYOT3gHMEO+aopd7P2M2+PazeqUKMGVM03S3IkiduhCtaD0txPQ7CDrsWnvAHyDiuRzjkewrEdUmumcWcISPMxwKYw5lp3+Jc1XK/GdTNAZVImMhsg/Uz5ZVU/8P+mStMtCvuKGPYksBaCzuHs6/C3+9L1LulL7loPiTyq5LKe8Jtoyv8Ze+3qlmbO1k4SvgfSLXPkCA4lqpHRXjX1InwaY3GsTI/bJZoKvE5LpANm6unS9AyZorzA8I5ZiT3A/D+pCtPV62PD90jvz987sEZh9IJuU5/koIYyHnpKbJT7IDI4voXIwYUEeK7WcwKbXFTf7lfushmk8YVL405KKYhQiQq6Z9pyNqEteNyqpvEKSnfn0CxwcDHyKpf7J5MCx/R9Y/y/NdVdYpFyQGUyNJ9h114kVcZi/x6j7voSAg0kRTWjaYrngH8yNCY0rYDd76PtEzdJDuq0nIXk8EcXeYEIsAbpHV1qHK0pU53ms=
-      distributions: clean --all sdist bdist_wheel
+      distributions:
       skip-cleanup: true
   - <<: *deploy-job
     name: >-
