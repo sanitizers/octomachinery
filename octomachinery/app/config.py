@@ -46,7 +46,9 @@ class BotAppConfig:
 
         Read .env into env vars before that.
         """
-        envparse.Env.read_envfile()
+        envparse.Env.read_envfile(
+            '.env',  # Making it relative to CWD, relative to caller if None
+        )
         return cls.from_env(
             app_name=app_name,
             app_version=app_version,
