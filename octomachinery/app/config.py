@@ -14,8 +14,6 @@ from .action.config import GitHubActionConfig
 # pylint: disable=relative-beyond-top-level
 from .runtime.config import RuntimeConfig
 # pylint: disable=relative-beyond-top-level
-from .runtime.utils import detect_env_mode
-# pylint: disable=relative-beyond-top-level
 from .server.config import WebServerConfig
 
 
@@ -30,12 +28,10 @@ class BotAppConfig:
     >>>
     """
 
+    github = environ.group(GitHubAppIntegrationConfig)
     action = environ.group(GitHubActionConfig)
     server = environ.group(WebServerConfig)
     runtime = environ.group(RuntimeConfig)
-
-    if detect_env_mode() == 'app':
-        github = environ.group(GitHubAppIntegrationConfig)
 
     @classmethod
     @lru_cache(maxsize=1)
