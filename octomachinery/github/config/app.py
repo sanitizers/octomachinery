@@ -10,7 +10,11 @@ from ...app.runtime.utils import detect_env_mode
 from ..models.utils import SecretStr
 
 
-def validate_is_not_none_if_app(self, attr, value):
+def validate_is_not_none_if_app(
+        self,  # pylint: disable=unused-argument
+        attr, value,
+):
+    """Forbid None value in a GitHub App context."""
     if value is None and detect_env_mode() == 'app':
         raise ValueError(
             f'GitHub App must provide a proper value for {attr!r}',
