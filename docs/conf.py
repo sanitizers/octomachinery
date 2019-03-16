@@ -86,6 +86,12 @@ extensions = [
     'sphinxcontrib.apidoc',
 ]
 
+# sphinxcontrib.apidoc configuration options
+apidoc_extra_args = ['--implicit-namespaces', '../octomachinery']
+apidoc_module_dir = '.'
+apidoc_output_dir = 'reference'
+apidoc_separate_modules = True
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
