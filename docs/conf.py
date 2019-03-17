@@ -132,6 +132,8 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
+    'show_relbars': True,
+    'show_related': True,
     'extra_nav_links': {
         'Create a GitHub bot 🤖': 'https://tutorial.octomachinery.dev',
     },
