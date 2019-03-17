@@ -305,7 +305,7 @@ def set_up_travis_context(
     travis_base_uri = 'travis-ci.{}/{}'.format(travis_tld, travis_slug)
     context['theme_travis_build_url'] = 'https://{}'.format(travis_base_uri)
     context['theme_travis_badge_url'] = 'https://api.{}.svg?branch={}'.format(
-        travis_base_uri, 'master'  # context['theme_badge_branch'],
+        travis_base_uri, 'master',  # context['theme_badge_branch'],
     )
 
 
