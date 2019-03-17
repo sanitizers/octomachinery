@@ -163,6 +163,7 @@ html_theme_options = {
     'show_related': True,
     'extra_nav_links': {
         'Create a GitHub bot 🤖': 'https://tutorial.octomachinery.dev',
+        'octomachinery [www] 🤖': 'https://octomachinery.dev',
     },
 }
 
