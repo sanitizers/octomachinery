@@ -7,6 +7,7 @@ http://www.sphinx-doc.org/en/master/config
 """
 
 from email import message_from_string
+from itertools import chain
 import pkg_resources
 
 # -- Path setup --------------------------------------------------------------
@@ -36,6 +37,18 @@ def get_supported_pythons(classifiers):
     return vers
 
 
+def get_github_data(project_urls):
+    """Retrieve GitHub user/org and repo name from a bunch of links."""
+    partitioned_urls = (p.partition(', ') for p in project_urls)
+    for _url_type, _sep, url in partitioned_urls:
+        proto, _gh, uri = url.partition('://github.com/')
+        if proto not in ('http', 'https'):
+            continue
+        return uri.split('/')[:2]
+
+    raise LookupError('There are no project URLs pointing to GitHub')
+
+
 PYTHON_DISTRIBUTION_NAME = 'octomachinery'
 
 PRJ_DIST = pkg_resources.get_distribution(PYTHON_DISTRIBUTION_NAME)
@@ -46,6 +59,12 @@ PRJ_LICENSE = PRJ_META['License']
 PRJ_DESCRIPTION = PRJ_META['Description']
 PRJ_PY_VER_RANGE = get_supported_pythons(PRJ_META.get_all('Classifier'))
 PRJ_PY_MIN_SUPPORTED, PRJ_PY_MAX_SUPPORTED = map('.'.join, PRJ_PY_VER_RANGE)
+PRJ_GITHUB_USER, PRJ_GITHUB_REPO = get_github_data(
+    chain(
+        (PRJ_META['Home-page'], ),
+        PRJ_META.get_all('Project-URL'),
+    ),
+)
 
 project = PRJ_DIST.project_name  # pylint: disable=invalid-name
 author = PRJ_AUTHOR  # pylint: disable=invalid-name
@@ -132,6 +151,9 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
+    'github_user': PRJ_GITHUB_USER,
+    'github_repo': PRJ_GITHUB_REPO,
+    'github_type': 'star',
     'github_banner': True,
     'show_relbars': True,
     'show_related': True,
