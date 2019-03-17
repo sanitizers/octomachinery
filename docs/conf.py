@@ -155,6 +155,8 @@ html_theme_options = {
     'github_repo': PRJ_GITHUB_REPO,
     'github_type': 'star',
     'github_banner': True,
+    'travis_button': True,
+    # 'travis_tld': 'com',
     'show_relbars': True,
     'show_related': True,
     'extra_nav_links': {
@@ -275,3 +277,34 @@ intersphinx_mapping = {
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+
+# Patch alabaster theme
+# Ref: https://github.com/bitprophet/alabaster/pull/147
+# FIXME: drop this hack once the PR is merged & released; pylint: disable=fixme
+def set_up_travis_context(
+        app, pagename, templatename,  # pylint: disable=unused-argument
+        context,
+        doctree,  # pylint: disable=unused-argument
+):
+    """Add complete Travis URLs to Jinja2 context."""
+    github_slug = '/'.join(
+        (context['theme_github_user'], context['theme_github_repo']),
+    )
+
+    travis_button = str(context['theme_travis_button']).lower()
+    travis_button_enabled = travis_button == 'true'
+
+    travis_slug = github_slug if travis_button_enabled else travis_button
+
+    travis_tld = 'com'  # context["theme_travis_tld"].strip(".").lower()
+    travis_base_uri = 'travis-ci.{}/{}'.format(travis_tld, travis_slug)
+    context['theme_travis_build_url'] = 'https://{}'.format(travis_base_uri)
+    context['theme_travis_badge_url'] = 'https://api.{}.svg?branch={}'.format(
+        travis_base_uri, context['theme_badge_branch'],
+    )
+
+
+def setup(app):
+    """Patch the sphinx theme set up stage."""
+    app.connect('html-page-context', set_up_travis_context)
