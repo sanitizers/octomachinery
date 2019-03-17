@@ -132,6 +132,7 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
+    'github_banner': True,
     'show_relbars': True,
     'show_related': True,
     'extra_nav_links': {
