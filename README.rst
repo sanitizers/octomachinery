@@ -8,6 +8,10 @@
    :target: https://travis-ci.com/sanitizers/octomachinery
    :alt: Travis CI build status
 
+.. image:: https://img.shields.io/readthedocs/octomachinery/latest.svg?logo=Read%20The%20Docs&logoColor=white
+   :target: https://docs.octomachinery.dev/en/latest/?badge=latest
+   :alt: Documentation Status
+
 octomachinery
 =============
 
