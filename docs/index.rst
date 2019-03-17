@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to |project|'s documentation!
-=====================================
+|project|: the octobots engine
+==============================
 
 .. include:: ../README.rst
    :end-before: DO-NOT-REMOVE-docs-badges-END
