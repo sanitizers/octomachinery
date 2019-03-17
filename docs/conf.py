@@ -56,6 +56,7 @@ PRJ_PKG_INFO = PRJ_DIST.get_metadata(PRJ_DIST.PKG_INFO)
 PRJ_META = message_from_string(PRJ_PKG_INFO)
 PRJ_AUTHOR = PRJ_META['Author']
 PRJ_LICENSE = PRJ_META['License']
+PRJ_SUMMARY = PRJ_META['Summary']
 PRJ_DESCRIPTION = PRJ_META['Description']
 PRJ_PY_VER_RANGE = get_supported_pythons(PRJ_META.get_all('Classifier'))
 PRJ_PY_MIN_SUPPORTED, PRJ_PY_MAX_SUPPORTED = map('.'.join, PRJ_PY_VER_RANGE)
@@ -151,6 +152,7 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
+    'description': PRJ_SUMMARY,
     'github_user': PRJ_GITHUB_USER,
     'github_repo': PRJ_GITHUB_REPO,
     'github_type': 'star',
