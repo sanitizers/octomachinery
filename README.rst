@@ -1,10 +1,10 @@
-.. image:: https://img.shields.io/pypi/v/octomachinery.svg
+.. image:: https://img.shields.io/pypi/v/octomachinery.svg?logo=Python&logoColor=white
    :target: https://pypi.org/project/octomachinery
    :alt: octomachinery @ PyPI
 
 .. DO-NOT-REMOVE-docs-badges-END
 
-.. image:: https://img.shields.io/travis/com/sanitizers/octomachinery/master.svg?label=Linux%20builds%20%40%20Travis%20CI
+.. image:: https://img.shields.io/travis/com/sanitizers/octomachinery/master.svg?label=Linux%20builds&logo=travis&logoColor=white
    :target: https://travis-ci.com/sanitizers/octomachinery
    :alt: Travis CI build status
 
