@@ -292,10 +292,11 @@ def set_up_travis_context(
 ):
     """Add complete Travis URLs to Jinja2 context."""
     github_slug = '/'.join(
-        (context['theme_github_user'], context['theme_github_repo']),
+        # (context['theme_github_user'], context['theme_github_repo']),
+        (PRJ_GITHUB_USER, PRJ_GITHUB_REPO),
     )
 
-    travis_button = str(context['theme_travis_button']).lower()
+    travis_button = 'true'  # str(context['theme_travis_button']).lower()
     travis_button_enabled = travis_button == 'true'
 
     travis_slug = github_slug if travis_button_enabled else travis_button
@@ -304,7 +305,7 @@ def set_up_travis_context(
     travis_base_uri = 'travis-ci.{}/{}'.format(travis_tld, travis_slug)
     context['theme_travis_build_url'] = 'https://{}'.format(travis_base_uri)
     context['theme_travis_badge_url'] = 'https://api.{}.svg?branch={}'.format(
-        travis_base_uri, context['theme_badge_branch'],
+        travis_base_uri, 'master'  # context['theme_badge_branch'],
     )
 
 
