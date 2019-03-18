@@ -6,8 +6,6 @@ from aiohttp import ClientSession
 from gidgethub.aiohttp import GitHubAPI
 
 # pylint: disable=relative-beyond-top-level
-from ...app.runtime.context import RUNTIME_CONTEXT
-# pylint: disable=relative-beyond-top-level
 from .tokens import GitHubToken, GitHubOAuthToken, GitHubJWTToken
 from .utils import accept_preview_version, mark_uninitialized_in_repr
 
@@ -29,7 +27,7 @@ class RawGitHubAPI(GitHubAPI):
         kwargs.pop('oauth_token', None)
         kwargs.pop('jwt', None)
         super().__init__(
-            requester=user_agent or RUNTIME_CONTEXT.config.github.user_agent,
+            requester=user_agent,
             session=session or ClientSession(),
             **kwargs,
         )
