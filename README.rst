@@ -12,8 +12,8 @@
    :target: https://docs.octomachinery.dev/en/latest/?badge=latest
    :alt: Documentation Status
 
-octomachinery
-=============
+octomachinery: Bots Without Boilerplate
+=======================================
 
 Invisible engine driving octobot machines. Simple, yet powerful.
 
