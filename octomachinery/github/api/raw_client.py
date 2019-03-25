@@ -80,20 +80,23 @@ class RawGitHubAPI(GitHubAPI):
             body: bytes = b'',
     ) -> Tuple[int, Mapping[str, str], bytes]:
         has_persistent_session = self._session is not None
-        if not has_persistent_session:
-            self._session = ClientSession()
+
+        if has_persistent_session:
+            return await super()._request(
+                method, url,
+                headers, body,
+            )
 
         try:
+            self._session = ClientSession()
+
             async with self._session:
-                request_result = await super()._request(
+                return await super()._request(
                     method, url,
                     headers, body,
                 )
         finally:
-            if not has_persistent_session:
-                self._session = None
-
-        return request_result
+            self._session = None
 
     getitem = accept_preview_version(GitHubAPI.getitem)
     getiter = accept_preview_version(GitHubAPI.getiter)
