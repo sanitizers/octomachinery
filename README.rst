@@ -65,3 +65,12 @@ Prerequisites
 -------------
 
 Python 3.7+
+
+License
+-------
+
+The source code and the documentation in this project are released under
+the `GPL v3 license`_.
+
+.. _`GPL v3 license`:
+   https://github.com/sanitizers/octomachinery/blob/master/LICENSE
