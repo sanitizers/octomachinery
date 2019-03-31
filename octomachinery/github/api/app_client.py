@@ -137,6 +137,9 @@ class GitHubApp(AbstractAsyncContextManager):
         install_id = event.data['installation']['id']
         app_installation = self._installations.get(install_id)
 
+        if app_installation is not None:
+            await app_installation.retrieve_access_token()
+
         # pylint: disable=assigning-non-slot
         RUNTIME_CONTEXT.app_installation = (
             app_installation
