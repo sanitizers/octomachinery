@@ -124,7 +124,7 @@ class GitHubApp(AbstractAsyncContextManager):
         install = event.data['installation']
         install_id = install['id']
         self._installations[install_id] = GitHubAppInstallation(
-            GitHubAppInstallationModel(install),
+            GitHubAppInstallationModel(**install),
         )
         await self._installations[install_id].retrieve_access_token()
         return self._installations[install_id]
