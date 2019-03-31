@@ -123,7 +123,9 @@ class GitHubApp(AbstractAsyncContextManager):
         """Retrieve an installation creds from store."""
         install = event.data['installation']
         install_id = install['id']
-        self._installations[install_id] = GitHubAppInstallation(install)
+        self._installations[install_id] = GitHubAppInstallation(
+            GitHubAppInstallationModel(install),
+        )
         await self._installations[install_id].retrieve_access_token()
         return self._installations[install_id]
 
