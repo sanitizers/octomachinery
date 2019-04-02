@@ -4,8 +4,10 @@ workflow "Publish Python package distribution to PyPI if it's tagged" {
 }
 
 action "Make sdist and wheel" {
-  uses = "docker://randomknowledge/docker-pyenv-tox"
-  args = "tox -ebuild-dists"
+  uses = "./.github/actions/python3.7-tox"
+  env = {
+    TOXENV = "build-dists"
+  }
 }
 
 action "Publish 📦 to Test PyPI" {
