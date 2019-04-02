@@ -1,6 +1,9 @@
 workflow "Publish Python package distribution to PyPI if it's tagged" {
   on = "deployment"
-  resolves = ["Publish 📦 to Test PyPI"]
+  resolves = [
+    "Publish 📦 to Test PyPI",
+    "Debug env",
+  ]
 }
 
 action "Make sdist and wheel" {
@@ -18,4 +21,8 @@ action "Publish 📦 to Test PyPI" {
     TWINE_REPOSITORY_URL = "https://test.pypi.org/legacy/"
   }
   secrets = ["TWINE_PASSWORD"]
+}
+
+action "Debug env" {
+  uses = "actions/bin/debug@master"
 }
