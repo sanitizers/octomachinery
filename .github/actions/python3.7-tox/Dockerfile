@@ -10,13 +10,14 @@ LABEL com.github.actions.icon code
 LABEL com.github.actions.color blue
 
 # Install Git
+	# \
 RUN set -ex \
         \
-	&& add-apt-repository ppa:git-core/ppa \
-        && apt-get update && apt-get install -y --no-install-recommends \
-	    git \
+        && apt-get update \
+        && apt-get install -y --no-install-recommends \
+            git \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-	&& rm -rf /var/lib/apt/lists/*
+        && rm -rf /var/lib/apt/lists/*
 
 # Install the newest tox
 RUN pip install -U tox
