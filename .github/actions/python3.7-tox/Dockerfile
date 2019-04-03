@@ -10,7 +10,7 @@ LABEL com.github.actions.icon code
 LABEL com.github.actions.color blue
 
 # Install Git
-	# \
+    # \
 RUN set -ex \
         \
         && apt-get update \
