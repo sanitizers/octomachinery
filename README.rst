@@ -40,18 +40,18 @@ Here's how you 👍 a just-created comment:
     @process_event_actions('issue_comment', {'created'})
     @process_webhook_payload
     async def on_comment(
-                *,
-                action, issue, comment,
-                installation, changes=None,
+            *,
+            action, issue, comment,
+            repository=None, sender=None,
+            installation=None,
+            assignee=None, changes=None,
     ):
         github_api = RUNTIME_CONTEXT.app_installation_client
-        reactions_api_url = f'{comment['url']}/reactions'
+        comment_reactions_api_url = f'{comment["url"]}/reactions'
         await github_api.post(
-            reactions_api_url,
+            comment_reactions_api_url,
             preview_api_version='squirrel-girl',
-            data={
-                'content': '+1',
-            },
+            data={'content': '+1'},
         )
 
 
