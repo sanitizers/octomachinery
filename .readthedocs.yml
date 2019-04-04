@@ -1,7 +1,16 @@
+version: 2
+
+formats: all
+
 build:
   image: latest
+
 python:
   version: 3.7
-  pip_install: true
-  extra_requirements:
-  - docs
+  install:
+  - method: pip
+    path: pip >= 19.0.3
+  - method: pip
+    path: .
+    extra_requirements:
+    - docs
