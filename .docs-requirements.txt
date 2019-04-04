@@ -1,1 +1,2 @@
 pip >= 19.0.3
+setuptools >= 40.9.0
