@@ -20,6 +20,7 @@ class _ContextMap:
         """Storage for individual context var reset tokens."""
 
     def __dir__(self):
+        """Render a list of public attributes."""
         return self.__map__.keys()
 
     def __getattr__(self, name):
