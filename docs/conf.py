@@ -18,7 +18,7 @@ def patch_setuptools_in_rtd():
     import sys
     import subprocess
 
-    if not os.getenv('READTHEDOCS'):
+    if not os.getenv('READTHEDOCS') or os.getenv('READTHEDOCS_EXEC'):
         return
 
     pyenv_python_executable = subprocess.check_output(
@@ -48,6 +48,16 @@ def patch_setuptools_in_rtd():
     subprocess.check_call(pip_update_cmd)
     print('>>>>> Installing octomachinery...', file=sys.stderr)
     subprocess.check_call(octomachinery_install_cmd)
+
+    new_env = dict(os.environ)
+    new_env['READTHEDOCS_EXEC'] = 'True'
+
+    print('>>>>> Restarting Sphinx build...', file=sys.stderr)
+    print(
+        f'Sphinx build command is `{sys.executable} {" ".join(sys.argv)}`',
+        file=sys.stderr,
+    )
+    os.execve(sys.executable, (sys.executable, *sys.argv), new_env)
 
 
 patch_setuptools_in_rtd()
