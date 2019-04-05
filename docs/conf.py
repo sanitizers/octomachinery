@@ -33,7 +33,7 @@ def patch_setuptools_in_rtd():
         sys.executable, '-m',
         'pip', 'install', '--force-reinstall',
         '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
-        '/octomachinery/.cache/pip', '.[docs]',
+        '/octomachinery/.cache/pip', '..[docs]',
     )
     subprocess.check_call(setuptools_update_cmd)
     subprocess.check_call(octomachinery_install_cmd)
