@@ -42,8 +42,11 @@ def patch_setuptools_in_rtd():
         '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
         '/octomachinery/.cache/pip', '..[docs]',
     )
+    print('>>>>> Bumping setuptools...', file=sys.stderr)
     subprocess.check_call(setuptools_update_cmd)
+    print('>>>>> Bumping pip...', file=sys.stderr)
     subprocess.check_call(pip_update_cmd)
+    print('>>>>> Installing octomachinery...', file=sys.stderr)
     subprocess.check_call(octomachinery_install_cmd)
 
 
