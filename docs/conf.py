@@ -13,6 +13,7 @@ import pkg_resources
 
 # RTD hack start
 def patch_setuptools_in_rtd():
+    """Install newer setuptools and octomachinery in RTD."""
     import os
     import sys
     import subprocess
