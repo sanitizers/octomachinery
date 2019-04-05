@@ -10,6 +10,39 @@ from email import message_from_string
 from itertools import chain
 import pkg_resources
 
+
+# RTD hack start
+def patch_setuptools_in_rtd():
+    import os
+    import sys
+    import subprocess
+
+    if not os.getenv('READTHEDOCS'):
+        return
+
+    pyenv_python_executable = subprocess.check_output(
+        ('pyenv', 'which', 'python3.7'), text=True,
+    ).strip()
+    setuptools_update_cmd = (
+        pyenv_python_executable, '-m',
+        'pip', 'install', '--force-reinstall',
+        '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
+        '/octomachinery/.cache/pip', 'setuptools >= 40.9.0',
+    )
+    octomachinery_install_cmd = (
+        sys.executable, '-m',
+        'pip', 'install', '--force-reinstall',
+        '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
+        '/octomachinery/.cache/pip', '.[docs]',
+    )
+    subprocess.check_call(setuptools_update_cmd)
+    subprocess.check_call(octomachinery_install_cmd)
+
+
+patch_setuptools_in_rtd()
+del patch_setuptools_in_rtd
+# RTD hack end
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
