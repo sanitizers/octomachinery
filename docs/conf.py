@@ -30,6 +30,12 @@ def patch_setuptools_in_rtd():
         '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
         '/octomachinery/.cache/pip', 'setuptools >= 40.9.0',
     )
+    pip_update_cmd = (
+        sys.executable, '-m',
+        'pip', 'install', '--force-reinstall',
+        '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
+        '/octomachinery/.cache/pip', 'pip >= 19.0.3',
+    )
     octomachinery_install_cmd = (
         sys.executable, '-m',
         'pip', 'install', '--force-reinstall',
@@ -37,6 +43,7 @@ def patch_setuptools_in_rtd():
         '/octomachinery/.cache/pip', '..[docs]',
     )
     subprocess.check_call(setuptools_update_cmd)
+    subprocess.check_call(pip_update_cmd)
     subprocess.check_call(octomachinery_install_cmd)
 
 
