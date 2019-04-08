@@ -1,5 +1,5 @@
-Tutorial
-========
+Getting started
+===============
 
 The documentation isn't ready yet so I suggest you going through the
 `How-to create a GitHub Bot tutorial`_ which should give you basic
