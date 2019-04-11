@@ -44,6 +44,6 @@ action "Debug env" {
 }
 
 action "Deploy button" {
-  uses = "webknjaz/comment-reactor-pyconsk-324@master"
+  uses = "sanitizers/diactoros-github-app@master"
   secrets = ["GITHUB_TOKEN"]
 }
