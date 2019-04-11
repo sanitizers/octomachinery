@@ -6,6 +6,22 @@ workflow "Publish Python package distribution to PyPI if it's tagged" {
   ]
 }
 
+workflow "Handle Deploy buttons" {
+  on = "check_run"
+  resolves = [
+    "Deploy button",
+    "Debug env",
+  ]
+}
+
+workflow "Add Deploy buttons" {
+  on = "push"
+  resolves = [
+    "Deploy button",
+    "Debug env",
+  ]
+}
+
 action "Make sdist and wheel" {
   uses = "./.github/actions/python3.7-tox"
   env = {
@@ -25,4 +41,9 @@ action "Publish 📦 to Test PyPI" {
 
 action "Debug env" {
   uses = "actions/bin/debug@master"
+}
+
+action "Deploy button" {
+  uses = "webknjaz/comment-reactor-pyconsk-324@master"
+  secrets = ["GITHUB_TOKEN"]
 }
