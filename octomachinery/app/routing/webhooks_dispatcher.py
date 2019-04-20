@@ -85,7 +85,9 @@ async def route_github_webhook_event(request):
 
     github_app = RUNTIME_CONTEXT.github_app
 
-    event = await get_event_from_request(request)
+    RUNTIME_CONTEXT.github_event = event = (
+        await get_event_from_request(request)
+    )
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
     async with github_app.github_app_client:
@@ -106,6 +108,7 @@ async def route_github_action_event(github_action):
     """Dispatch a GitHub action event to corresponsing handlers."""
     RUNTIME_CONTEXT.IS_GITHUB_ACTION = True
     RUNTIME_CONTEXT.IS_GITHUB_APP = False
+    RUNTIME_CONTEXT.github_event = github_action.event
 
     async with github_action.github_installation_client as gh_install_client:
         # pylint: disable=assigning-non-slot

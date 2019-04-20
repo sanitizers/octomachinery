@@ -15,6 +15,7 @@ RUNTIME_CONTEXT = _ContextMap(
     app_installation_client='app installation client',
     config='config context',
     github_app='github app',
+    github_event='GitHub Event',
     IS_GITHUB_ACTION='Is GitHub Action',
     IS_GITHUB_APP='Is GitHub App',
 )
