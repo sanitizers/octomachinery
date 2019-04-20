@@ -80,6 +80,9 @@ def validate_allowed_http_methods(*allowed_methods):
 @validate_allowed_http_methods('POST')
 async def route_github_webhook_event(request):
     """Dispatch incoming webhook events to corresponsing handlers."""
+    RUNTIME_CONTEXT.IS_GITHUB_ACTION = False
+    RUNTIME_CONTEXT.IS_GITHUB_APP = True
+
     github_app = RUNTIME_CONTEXT.github_app
 
     event = await get_event_from_request(request)
@@ -101,6 +104,9 @@ async def route_github_webhook_event(request):
 
 async def route_github_action_event(github_action):
     """Dispatch a GitHub action event to corresponsing handlers."""
+    RUNTIME_CONTEXT.IS_GITHUB_ACTION = True
+    RUNTIME_CONTEXT.IS_GITHUB_APP = False
+
     async with github_action.github_installation_client as gh_install_client:
         # pylint: disable=assigning-non-slot
         RUNTIME_CONTEXT.app_installation_client = gh_install_client
