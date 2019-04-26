@@ -5,8 +5,6 @@ import logging
 import attr
 
 # pylint: disable=relative-beyond-top-level
-from ...app.runtime.context import RUNTIME_CONTEXT
-# pylint: disable=relative-beyond-top-level
 from ..api.client import GitHubAPIClient
 # pylint: disable=relative-beyond-top-level
 from ..api.tokens import GitHubOAuthToken
@@ -42,6 +40,9 @@ class GitHubAppInstallation:
 
     async def retrieve_access_token(self):
         """Retrieve installation access token from GitHub API."""
+        # pylint: disable=relative-beyond-top-level
+        from ...app.runtime.context import RUNTIME_CONTEXT
+
         async with RUNTIME_CONTEXT.github_app.github_app_client as gh_api:
             self._token = GitHubInstallationAccessToken(**(await gh_api.post(
                 self._metadata.access_tokens_url,
