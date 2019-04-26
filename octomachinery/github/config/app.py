@@ -3,8 +3,6 @@ import environ
 
 
 # pylint: disable=relative-beyond-top-level
-from ...app.runtime.utils import detect_env_mode
-# pylint: disable=relative-beyond-top-level
 from ..models.utils import SecretStr
 
 
@@ -13,6 +11,9 @@ def validate_is_not_none_if_app(
         attr, value,
 ):
     """Forbid None value in a GitHub App context."""
+    # pylint: disable=relative-beyond-top-level
+    from ...app.runtime.utils import detect_env_mode
+
     if value is None and detect_env_mode() == 'app':
         raise ValueError(
             f'GitHub App must provide a proper value for {attr!r}',
