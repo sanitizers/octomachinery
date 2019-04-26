@@ -8,9 +8,10 @@ import aiohttp
 import attr
 
 # pylint: disable=relative-beyond-top-level
-from ...app.runtime.context import RUNTIME_CONTEXT
 from .raw_client import RawGitHubAPI
+# pylint: disable=relative-beyond-top-level
 from .tokens import GitHubToken
+# pylint: disable=relative-beyond-top-level
 from .utils import mark_uninitialized_in_repr
 
 
@@ -31,6 +32,9 @@ class GitHubAPIClient(AbstractAsyncContextManager):
 
     def __attrs_post_init__(self):
         """Gidgethub API client instance initializer."""
+        # pylint: disable=relative-beyond-top-level
+        from ...app.runtime.context import RUNTIME_CONTEXT
+
         try:
             self._api_client = RawGitHubAPI(
                 token=self._github_token,
