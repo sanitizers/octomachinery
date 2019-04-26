@@ -3,8 +3,6 @@ import environ
 
 
 # pylint: disable=relative-beyond-top-level
-from ...app.runtime.context import RUNTIME_CONTEXT
-# pylint: disable=relative-beyond-top-level
 from ...app.runtime.utils import detect_env_mode
 # pylint: disable=relative-beyond-top-level
 from ..models.utils import SecretStr
@@ -44,6 +42,9 @@ class GitHubAppIntegrationConfig:
     @property
     def user_agent(self):  # noqa: D401
         """The User-Agent value to use when hitting GitHub API."""
+        # pylint: disable=relative-beyond-top-level
+        from ...app.runtime.context import RUNTIME_CONTEXT
+
         name = RUNTIME_CONTEXT.config.runtime.app_name
         version = RUNTIME_CONTEXT.config.runtime.app_version
         url = RUNTIME_CONTEXT.config.runtime.app_url
