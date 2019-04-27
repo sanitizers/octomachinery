@@ -22,7 +22,7 @@ Web-site @ https://octomachinery.dev. Stay tuned!
 .. DO-NOT-REMOVE-docs-intro-START
 
 **How-to create a GitHub Bot tutorial** is ready for preview
-@ https://tutorial.octomachinery.dev
+@ `tutorial.octomachinery.dev <https://tutorial.octomachinery.dev/en/latest/>`
 
 Elevator pitch
 --------------

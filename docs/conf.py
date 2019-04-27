@@ -327,8 +327,9 @@ epub_exclude_files = ['search.html']
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'https://docs.python.org/': None,
-    'https://gidgethub.readthedocs.io/en/latest/': None,
+    'gidgethub': ('https://gidgethub.readthedocs.io/en/latest/', None),
+    'python': ('https://docs.python.org/', None),
+    'tutorial': ('https://tutorial.octomachinery.dev/en/latest/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------
