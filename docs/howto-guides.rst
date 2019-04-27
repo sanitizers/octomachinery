@@ -86,6 +86,18 @@ Authenticating as a bot (GitHub App)
 Making API queries against preview endpoints
 --------------------------------------------
 
+Endpoints with stable interfaces in GitHub API are easy to hit. But some
+are marked as preview API. For those, GitHub requires special Accept
+headers to be passed along with a normal HTTP request. The exact strings
+are documented at https://developers.github.com under specific endpoint
+sections in their description.
+
+Given that you've already got an instance of :py:class:`RawGitHubAPI
+<octomachinery.github.api.raw_client.RawGitHubAPI>` initialized, what's
+left is to pass ``preview_api_version`` argument with the appropriate
+preview API code name when making query to the API endpoint requiring
+that.
+
 .. code:: python
 
     github_api: RawGitHubAPI
