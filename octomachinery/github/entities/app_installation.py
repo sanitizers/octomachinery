@@ -1,6 +1,9 @@
 """GitHub App Installation wrapper."""
 
+from __future__ import annotations
+
 import logging
+import typing
 
 import attr
 
@@ -15,6 +18,10 @@ from ..models import (
 )
 
 
+if typing.TYPE_CHECKING:
+    from ..api.app_client import GitHubApp
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,6 +31,8 @@ class GitHubAppInstallation:
 
     _metadata: GitHubAppInstallationModel
     """A GitHub Installation metadata from GitHub webhook."""
+    _github_app: GitHubApp
+    """A GitHub App the Installation is associated with."""
     _token: GitHubInstallationAccessToken = attr.ib(init=False, default=None)
     """A GitHub Installation token for GitHub API."""
 
@@ -40,10 +49,7 @@ class GitHubAppInstallation:
 
     async def retrieve_access_token(self):
         """Retrieve installation access token from GitHub API."""
-        # pylint: disable=relative-beyond-top-level
-        from ...app.runtime.context import RUNTIME_CONTEXT
-
-        async with RUNTIME_CONTEXT.github_app.github_app_client as gh_api:
+        async with self._github_app.github_app_client as gh_api:
             self._token = GitHubInstallationAccessToken(**(await gh_api.post(
                 self._metadata.access_tokens_url,
                 data=b'',

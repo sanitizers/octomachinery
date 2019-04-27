@@ -126,6 +126,7 @@ class GitHubApp(AbstractAsyncContextManager):
         install_id = install['id']
         self._installations[install_id] = GitHubAppInstallation(
             GitHubAppInstallationModel(**install),
+            self,
         )
         await self._installations[install_id].retrieve_access_token()
         return self._installations[install_id]
@@ -136,7 +137,7 @@ class GitHubApp(AbstractAsyncContextManager):
         from ...app.runtime.context import RUNTIME_CONTEXT
 
         if event.event == 'ping':
-            return GitHubAppInstallation(None)
+            return GitHubAppInstallation(None, self)
 
         install_id = event.data['installation']['id']
         app_installation = self._installations.get(install_id)
@@ -162,6 +163,8 @@ class GitHubApp(AbstractAsyncContextManager):
                         preview_api_version='machine-man',
                     ),
             ):
-                installations[install.id] = GitHubAppInstallation(install)
+                installations[install.id] = GitHubAppInstallation(
+                    install, self,
+                )
                 await installations[install.id].retrieve_access_token()
         return installations
