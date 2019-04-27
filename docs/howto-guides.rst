@@ -45,6 +45,37 @@ API calls return native Python :py:class:`dict` or iterable objects.
 Authenticating as a bot (GitHub App)
 ------------------------------------
 
+To act as a bot, you should use a special kind of integration with
+GitHub — Apps. They are reusable entities in the GitHub Platform
+available to be installed into multiple accounts and organizations.
+
+Classic GitHub App requires a web-sever part to be deployed somewhere on
+the Internet in order to receive events GitHub Platform would send
+there.
+
+Yet, sometimes, you just want to act as a bot without any of that
+deployment hustle. You may want to have a ``[bot]`` label next to
+comments you'll post via API. You may want to manage rate limits better.
+This will allow you to run one-off tasks like batch changes/migrations.
+
+You'll still need to register a GitHub App and install it into the
+target user account or organization. You'll also have to specify APIs
+you'd like to access using this App.
+
+Then, you'll need to get your App's ID and a private key.
+
+Now, first, specify the App ID, the key path and the target account.
+After that, create a
+:py:class:`~octomachinery.github.config.app.GitHubAppIntegrationConfig`
+instance also specifying app name, version and some URL (these will be
+used to generate a ``User-Agent`` HTTP header for API queries).
+Then, create a
+:py:class:`~octomachinery.github.api.app_client.GitHubApp` instance from
+that config. Retrieve a list of places where the App is installed,
+filter out the target Installation and get an API client for it.
+Finally, use
+:py:class:`~octomachinery.github.api.raw_client.RawGitHubAPI` as usual.
+
 .. code:: python
 
     import asyncio
