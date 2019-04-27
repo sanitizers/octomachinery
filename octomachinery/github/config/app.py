@@ -46,7 +46,4 @@ class GitHubAppIntegrationConfig:
         # pylint: disable=relative-beyond-top-level
         from ...app.runtime.context import RUNTIME_CONTEXT
 
-        name = RUNTIME_CONTEXT.config.runtime.app_name
-        version = RUNTIME_CONTEXT.config.runtime.app_version
-        url = RUNTIME_CONTEXT.config.runtime.app_url
-        return f'{name}/{version} (+{url})'
+        return RUNTIME_CONTEXT.config.runtime.user_agent
