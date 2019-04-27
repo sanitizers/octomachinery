@@ -17,6 +17,7 @@
    :caption: Contents:
 
    getting-started
+   howto-guides
 
 
 
