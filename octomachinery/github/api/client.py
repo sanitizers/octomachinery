@@ -21,12 +21,12 @@ class GitHubAPIClient(AbstractAsyncContextManager):
     """A client to the GitHub API with an asynchronous CM support."""
 
     _github_token: GitHubToken
+    _user_agent: str
+    """A User-Agent string to use in HTTP requests to the GitHub API."""
     _external_session: typing.Optional[aiohttp.ClientSession] = (
         attr.ib(default=None)
     )
     """A session created externally."""
-    _user_agent: str
-    """A User-Agent string to use in HTTP requests to the GitHub API."""
     _current_session: aiohttp.ClientSession = attr.ib(init=False, default=None)
     """A session created per CM if there's no external one."""
     _api_client: RawGitHubAPI = attr.ib(init=False, default=None)
