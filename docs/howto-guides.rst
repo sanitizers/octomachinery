@@ -5,6 +5,19 @@ How-to guides
 Running a one-off task against GitHub API
 -----------------------------------------
 
+Sometimes you need to run a series of queries against GitHub API.
+To do this, initialize a token (it's taken from the ``GITHUB_TOKEN`` env
+var in the example below), constuct a GitHub API wrapper and you are
+good to go.
+
+:py:class:`~octomachinery.github.api.raw_client.RawGitHubAPI` is a
+wrapper around interface provided by
+:py:class:`~gidgethub.abc.GitHubAPI`, you can find the usage interface
+on its documentation page. Don't forget to specify a ``user_agent``
+string — it's mandatory!
+
+API calls return native Python :py:class:`dict` or iterable objects.
+
 .. code:: python
 
     import asyncio
