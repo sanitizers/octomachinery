@@ -43,7 +43,7 @@ class GitHubAppInstallation:
             if self._token.expired:
                 return None
 
-            return GitHubOAuthToken(str(self._token))
+            return GitHubOAuthToken(self._token.token)
         except TypeError:
             return None
 
@@ -60,12 +60,8 @@ class GitHubAppInstallation:
     @property
     def github_installation_client(self):  # noqa: D401
         """The GitHub App client with an async CM interface."""
-        try:
-            token = GitHubOAuthToken(self._token.token)
-        except AttributeError:
-            token = None
         return GitHubAPIClient(
-            github_token=token,
+            github_token=self.token,
             # pylint: disable=protected-access
             user_agent=self._github_app._config.user_agent,
         )
