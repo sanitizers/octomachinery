@@ -24,6 +24,8 @@ class GitHubAction:
 
     _metadata: GitHubActionConfig
     """A GitHub Action metadata from envronment vars."""
+    _user_agent: str
+    """A User-Agent string to use in HTTP requests to the GitHub API."""
 
     @property
     def event(self):  # noqa: D401
@@ -50,4 +52,7 @@ class GitHubAction:
     @property
     def github_installation_client(self):  # noqa: D401
         """The GitHub App client with an async CM interface."""
-        return GitHubAPIClient(self.token)
+        return GitHubAPIClient(
+            github_token=self.token,
+            user_agent=self._user_agent,
+        )

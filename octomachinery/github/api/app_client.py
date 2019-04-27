@@ -118,7 +118,10 @@ class GitHubApp(AbstractAsyncContextManager):
     @property
     def github_app_client(self):  # noqa: D401
         """The GitHub App client with an async CM interface."""
-        return GitHubAPIClient(self.gh_jwt)
+        return GitHubAPIClient(
+            github_token=self.gh_jwt,
+            user_agent=self._config.user_agent,
+        )
 
     async def add_installation(self, event):
         """Retrieve an installation creds from store."""

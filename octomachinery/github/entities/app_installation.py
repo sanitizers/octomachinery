@@ -64,4 +64,7 @@ class GitHubAppInstallation:
             token = GitHubOAuthToken(self._token.token)
         except AttributeError:
             token = None
-        return GitHubAPIClient(token)
+        return GitHubAPIClient(
+            github_token=token,
+            user_agent=self._github_app.config.user_agent,
+        )

@@ -28,7 +28,10 @@ async def process_github_action(config):
     """Schedule GitHub Action event for processing."""
     logger.info('Processing GitHub Action event...')
 
-    github_action = GitHubAction(config.action)
+    github_action = GitHubAction(
+        metadata=config.action,
+        user_agent=config.github.user_agent,
+    )
     logger.info('GitHub Action=%r', config.action)
 
     await route_github_action_event(github_action)

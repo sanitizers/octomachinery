@@ -25,6 +25,8 @@ class GitHubAPIClient(AbstractAsyncContextManager):
         attr.ib(default=None)
     )
     """A session created externally."""
+    _user_agent: str
+    """A User-Agent string to use in HTTP requests to the GitHub API."""
     _current_session: aiohttp.ClientSession = attr.ib(init=False, default=None)
     """A session created per CM if there's no external one."""
     _api_client: RawGitHubAPI = attr.ib(init=False, default=None)
@@ -32,14 +34,11 @@ class GitHubAPIClient(AbstractAsyncContextManager):
 
     def __attrs_post_init__(self):
         """Gidgethub API client instance initializer."""
-        # pylint: disable=relative-beyond-top-level
-        from ...app.runtime.context import RUNTIME_CONTEXT
-
         try:
             self._api_client = RawGitHubAPI(
                 token=self._github_token,
                 session=self._open_session(),
-                user_agent=RUNTIME_CONTEXT.config.github.user_agent,
+                user_agent=self._user_agent,
             )
         except (AttributeError, TypeError):
             pass
