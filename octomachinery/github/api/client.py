@@ -35,13 +35,25 @@ class GitHubAPIClient(AbstractAsyncContextManager):
     def __attrs_post_init__(self):
         """Gidgethub API client instance initializer."""
         try:
-            self._api_client = RawGitHubAPI(
-                token=self._github_token,
+            self._api_client = self.get_github_api_client(
                 session=self._open_session(),
-                user_agent=self._user_agent,
             )
         except (AttributeError, TypeError):
             pass
+
+    def get_github_api_client(
+            self,
+            *,
+            session: typing.Optional[aiohttp.ClientSession] = None,
+    ):
+        """Gidgethub API client instance."""
+        extra_kwargs = {'session': session} if session is not None else {}
+
+        return RawGitHubAPI(
+            token=self._github_token,
+            user_agent=self._user_agent,
+            **extra_kwargs,
+        )
 
     @property
     def is_initialized(self):
