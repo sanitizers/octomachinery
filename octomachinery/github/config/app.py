@@ -40,10 +40,11 @@ class GitHubAppIntegrationConfig:
         converter=lambda s: SecretStr(s) if s is not None else s,
     )
 
+    app_name = environ.var(None, name='OCTOMACHINERY_APP_NAME')
+    app_version = environ.var(None, name='OCTOMACHINERY_APP_VERSION')
+    app_url = environ.var(None, name='OCTOMACHINERY_APP_URL')
+
     @property
     def user_agent(self):  # noqa: D401
         """The User-Agent value to use when hitting GitHub API."""
-        # pylint: disable=relative-beyond-top-level
-        from ...app.runtime.context import RUNTIME_CONTEXT
-
-        return RUNTIME_CONTEXT.config.runtime.user_agent
+        return f'{self.app_name}/{self.app_version} (+{self.app_url})'
