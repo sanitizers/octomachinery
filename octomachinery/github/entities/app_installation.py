@@ -5,10 +5,13 @@ from __future__ import annotations
 import logging
 import typing
 
+import aiohttp
 import attr
 
 # pylint: disable=relative-beyond-top-level
 from ..api.client import GitHubAPIClient
+# pylint: disable=relative-beyond-top-level
+from ..api.raw_client import RawGitHubAPI
 # pylint: disable=relative-beyond-top-level
 from ..api.tokens import GitHubOAuthToken
 # pylint: disable=relative-beyond-top-level
@@ -56,6 +59,21 @@ class GitHubAppInstallation:
                 accept='application/vnd.github.machine-man-preview+json',
             )))
         return self._token
+
+    def get_github_api_client(
+            self,
+            *,
+            session: typing.Optional[aiohttp.ClientSession] = None,
+    ):
+        """Gidgethub API client instance."""
+        extra_kwargs = {'session': session} if session is not None else {}
+
+        return RawGitHubAPI(
+            token=self.token,
+            # pylint: disable=protected-access
+            user_agent=self._github_app._config.user_agent,
+            **extra_kwargs,
+        )
 
     @property
     def github_installation_client(self):  # noqa: D401
