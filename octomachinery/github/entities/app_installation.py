@@ -66,5 +66,6 @@ class GitHubAppInstallation:
             token = None
         return GitHubAPIClient(
             github_token=token,
-            user_agent=self._github_app.config.user_agent,
+            # pylint: disable=protected-access
+            user_agent=self._github_app._config.user_agent,
         )
