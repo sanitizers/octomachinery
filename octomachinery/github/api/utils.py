@@ -1,6 +1,7 @@
 """Utilitary helpers."""
 
 from functools import wraps
+from inspect import Parameter, Signature
 from types import AsyncGeneratorType
 from typing import Any, Dict, Tuple
 
@@ -49,5 +50,22 @@ def accept_preview_version(wrapped_coroutine):
                 yield result_item
 
         return async_generator_wrapper()
+
+    original_wrapped_signature = Signature.from_callable(wrapped_coroutine)
+    original_callable_params = original_wrapped_signature.parameters
+    wrapped_callable_params = list(original_callable_params.values())
+
+    accept_pos = list(original_callable_params.keys()).index('accept')
+    preview_param = Parameter(
+        name='preview_api_version',
+        annotation='Optional[str]',
+        default=None,
+        kind=Parameter.KEYWORD_ONLY,
+    )
+    wrapped_callable_params.insert(accept_pos, preview_param)
+
+    coroutine_wrapper.__signature__ = original_wrapped_signature.replace(
+        parameters=wrapped_callable_params,
+    )
 
     return coroutine_wrapper
