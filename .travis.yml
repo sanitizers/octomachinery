@@ -12,9 +12,6 @@ cache:
 python:
 - "3.7"
 
-env:
-  TOXENV: python
-
 before_install:
 - pip install tox-venv
 install:
@@ -33,6 +30,10 @@ jobs:
     name: Checking docs build
     env:
       TOXENV: build-docs
+  - python: "3.7"
+    name: Running pytest test suite
+    env:
+      TOXENV: python
   - &deploy-job
     stage: Upload a new version of python package to PYPI
     name: Publishing current Git tagged version of dist to PyPI
