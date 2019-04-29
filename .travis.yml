@@ -12,6 +12,9 @@ cache:
 python:
 - "3.7"
 
+env:
+  TOXENV: pre-commit
+
 before_install:
 - pip install tox-venv
 install:
