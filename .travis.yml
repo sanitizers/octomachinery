@@ -13,7 +13,7 @@ python:
 - "3.7"
 
 env:
-  TOXENV: pre-commit
+  TOXENV: python
 
 before_install:
 - pip install tox-venv
