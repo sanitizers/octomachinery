@@ -8,8 +8,10 @@ import subprocess
 import tempfile
 
 import pytest
+import setuptools_scm.version
 
 from octomachinery.utils.versiontools import (
+    cut_local_version_on_upload,
     get_self_version,
 )
 
@@ -89,8 +91,9 @@ def test_get_self_version_in_git_repo(
     head_sha1_hash = git_cmd('rev-parse', '--short', 'HEAD').strip()
     assert get_self_version() == f'1.3.10.dev1+g{head_sha1_hash}'
 
-    monkeypatch.setenv('PYPI_UPLOAD', 'true')
-    assert get_self_version() == f'1.3.10.dev1'
+    with monkeypatch.context() as mp_ctx:
+        mp_ctx.setenv('PYPI_UPLOAD', 'true')
+        assert get_self_version() == f'1.3.10.dev1'
 
 
 def test_get_self_version_outside_git_repo(
@@ -98,3 +101,21 @@ def test_get_self_version_outside_git_repo(
 ):
     """Check that version is unknown outside of Git repo."""
     assert get_self_version() == 'unknown'
+
+
+def test_cut_local_version_on_upload(
+        monkeypatch,
+        tmp_git_repo,  # pylint: disable=unused-argument
+):
+    """Test that PEP440 local version isn't emitted when upload."""
+    scm_node = 'gfe99188'
+    ver = setuptools_scm.version.ScmVersion(
+        'v1.1.4',
+        distance=3, node='gfe99188',
+        dirty=False, branch='master',
+    )
+    assert cut_local_version_on_upload(ver) == f'+{scm_node}'
+
+    with monkeypatch.context() as mp_ctx:
+        mp_ctx.setenv('PYPI_UPLOAD', 'true')
+        assert cut_local_version_on_upload(ver) == ''
