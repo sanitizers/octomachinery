@@ -13,7 +13,7 @@ python:
 - "3.7"
 
 before_install:
-- pip install tox-venv
+- pip install -U tox
 install:
 - tox --notest
 
