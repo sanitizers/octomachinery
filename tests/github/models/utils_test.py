@@ -1,10 +1,17 @@
 """Tests for GitHub models utility functions."""
 
+from datetime import datetime, timezone
+from functools import partial
+
 import pytest
 
 from octomachinery.github.models.utils import (
-    SecretStr, SuperSecretStr,
+    convert_datetime, SecretStr, SuperSecretStr,
 )
+
+
+# pylint: disable=invalid-name
+utc_datetime = partial(datetime, tzinfo=timezone.utc)
 
 
 @pytest.mark.parametrize(
@@ -68,3 +75,27 @@ def test_secret_sanitizers(secret_class, secret_placeholder):
         f'o={repr(open_data)}), o={secret_placeholder})'
     )
     assert repr(sub_data_struct) == expected_nested_data_struct_repr
+
+
+@pytest.mark.parametrize(
+    'input_date_string,expected_date_object',
+    (
+        (1556634127, utc_datetime(2019, 4, 30, 14, 22, 7)),
+        (0, utc_datetime(1970, 1, 1, 0, 0)),
+        ('2032-01-02T05:28:47Z', utc_datetime(2032, 1, 2, 5, 28, 47)),
+        ('2032-01-02T05:28:47Z+00:00', utc_datetime(2032, 1, 2, 5, 28, 47)),
+        (
+            '2032-01-02T05:28:47.000Z+00:00',
+            utc_datetime(2032, 1, 2, 5, 28, 47),
+        ),
+        (
+            '2032-01-02T05:28:47.000000Z+00:00',
+            utc_datetime(2032, 1, 2, 5, 28, 47),
+        ),
+        ('2032-01-02T05:28:47.000Z', utc_datetime(2032, 1, 2, 5, 28, 47)),
+        ('2032-01-02T05:28:47.000000Z', utc_datetime(2032, 1, 2, 5, 28, 47)),
+    ),
+)
+def test_convert_datetime(input_date_string, expected_date_object):
+    """Test that convert_datetime recognizes supported date formats."""
+    assert convert_datetime(input_date_string) == expected_date_object
