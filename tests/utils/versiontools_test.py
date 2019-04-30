@@ -13,6 +13,7 @@ import setuptools_scm.version
 from octomachinery.utils.versiontools import (
     cut_local_version_on_upload,
     get_self_version,
+    get_version_from_scm_tag,
 )
 
 
@@ -119,3 +120,31 @@ def test_cut_local_version_on_upload(
     with monkeypatch.context() as mp_ctx:
         mp_ctx.setenv('PYPI_UPLOAD', 'true')
         assert cut_local_version_on_upload(ver) == ''
+
+
+def test_get_version_from_scm_tag_in_git_repo(
+        monkeypatch,
+        tmp_git_repo,  # pylint: disable=unused-argument
+        git_cmd, git_commit_cmd, git_tag_cmd,
+):
+    """Check that get_version_from_scm_tag works properly in Git repo."""
+    assert get_self_version() == '0.1.dev0'
+
+    git_commit_cmd('-m', 'Test commit')
+    git_tag_cmd('v1.3.9')
+    assert get_version_from_scm_tag() == '1.3.9'
+
+    git_commit_cmd('-m', 'Test commit 2')
+    head_sha1_hash = git_cmd('rev-parse', '--short', 'HEAD').strip()
+    assert get_version_from_scm_tag() == f'1.3.10.dev1+g{head_sha1_hash}'
+
+    with monkeypatch.context() as mp_ctx:
+        mp_ctx.setenv('PYPI_UPLOAD', 'true')
+        assert get_version_from_scm_tag() == f'1.3.10.dev1+g{head_sha1_hash}'
+
+
+def test_get_version_from_scm_tag_outside_git_repo(
+        temporary_working_directory,  # pylint: disable=unused-argument
+):
+    """Check that version is unknown outside of Git repo."""
+    assert get_version_from_scm_tag() == 'unknown'
