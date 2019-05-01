@@ -32,7 +32,7 @@ class GitHubAppIntegrationConfig:
     private_key = environ.var(
         None,
         name='GITHUB_PRIVATE_KEY',
-        converter=SecretStr,
+        converter=lambda s: SecretStr(s.replace('\\n', '\n')),
         validator=validate_is_not_none_if_app,
     )
     webhook_secret = environ.var(
