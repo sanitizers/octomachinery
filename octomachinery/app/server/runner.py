@@ -25,18 +25,28 @@ def run(
         name: Optional[str] = None,
         version: Optional[str] = None,
         url: Optional[str] = None,
+        config: Optional[BotAppConfig] = None,
 ):
     """Start up a server using CLI args for host and port."""
-    config = BotAppConfig.from_dotenv(
-        app_name=name,
-        app_version=version,
-        app_url=url,
-    )
-    if len(sys.argv) > 2:
-        config = attr.evolve(
-            config,
-            server=WebServerConfig(*sys.argv[1:3]),
+    if (
+            config is not None and
+            (name is not None or version is not None or url is not None)
+    ):
+        raise TypeError(
+            'run() takes either a BotAppConfig instance as a config argument '
+            'or name, version and url arguments.',
         )
+    if config is None:
+        config = BotAppConfig.from_dotenv(
+            app_name=name,
+            app_version=version,
+            app_url=url,
+        )
+        if len(sys.argv) > 2:
+            config = attr.evolve(
+                config,
+                server=WebServerConfig(*sys.argv[1:3]),
+            )
     RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
 
     logging.basicConfig(
