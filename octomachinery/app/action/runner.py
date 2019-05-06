@@ -39,7 +39,7 @@ async def process_github_action(config):
     return ActionSuccess('GitHub Action has been processed')
 
 
-def run(config: typing.Optional[BotAppConfig] = None) -> None:
+def run(*, config: typing.Optional[BotAppConfig] = None) -> None:
     """Start up a server using CLI args for host and port."""
     if config is None:
         config = BotAppConfig.from_dotenv()
