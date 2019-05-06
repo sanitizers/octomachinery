@@ -38,15 +38,17 @@ def run(
             server=WebServerConfig(*sys.argv[1:3]),
         )
     RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
-    if config.runtime.debug:  # pylint: disable=no-member
-        logging.basicConfig(level=logging.DEBUG)
 
+    logging.basicConfig(
+        level=logging.DEBUG
+        if config.runtime.debug  # pylint: disable=no-member
+        else logging.INFO,
+    )
+    if config.runtime.debug:  # pylint: disable=no-member
         logger.debug(
             ' App version: %s '.center(50, '='),
             config.runtime.app_version,
         )
-    else:
-        logging.basicConfig(level=logging.INFO)
 
     try:
         asyncio.run(run_server_forever(config))
