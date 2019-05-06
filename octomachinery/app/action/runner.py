@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import typing
 
 # pylint: disable=relative-beyond-top-level
 from ...github.entities.action import GitHubAction
@@ -38,15 +39,18 @@ async def process_github_action(config):
     return ActionSuccess('GitHub Action has been processed')
 
 
-def run():
+def run(config: typing.Optional[BotAppConfig] = None) -> None:
     """Start up a server using CLI args for host and port."""
-    config = BotAppConfig.from_dotenv()
+    if config is None:
+        config = BotAppConfig.from_dotenv()
     RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
+
     logging.basicConfig(
         level=logging.DEBUG
         if config.runtime.debug  # pylint: disable=no-member
         else logging.INFO,
     )
+
     try:
         processing_outcome = asyncio.run(process_github_action(config))
     except GitHubActionError as action_error:
