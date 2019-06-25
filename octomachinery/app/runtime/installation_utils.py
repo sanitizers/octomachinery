@@ -50,6 +50,32 @@ async def _get_file_contents_from_api(
     return b64decode(config_response['content']).decode()
 
 
+async def read_file_contents_from_repo(
+        *,
+        file_path: str,
+        ref: typing.Optional[str] = None,
+) -> str:
+    """Get a config object from the current installation.
+
+    Read from file system checkout in case of GitHub Action env.
+    Grab it via GitHub API otherwise.
+
+    Usage::
+
+        >>> from octomachinery.app.runtime.installation_utils import (
+        ...     read_file_contents_from_repo
+        ... )
+        >>> await read_file_contents_from_repo(
+        ...     '/file/path.txt',
+        ...     ref='bdeaf38',
+        ... )
+    """
+    if RUNTIME_CONTEXT.IS_GITHUB_ACTION and ref is None:
+        return _get_file_contents_from_fs(file_path)
+
+    return await _get_file_contents_from_api(file_path, ref)
+
+
 async def get_installation_config(
         *,
         config_name: str = 'config.yml',
@@ -69,10 +95,10 @@ async def get_installation_config(
     """
     config_path = f'.github/{config_name}'
 
-    if RUNTIME_CONTEXT.IS_GITHUB_ACTION and ref is None:
-        config_content = _get_file_contents_from_fs(config_path)
-    else:
-        config_content = await _get_file_contents_from_api(config_path, ref)
+    config_content = await read_file_contents_from_repo(
+        file_path=config_path,
+        ref=ref,
+    )
 
     if config_content is None:
         return {}
