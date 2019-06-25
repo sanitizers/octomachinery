@@ -1,8 +1,12 @@
 """GitHub App runtime context helpers."""
 
+import logging
 import os
 
 from contextvars import ContextVar
+
+
+logger = logging.getLogger(__name__)
 
 
 class ContextLookupError(AttributeError):
@@ -60,5 +64,14 @@ def detect_env_mode():
             'TOKEN',
     }:
         if f'GITHUB_{var_suffix}' not in os.environ:
+            logger.info(
+                'Detected GitHub App mode since '
+                'GITHUB_%s is missing from the env',
+                var_suffix,
+            )
             return 'app'
+    logger.info(
+        'Detected GitHub Action mode since all the '
+        'typical env vars are present in the env',
+    )
     return 'action'
