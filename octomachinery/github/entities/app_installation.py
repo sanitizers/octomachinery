@@ -53,11 +53,13 @@ class GitHubAppInstallation:
     async def retrieve_access_token(self):
         """Retrieve installation access token from GitHub API."""
         async with self._github_app.github_app_client as gh_api:
-            self._token = GitHubInstallationAccessToken(**(await gh_api.post(
+            result = await gh_api.post(
                 self._metadata.access_tokens_url,
                 data=b'',
                 accept='application/vnd.github.machine-man-preview+json',
-            )))
+            )
+            self._token = GitHubInstallationAccessToken(token=result['token'],
+                                                        expires_at=result['expires_at'])
         return self._token
 
     def get_github_api_client(
