@@ -22,16 +22,18 @@ class GitHubAppInstallation:
     app_id: int = attr.ib(converter=int)
     """GitHub App ID."""
 
-    created_at: datetime = attr.ib(converter=convert_datetime)
+    # FIXME: unignore once this is solved:  # pylint: disable=fixme
+    # https://github.com/python/mypy/issues/6172#issuecomment-515718727
+    created_at: datetime = attr.ib(converter=convert_datetime)  # type: ignore
     """Date time when the installation has been installed."""
-    updated_at: datetime = attr.ib(converter=convert_datetime)
+    updated_at: datetime = attr.ib(converter=convert_datetime)  # type: ignore
     """Date time when the installation was last updated."""
 
-    account: dict
+    account: typing.Dict[str, typing.Any]
     """Target account (org or user) where this GitHub App is installed into."""
     events: typing.List[str]
     """List of webhook events the app will be receiving from the account."""
-    permissions: dict
+    permissions: typing.Dict[str, typing.Any]
     """Permission levels of access to API endpoints types."""
     repository_selection: str = attr.ib(converter=str)
     """Repository selection mode."""
@@ -59,7 +61,7 @@ class GitHubInstallationAccessToken:
 
     token: SecretStr = attr.ib(converter=SecretStr)
     """Access token for GitHub App Installation."""
-    expires_at: datetime = attr.ib(converter=convert_datetime)
+    expires_at: datetime = attr.ib(converter=convert_datetime)  # type: ignore
     """Token expiration time."""
 
     @property
