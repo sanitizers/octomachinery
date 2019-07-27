@@ -58,7 +58,7 @@ repos:
     args: []
 
 - repo: git://github.com/pre-commit/mirrors-mypy.git
-  rev: v0.701
+  rev: v0.720
   hooks:
   - id: mypy
     # args:
