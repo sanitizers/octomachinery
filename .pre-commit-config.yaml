@@ -56,3 +56,12 @@ repos:
     files: \.py$
     entry: python3 -m pylint.__main__
     args: []
+
+- repo: git://github.com/pre-commit/mirrors-mypy.git
+  rev: v0.701
+  hooks:
+  - id: mypy
+    # args:
+    # - --strict-optional
+    # - --no-strict-optional
+    # - --ignore-missing-imports
