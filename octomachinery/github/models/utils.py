@@ -14,12 +14,12 @@ def convert_datetime(datetime_obj) -> datetime:
 
 
 @convert_datetime.register
-def _(date_unixtime: int) -> datetime:
+def _convert_datetime_from_unixtime(date_unixtime: int) -> datetime:
     return datetime.fromtimestamp(date_unixtime, timezone.utc)
 
 
 @convert_datetime.register
-def _(date_string: str) -> datetime:
+def _convert_datetime_from_string(date_string: str) -> datetime:
     date_string = date_string.replace('.000Z', '.000000Z')
     if '.' not in date_string:
         date_string = date_string.replace('Z', '.000000Z')
