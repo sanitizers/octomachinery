@@ -63,6 +63,9 @@ class GitHubInstallationAccessToken:
     """Access token for GitHub App Installation."""
     expires_at: datetime = attr.ib(converter=convert_datetime)  # type: ignore
     """Token expiration time."""
+    permissions: typing.Dict[str, str]
+    """Permission levels of access to API endpoints types."""
+    repositories: typing.List[typing.Dict[str, typing.Any]]
 
     @property
     def expired(self):
