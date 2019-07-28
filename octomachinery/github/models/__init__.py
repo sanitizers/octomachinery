@@ -65,7 +65,13 @@ class GitHubInstallationAccessToken:
     """Token expiration time."""
     permissions: typing.Dict[str, str]
     """Permission levels of access to API endpoints types."""
-    repositories: typing.List[typing.Dict[str, typing.Any]]
+    repository_selection: str = attr.ib(converter=str)
+    """Repository selection mode."""
+    repositories: typing.List[typing.Dict[str, typing.Any]] = attr.ib(
+        default=[],
+        converter=list,
+    )
+    """List of accessible repositories."""
 
     @property
     def expired(self):
