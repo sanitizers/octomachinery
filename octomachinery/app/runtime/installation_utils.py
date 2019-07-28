@@ -1,10 +1,12 @@
 """Utility helpers for App/Action installations."""
 
 from base64 import b64decode
+from http import HTTPStatus
 from io import StringIO
 from pathlib import Path
 import typing
 
+import gidgethub
 import yaml
 
 from .context import RUNTIME_CONTEXT
@@ -35,10 +37,16 @@ async def _get_file_contents_from_api(
     repo_slug = RUNTIME_CONTEXT.github_event.data['repository']['full_name']
 
     api_query_params = f'?ref={ref}' if ref else ''
-    config_response = await github_api.getitem(
-        f'/repos/{repo_slug}/contents'
-        f'/{file_name}{api_query_params}',
-    )
+    try:
+        config_response = await github_api.getitem(
+            f'/repos/{repo_slug}/contents'
+            f'/{file_name}{api_query_params}',
+        )
+    except gidgethub.BadRequest as http_bad_req:
+        if http_bad_req.status_code == HTTPStatus.NOT_FOUND:
+            return None
+
+        raise
 
     config_file_found = (
         config_response.get('encoding') == 'base64' and
@@ -54,7 +62,7 @@ async def read_file_contents_from_repo(
         *,
         file_path: str,
         ref: typing.Optional[str] = None,
-) -> str:
+) -> typing.Optional[str]:
     """Get a config object from the current installation.
 
     Read from file system checkout in case of GitHub Action env.
