@@ -61,9 +61,8 @@ repos:
   rev: v0.720
   hooks:
   - id: mypy
-    # args:
-    # - --strict-optional
-    # - --no-strict-optional
-    # - --ignore-missing-imports
-    entry: mypy .
+    entry: mypy octomachinery/
     pass_filenames: false
+    language: python
+    additional_dependencies:
+    - .
