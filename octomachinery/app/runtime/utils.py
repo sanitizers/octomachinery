@@ -1,9 +1,9 @@
 """GitHub App runtime context helpers."""
 
+from contextvars import ContextVar, Token
 import logging
 import os
-
-from contextvars import ContextVar
+import typing
 
 
 logger = logging.getLogger(__name__)
@@ -17,10 +17,12 @@ class _ContextMap:
     __slots__ = '__map__', '__token_map__'
 
     def __init__(self, **initial_vars):
-        self.__map__ = {k: ContextVar(v) for k, v in initial_vars.items()}
+        self.__map__: typing.Dict[str, ContextVar[typing.Any]] = {
+            k: ContextVar(v) for k, v in initial_vars.items()
+        }
         """Storage for all context vars."""
 
-        self.__token_map__ = {}
+        self.__token_map__: typing.Dict[str, Token[typing.Any]] = {}
         """Storage for individual context var reset tokens."""
 
     def __dir__(self):

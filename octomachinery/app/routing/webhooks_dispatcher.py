@@ -4,6 +4,7 @@ import asyncio
 from functools import wraps
 from http import HTTPStatus
 import logging
+import typing
 
 from aiohttp import web
 from gidgethub import BadRequest, ValidationFailure
@@ -57,20 +58,21 @@ async def get_event_from_request(request):
         return event
 
 
-def validate_allowed_http_methods(*allowed_methods):
+def validate_allowed_http_methods(*allowed_methods: str):
     """Block disallowed HTTP methods."""
+    _allowed_methods: typing.Set[str]
     if not allowed_methods:
-        allowed_methods = {'POST'}
+        _allowed_methods = {'POST'}
     else:
-        allowed_methods = set(allowed_methods)
+        _allowed_methods = set(allowed_methods)
 
     def decorator(wrapped_function):
         @wraps(wrapped_function)
         async def wrapper(request):
-            if request.method not in allowed_methods:
+            if request.method not in _allowed_methods:
                 raise web.HTTPMethodNotAllowed(
                     method=request.method,
-                    allowed_methods=allowed_methods,
+                    allowed_methods=_allowed_methods,
                 ) from BadRequest(HTTPStatus.METHOD_NOT_ALLOWED)
             return await wrapped_function(request)
         return wrapper
