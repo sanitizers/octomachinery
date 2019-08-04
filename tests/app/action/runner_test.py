@@ -13,6 +13,7 @@ from octomachinery.app.routing import process_event_actions
 from octomachinery.app.runtime.config import RuntimeConfig
 from octomachinery.app.server.config import WebServerConfig
 from octomachinery.github.config.app import GitHubAppIntegrationConfig
+from octomachinery.github.errors import GitHubActionError
 from octomachinery.github.models.action_outcomes import ActionNeutral
 
 
@@ -30,7 +31,7 @@ async def check_run_created(action):  # pylint: disable=unused-argument
 @process_event_actions('neutral_event', {'qwerty'})
 async def neutral_event_qwerty(action):  # pylint: disable=unused-argument
     """Handle a neutral_event."""
-    ActionNeutral('Neutral outcome').raise_it()
+    raise GitHubActionError(ActionNeutral('Neutral outcome'))
 
 
 @process_event_actions('neutral_event')
