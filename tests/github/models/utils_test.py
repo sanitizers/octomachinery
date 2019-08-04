@@ -99,3 +99,36 @@ def test_secret_sanitizers(secret_class, secret_placeholder):
 def test_convert_datetime(input_date_string, expected_date_object):
     """Test that convert_datetime recognizes supported date formats."""
     assert convert_datetime(input_date_string) == expected_date_object
+
+
+@pytest.mark.parametrize(
+    'input_date_string',
+    (
+        None,
+        float('NaN'),
+        float('Inf'),
+        -float('Inf'),
+        object(),
+        {},
+        dict(),
+        [],
+        frozenset(),
+        (),
+    ),
+)
+def test_convert_datetime_negative(input_date_string):
+    """Test that convert_datetime errors out on supported date input."""
+    with pytest.raises(
+            ValueError,
+            match=r'^The input arg type .* is not supported$',
+    ):
+        convert_datetime(input_date_string)
+
+
+def test_convert_datetime_empty_string():
+    """Test that convert_datetime errors out on supported date input."""
+    with pytest.raises(
+            ValueError,
+            match=r'^The input arg .* is unsupported$',
+    ):
+        convert_datetime('')

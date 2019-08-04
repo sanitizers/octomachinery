@@ -20,6 +20,10 @@ def _convert_datetime_from_unixtime(date_unixtime: int) -> datetime:
 
 @convert_datetime.register
 def _convert_datetime_from_string(date_string: str) -> datetime:
+    if not date_string:
+        raise ValueError(
+            f'The input arg {date_string!r} is unsupported',
+        )
     date_string = date_string.replace('.000Z', '.000000Z')
     if '.' not in date_string:
         date_string = date_string.replace('Z', '.000000Z')
