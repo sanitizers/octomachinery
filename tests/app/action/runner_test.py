@@ -9,6 +9,7 @@ from octomachinery.app.action.config import GitHubActionConfig
 from octomachinery.app.action.runner import run
 from octomachinery.app.config import BotAppConfig
 from octomachinery.app.routing import process_event
+from octomachinery.app.routing import process_event_actions
 from octomachinery.app.runtime.config import RuntimeConfig
 from octomachinery.app.server.config import WebServerConfig
 from octomachinery.github.config.app import GitHubAppIntegrationConfig
@@ -26,10 +27,15 @@ async def check_run_created(action):  # pylint: disable=unused-argument
     assert False
 
 
-@process_event('neutral_event', action='qwerty')
+@process_event_actions('neutral_event', {'qwerty'})
 async def neutral_event_qwerty(action):  # pylint: disable=unused-argument
     """Handle a neutral_event."""
     ActionNeutral('Neutral outcome').raise_it()
+
+
+@process_event_actions('neutral_event')
+async def neutral_event_dummy(action):  # pylint: disable=unused-argument
+    """Handle any neutral event."""
 
 
 @pytest.fixture
