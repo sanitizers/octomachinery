@@ -13,6 +13,8 @@ python:
 - "3.7"
 
 before_install:
+- >-
+  which pylint || :
 - pip install -U tox
 install:
 - tox --notest
