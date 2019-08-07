@@ -14,12 +14,12 @@ python:
 
 before_install:
 - deactivate
-- pip install -U tox
+- python -m pip install -U tox --user
 install:
-- tox --notest
+- python -m tox --notest
 
 script:
-- tox
+- python -m tox
 
 jobs:
   fast_finish: true
