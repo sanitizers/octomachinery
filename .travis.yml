@@ -14,6 +14,7 @@ python:
 
 before_install:
 - deactivate
+- pyenv global 3.7
 - python3.7 -m pip install -U tox --user
 install:
 - python3.7 -m tox --notest
