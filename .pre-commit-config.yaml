@@ -54,7 +54,7 @@ repos:
     language: system
     name: PyLint
     files: \.py$
-    entry: python3 -m pylint.__main__
+    entry: python -m pylint
     args: []
 
 - repo: git://github.com/pre-commit/mirrors-mypy.git
