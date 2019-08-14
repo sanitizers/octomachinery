@@ -26,4 +26,4 @@ jobs:
         python -m tox --parallel auto --notest
     - name: Test with pytest
       run: |
-        python -m tox --parallel 0 --notest
+        python -m tox --parallel 0
