@@ -7,15 +7,18 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 5
       matrix:
         python-version:
         - 3.7
         os:
         - ubuntu-18.04
         env:
-        - TOXENV: python,check-docs,build-docs
-        - TOXENV: build-dists,pre-commit-ci
+        - TOXENV: pre-commit-ci
+        - TOXENV: check-docs
+        - TOXENV: build-docs
+        - TOXENV: build-dists
+        - TOXENV: python
 
     steps:
     - uses: actions/checkout@master
@@ -33,9 +36,7 @@ jobs:
     - name: Initialize pre-commit envs if needed
       run: |
         test -d .tox/pre-commit-ci && .tox/pre-commit-ci/bin/python -m pre_commit install-hooks || :
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v1
-    - name: Test with pytest
+    - name: Test with tox
       run: |
         python -m tox --parallel 0
       env: ${{ matrix.env }}
