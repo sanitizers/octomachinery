@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 5
       matrix:
@@ -13,6 +13,8 @@ jobs:
         - 3.7
         os:
         - ubuntu-18.04
+        - ubuntu-16.04
+        - macOS-10.14
         env:
         - TOXENV: pre-commit-ci
         - TOXENV: check-docs
