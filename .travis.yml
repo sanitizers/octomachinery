@@ -51,8 +51,7 @@ jobs:
       on:
         all_branches: true
         tags: true
-      user: >-
-        @token
+      user: __token__
       password:
         secure: >-
           NihDbboQ/8fwKgk9Uv3+xH2Vww3cndtKDRAGrCRsKr8AfaCjqA/fwg8jcta3FEgpCAHRvATIc63bexSv5fn4iyDpiQYUFbHVTUiou/TwH+/o14LE5bSriB/fwWtfg6KKA+PO7IBPyzKP5Kn6U0YFPy0sTboYjGnHnqKSci/pbra8QTrVuOnbuFOC8oeg9eckl2k3TYPFm/sBU9YO4nPfXxkAQnNvvisVEEkljJ+RzP6h0uroTUXH6DTTyGb9IvK85no71M9LW3DlXdSss1gga7LpPCabEQlJmYr1SjlWT1wSFJihtiP+0aTo/UCNoUyFbWVyWd+f7mJpbMtAY57AmMF9BSqcvSOke6TOj5k3uIbqJ6ePvj7WUA8qE1AebOm4OcFK2tGBpp4rue97qHvAyYbDIg0Yo73OQx2WuWdB3GAlvuXw+7yRPtRuaEbUpYLV0rn34tbQlTEoK572VcPas18qcw8+EPLfJt/dbUsQUtDdu7gw6nXIuOOa8FOMPwt9fSls8ajpiHR+llGQ78aOIJDWGuhfBmlCUnzfZU2KtK/e8+ETQmdMVf9eqvSEAsyccNt+jTA8tSm11BvzV5HRruJlSao4dpo6U+EwZlf+CIzGUZVvbUhY5SNNhMGrufW5vBwY3NoCUQS2Srt20kELCiCeu1G1Pw1K4737ceTz1qw=
@@ -70,7 +69,7 @@ jobs:
       <<: *deploy-step
       password:  # Test PyPI has a separate account hence separately generated token
         secure: >-
-          S5W1qNIBYn3rZCxUftue6d7Tw/cgGKCQRG+ZrKaRTgJbBaDvwBcIyXHHARYRAldvoTKnGCBUSs+LFlujAalvN6eufwT59YA8IHGd66Gy6mp/iUYNz8s2GnoYPD2IYlcIzBsmdAbpaeJ59WteasAe5xOW7VoHiWA2CtaxP3MgpH/AFUI4rmRVql9wsv2+LNV9TPrclc/WDELrHrfjIB0gEofV48utLghvmYoMvaa4pY793Kjcx6csPX8F/lXzERNYwlXFcEZLae3moj6VuZCKwqn45iXZprVTEZxjcjCcYqehcyjgAjqydJL4H3zRBIUOd7WxiYDmPinLe3T1ArMytlZBuQsZEUBhmmP/DL7fGGzWIuXx+ihYxxQd1/LTMypdi7nGFjCQKBm7lFVd0ki/DMKLC1zcjew/k7KUDjPTW1a1BtYkQAnGtiKB0NJNaSYO2aAt64HvmOA3wWM6W5PvPIzY2eiD9aAP/nEwwYFHF1U3D6vEUGg5NXt8am3B/r9TdJQ7wO59LqG8x4zXO0xBFThH6zIZpoxri7xHjfRoC9BW57ksq4A+zFN5Q3t5B/pvO+Nyjo74o9mPs/0nu0m85r8/qEkADVmmnMTNenSiFVWF6quknw2aed9mbi+JH+tHjwki7H+BKRM3+VJsbguybMhrnfcie5zDD5UTXalQQAk=
+          KORvGOUrSOrz90HmRdhu2FF0oszydzh0JW1DjkBKCmLlx/7dGN0YYsI+vaai6EBtoMMF7pRR/Hwc1Kc5OqjDnsVfIiPtVLld8whplYR3AflRN+X/rjiVoUiumBFUzJSzjhzk9lIUg3dSuiTrs/J+UPx1PriqfRi6eFdujQzqFg6LVnvHhC2C5BvcG15Y+PI+J0Z2o9snTJJvFM30Z3M+Xtr8df0XuWw7SM4NSaAtn+GvwBjXbQD9ehwJ5mpdQLVdln0dcKVOJkCMI8418XvT4AcyRQSKpc6z2+VRu+6TKqmtsfLfUpapiRjROltN+tMiHKVSLbu6zrYkelsAW8JIfAJO8oRqFThgV+gKq/3qsRVF7QTeDqkNJBosrdsxsCj5J5YJP0VQikgzkKPwUNG2lcKM1q7ErOKs7wz6GOB8meTs+sYVbYXOtiIXZhfSb+gUaNzFHcm+r5rt3zVIU7+lJHBsjTavGQXN88odSqpnuWKXIf5GirkBYyg4gcjoR9ID9WilBUHxd92cG9eiBAsXybimE9rnjSsVmX+TkvC/S9hXxGm+ew+5LARRAhVzhvCSwOpfHTo7HatBWr+/WFHrva1nNPt9ljTNy7OIOM4q43TDbMe9DqjqgtomUoMPIUgmUFNTt22Ib44ah9n5+Z3NEM0KKPPn1LVvNweo7KX5cwg=
       server: https://test.pypi.org/legacy/
       on:
         all_branches: true
