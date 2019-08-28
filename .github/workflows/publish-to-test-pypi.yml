@@ -3,7 +3,8 @@ name: Publish Python distribution package to Test PyPI
 on: [deployment]
 
 jobs:
-  build-n-publish:
+  # build-n-publish:
+  build:
     # name: Build and publish Python dist to Test PyPI
     runs-on: ${{ matrix.os }}
     strategy:
