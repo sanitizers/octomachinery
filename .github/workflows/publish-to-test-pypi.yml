@@ -4,10 +4,10 @@ on: [deployment]
 
 jobs:
   build-n-publish:
-    name: Build and publish Python dist to Test PyPI
+    # name: Build and publish Python dist to Test PyPI
     runs-on: ${{ matrix.os }}
     strategy:
-      max-parallel: 1
+      # max-parallel: 1
       matrix:
         python-version:
         - 3.7
