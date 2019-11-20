@@ -67,6 +67,19 @@ Prerequisites
 
 Python 3.7+
 
+Contribute Cheroot
+------------------
+
+**Want to add something to upstream?** Feel free to submit a PR or file
+an issue if unsure.
+Note that PR is more likely to be accepted if it includes tests and
+detailed description helping maintainers to understand it better 🎉
+
+Oh, and be pythonic, please 🐍
+
+**Don't know how?** Check out `How to Contribute to Open Source
+<https://opensource.guide/how-to-contribute/>`_ article by GitHub 🚀
+
 License
 -------
 
