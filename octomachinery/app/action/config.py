@@ -8,8 +8,8 @@ import environ
 from ...github.models.utils import SecretStr
 
 
-@environ.config  # pylint: disable=too-few-public-methods
-class GitHubActionConfig:
+@environ.config
+class GitHubActionConfig:  # pylint: disable=too-few-public-methods
     """GitHub Action config."""
 
     workflow = environ.var(

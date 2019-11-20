@@ -40,6 +40,7 @@ def temporary_working_directory():
 def git_cmd():
     """Provide a Git command helper."""
     git_cmd = ('git', )
+    # pylint: disable=unexpected-keyword-arg
     return lambda *args: subprocess.check_output(git_cmd + args, text=True)
 
 

@@ -11,7 +11,7 @@ def validate_is_not_none_if_app(
         attr, value,
 ):
     """Forbid None value in a GitHub App context."""
-    # pylint: disable=relative-beyond-top-level
+    # pylint: disable=relative-beyond-top-level,import-outside-toplevel
     from ...app.runtime.utils import detect_env_mode
 
     if value is None and detect_env_mode() == 'app':

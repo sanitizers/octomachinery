@@ -19,7 +19,8 @@ class GitHubToken:  # pylint: disable=too-few-public-methods
         return self._token_value
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
+@attr.dataclass
+# pylint: disable=too-few-public-methods
 class GitHubOAuthToken(GitHubToken):
     r"""GitHub OAuth Token.
 
@@ -31,7 +32,8 @@ class GitHubOAuthToken(GitHubToken):
     """
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
+@attr.dataclass
+# pylint: disable=too-few-public-methods
 class GitHubJWTToken(GitHubToken):
     r"""GitHub JSON Web Token.
 

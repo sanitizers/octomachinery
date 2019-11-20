@@ -61,7 +61,7 @@ class GitHubApp(AbstractAsyncContextManager):
 
     async def __aenter__(self) -> 'GitHubApp':
         """Store all installations data before starting."""
-        # pylint: disable=relative-beyond-top-level
+        # pylint: disable=relative-beyond-top-level,import-outside-toplevel
         from ...app.runtime.context import RUNTIME_CONTEXT
 
         RUNTIME_CONTEXT.github_app = self
@@ -136,7 +136,7 @@ class GitHubApp(AbstractAsyncContextManager):
 
     async def get_installation(self, event):
         """Retrieve an installation creds from store."""
-        # pylint: disable=relative-beyond-top-level
+        # pylint: disable=relative-beyond-top-level,import-outside-toplevel
         from ...app.runtime.context import RUNTIME_CONTEXT
 
         if event.event == 'ping':

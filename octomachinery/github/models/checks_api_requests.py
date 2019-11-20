@@ -55,8 +55,8 @@ def optional_list_converter(args_list, convert_to_cls):
     return args_list
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class CheckAnnotation:
+@attr.dataclass
+class CheckAnnotation:  # pylint: disable=too-few-public-methods
     """Checks API annotation struct."""
 
     path: str = str_attrib()
@@ -78,8 +78,8 @@ class CheckAnnotation:
     raw_details: Optional[str] = optional_str_attrib()
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class CheckImage:
+@attr.dataclass
+class CheckImage:  # pylint: disable=too-few-public-methods
     """Checks API image struct."""
 
     alt: str = str_attrib()
@@ -122,8 +122,8 @@ class CheckActions:
             )
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class CheckOutput:
+@attr.dataclass
+class CheckOutput:  # pylint: disable=too-few-public-methods
     """Checks API output struct."""
 
     title: str = str_attrib()
@@ -214,8 +214,8 @@ class BaseCheckRequestMixin:
             raise ValueError(f'`{attribute.name}` must not exceed 3 items.')
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class NewCheckRequestMixin:
+@attr.dataclass
+class NewCheckRequestMixin:  # pylint: disable=too-few-public-methods
     """Checks API new check request mixin."""
 
     head_branch: str = str_attrib()

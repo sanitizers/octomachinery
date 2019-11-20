@@ -14,13 +14,14 @@ import pkg_resources
 # RTD hack start
 def patch_setuptools_in_rtd():
     """Install newer setuptools and octomachinery in RTD."""
-    import os
-    import sys
-    import subprocess
+    import os  # pylint: disable=import-outside-toplevel
+    import sys  # pylint: disable=import-outside-toplevel
+    import subprocess  # pylint: disable=import-outside-toplevel
 
     if not os.getenv('READTHEDOCS') or os.getenv('READTHEDOCS_EXEC'):
         return
 
+    # pylint: disable=unexpected-keyword-arg
     pyenv_python_executable = subprocess.check_output(
         ('pyenv', 'which', 'python3.7'), text=True,
     ).strip()

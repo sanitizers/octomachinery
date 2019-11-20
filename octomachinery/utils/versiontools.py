@@ -29,6 +29,7 @@ def cut_local_version_on_upload(version):
     if is_pypi_upload:
         return ''
 
+    # pylint: disable=import-outside-toplevel
     import setuptools_scm.version  # only available during setup time
     return setuptools_scm.version.get_local_node_and_date(version)
 
