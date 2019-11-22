@@ -71,8 +71,8 @@ Prerequisites
 
 Python 3.7+
 
-Contribute Cheroot
-------------------
+Contribute octomachinery
+------------------------
 
 **Want to add something to upstream?** Feel free to submit a PR or file
 an issue if unsure.
