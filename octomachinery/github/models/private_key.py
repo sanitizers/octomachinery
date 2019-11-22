@@ -59,7 +59,7 @@ class GitHubPrivateKey:
         )
 
     @property
-    def sha1_hash(self):
+    def fingerprint(self):
         """Colon-separated SHA1 hash string value of the public key.
 
         :returns: colon-separated SHA-1 hash string
@@ -87,7 +87,7 @@ class GitHubPrivateKey:
         """
         return (
             "<GitHubPrivateKey(b_raw_data=b'<SECRET>') "
-            f"with public key SHA-1 hash digest '{self.sha1_hash}>'"
+            f"with public key SHA-1 hash digest '{self.fingerprint}>'"
         )
 
     def __eq__(self, other_private_key):
@@ -97,15 +97,15 @@ class GitHubPrivateKey:
                   ``GitHubPrivateKey`` instance
         :rtype: bool
         """
-        return self.matches_hash(other_private_key.sha1_hash)
+        return self.matches_fingerprint(other_private_key.fingerprint)
 
-    def matches_hash(self, other_hash):
+    def matches_fingerprint(self, other_hash):
         """Compare our public key SHA-1 with ``other_hash``.
 
         :returns: the result of own SHA-1 hash comparison with ``other_hash``
         :rtype: bool
         """
-        return self.sha1_hash == other_hash
+        return self.fingerprint == other_hash
 
     @classmethod
     def from_file(cls, path):
