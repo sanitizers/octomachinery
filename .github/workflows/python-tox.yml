@@ -32,6 +32,10 @@ jobs:
         - os: macOS-latest
           python-version: 3.8
           env:
+            TOXENV: build-docs
+        - os: macOS-latest
+          python-version: 3.8
+          env:
             TOXENV: check-docs
 
     steps:
