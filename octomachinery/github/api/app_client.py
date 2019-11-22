@@ -3,14 +3,12 @@
 from collections import defaultdict
 from contextlib import AbstractAsyncContextManager
 import logging
-import time
 import types
 import typing
 
 from aiohttp.client_exceptions import ClientConnectorError
 import attr
 from gidgethub.sansio import Event
-import jwt
 
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import (
@@ -102,17 +100,9 @@ class GitHubApp(AbstractAsyncContextManager):
     @property
     def gh_jwt(self):
         """Generate app's JSON Web Token, valid for 60 seconds."""
-        now = int(time.time())
-        payload = {
-            'iat': now,
-            'exp': now + 60,
-            'iss': self._config.app_id,
-        }
-        token = jwt.encode(
-            payload,
-            key=self._config.private_key,
-            algorithm='RS256',
-        ).decode('utf-8')
+        token = self._config.private_key.make_jwt_for(
+            app_id=self._config.app_id,
+        )
         return GitHubJWTToken(token)
 
     @property

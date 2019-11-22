@@ -3,6 +3,8 @@ import environ
 
 
 # pylint: disable=relative-beyond-top-level
+from ..models.private_key import GitHubPrivateKey
+# pylint: disable=relative-beyond-top-level
 from ..models.utils import SecretStr
 
 
@@ -32,7 +34,7 @@ class GitHubAppIntegrationConfig:  # pylint: disable=too-few-public-methods
     private_key = environ.var(
         None,
         name='GITHUB_PRIVATE_KEY',
-        converter=SecretStr,
+        converter=lambda raw_data: GitHubPrivateKey(raw_data.encode()),
         validator=validate_is_not_none_if_app,
     )
     webhook_secret = environ.var(
