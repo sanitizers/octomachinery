@@ -28,14 +28,16 @@ class ActionOutcome:  # pylint: disable=too-few-public-methods
 
 
 @attr.dataclass
-class ActionSuccess(ActionOutcome):  # pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods
+class ActionSuccess(ActionOutcome):
     """GitHub Action successful outcome."""
 
     return_code: int = attr.ib(default=0, init=False)
 
 
 @attr.dataclass
-class ActionFailure(ActionOutcome):  # pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods
+class ActionFailure(ActionOutcome):
     """GitHub Action failed outcome."""
 
     return_code: int = attr.ib(default=1)
@@ -54,7 +56,8 @@ class ActionFailure(ActionOutcome):  # pylint: disable=too-few-public-methods
 
 
 @attr.dataclass
-class ActionNeutral(ActionOutcome):  # pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods
+class ActionNeutral(ActionOutcome):
     """GitHub Action neutral outcome."""
 
     # NOTE: It's EX_CONFIG under BSD and EREMCHG under GNU/Linux
