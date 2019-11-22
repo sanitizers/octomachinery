@@ -8,6 +8,10 @@
    :target: https://travis-ci.com/sanitizers/octomachinery
    :alt: Travis CI build status
 
+.. image:: https://github.com/sanitizers/octomachinery/workflows/Python%20package/badge.svg
+   :target: https://github.com/sanitizers/octomachinery/actions?workflow=Python%20package
+   :alt: GitHub Actions CI/CD build status — Python package
+
 .. image:: https://img.shields.io/readthedocs/octomachinery/latest.svg?logo=Read%20The%20Docs&logoColor=white
    :target: https://docs.octomachinery.dev/en/latest/?badge=latest
    :alt: Documentation Status
