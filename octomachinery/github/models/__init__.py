@@ -8,8 +8,8 @@ import attr
 from .utils import convert_datetime, SecretStr
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class GitHubAppInstallation:
+@attr.dataclass
+class GitHubAppInstallation:  # pylint: disable=too-few-public-methods
     """
     Represents a GitHub App installed into a user or an organization profile.
 
@@ -55,8 +55,8 @@ class GitHubAppInstallation:
     """API endpoint listing repositories accissible by this Installation."""
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class GitHubInstallationAccessToken:
+@attr.dataclass
+class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
     """Struct for installation access token response from GitHub API."""
 
     token: SecretStr = attr.ib(converter=SecretStr)

@@ -11,8 +11,8 @@ __all__ = ('ActionSuccess', 'ActionNeutral', 'ActionFailure', )
 logger = logging.getLogger(__name__)
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class ActionOutcome:
+@attr.dataclass
+class ActionOutcome:  # pylint: disable=too-few-public-methods
     """GitHub Action processing outcome."""
 
     message: str
@@ -27,15 +27,15 @@ class ActionOutcome:
         raise SystemExit(self.return_code)
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class ActionSuccess(ActionOutcome):
+@attr.dataclass
+class ActionSuccess(ActionOutcome):  # pylint: disable=too-few-public-methods
     """GitHub Action successful outcome."""
 
     return_code: int = attr.ib(default=0, init=False)
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class ActionFailure(ActionOutcome):
+@attr.dataclass
+class ActionFailure(ActionOutcome):  # pylint: disable=too-few-public-methods
     """GitHub Action failed outcome."""
 
     return_code: int = attr.ib(default=1)
@@ -53,8 +53,8 @@ class ActionFailure(ActionOutcome):
             )
 
 
-@attr.dataclass  # pylint: disable=too-few-public-methods
-class ActionNeutral(ActionOutcome):
+@attr.dataclass
+class ActionNeutral(ActionOutcome):  # pylint: disable=too-few-public-methods
     """GitHub Action neutral outcome."""
 
     # NOTE: It's EX_CONFIG under BSD and EREMCHG under GNU/Linux

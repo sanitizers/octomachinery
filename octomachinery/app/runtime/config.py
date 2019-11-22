@@ -5,8 +5,8 @@ import environ
 from .utils import detect_env_mode
 
 
-@environ.config  # pylint: disable=too-few-public-methods
-class RuntimeConfig:
+@environ.config
+class RuntimeConfig:  # pylint: disable=too-few-public-methods
     """Config of runtime env."""
 
     debug = environ.bool_var(False, name='DEBUG')

@@ -20,8 +20,8 @@ def validate_is_not_none_if_app(
         )
 
 
-@environ.config  # pylint: disable=too-few-public-methods
-class GitHubAppIntegrationConfig:
+@environ.config
+class GitHubAppIntegrationConfig:  # pylint: disable=too-few-public-methods
     """GitHub App auth related config."""
 
     app_id = environ.var(

@@ -3,8 +3,8 @@
 import environ
 
 
-@environ.config  # pylint: disable=too-few-public-methods
-class WebServerConfig:
+@environ.config
+class WebServerConfig:  # pylint: disable=too-few-public-methods
     """Config of a web-server."""
 
     host = environ.var('0.0.0.0', name='HOST')
