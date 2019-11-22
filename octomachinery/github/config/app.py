@@ -34,7 +34,8 @@ class GitHubAppIntegrationConfig:  # pylint: disable=too-few-public-methods
     private_key = environ.var(
         None,
         name='GITHUB_PRIVATE_KEY',
-        converter=lambda raw_data: GitHubPrivateKey(raw_data.encode()),
+        converter=lambda raw_data:
+        None if raw_data is None else GitHubPrivateKey(raw_data.encode()),
         validator=validate_is_not_none_if_app,
     )
     webhook_secret = environ.var(
