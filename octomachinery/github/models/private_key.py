@@ -136,7 +136,7 @@ class GitHubPrivateKey:
         now = int(time())
         payload = {
             'iat': now,
-            'exp': now + 60,
+            'exp': now + time_offset,
             'iss': app_id,
         }
 
