@@ -87,7 +87,7 @@ class GitHubPrivateKey:
         """
         return (
             "<GitHubPrivateKey(b_raw_data=b'<SECRET>') "
-            f"with public key SHA-1 hash digest '{self.fingerprint}>'"
+            f"with public key SHA-1 hash digest '{self.fingerprint}'>"
         )
 
     def __eq__(self, other_private_key):
