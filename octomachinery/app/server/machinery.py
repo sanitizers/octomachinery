@@ -47,9 +47,9 @@ async def run_forever(config):
             github_app._config.app_id,  # pylint: disable=protected-access
         )
         logger.info(
-            '* private key SHA-1: %s',
+            '* private key SHA-1 fingerprint: %s',
             # pylint: disable=protected-access
-            github_app._config.private_key.sha1_hash,
+            github_app._config.private_key.fingerprint,
         )
         logger.info(
             '* user agent: %s',
