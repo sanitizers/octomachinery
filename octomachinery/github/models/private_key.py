@@ -9,14 +9,14 @@ from cryptography.hazmat.primitives.serialization import load_pem_private_key
 from jwt import encode as compute_jwt
 
 
-def extract_public_key_sha1_from_private_key(rsa_private_key):
-    r"""Retrieve SHA-1 digest of the public key from the private key.
+def extract_private_key_sha1_fingerprint(rsa_private_key):
+    r"""Retrieve the private key SHA-1 fingerprint.
 
     :param rsa_private_key: private key object
     :type rsa_private_key: cryptography.hazmat.primitives.asymmetric.\
                            rsa.RSAPrivateKey
 
-    :returns: colon-separated SHA-1 hash string
+    :returns: colon-separated SHA-1 fingerprint
     :rtype: str
     """
     rsa_public_key = rsa_private_key.public_key()
@@ -24,7 +24,7 @@ def extract_public_key_sha1_from_private_key(rsa_private_key):
         Encoding.DER,
         PublicFormat.SubjectPublicKeyInfo,
     )
-    rsa_public_key_sha1_hash_digest = compute_sha1_hash(
+    rsa_public_key_sha1_fingerprint = compute_sha1_hash(
         b_rsa_public_key,
     ).hexdigest()
 
@@ -37,12 +37,12 @@ def extract_public_key_sha1_from_private_key(rsa_private_key):
             start_pos = end_pos
 
     return ':'.join(
-        emit_chunks(rsa_public_key_sha1_hash_digest, 2),
+        emit_chunks(rsa_public_key_sha1_fingerprint, 2),
     )
 
 
 class GitHubPrivateKey:
-    """Private key entity with a pre-calculated public key SHA-1.
+    """Private key entity with a pre-calculated SHA-1 fingerprint.
 
     :param bytes b_raw_data: the contents of a PEM file
     """
@@ -54,18 +54,18 @@ class GitHubPrivateKey:
             password=None,
             backend=default_backend(),
         )
-        self._col_separated_rsa_public_key_sha1_hash_digest = (
-            extract_public_key_sha1_from_private_key(self._rsa_private_key)
+        self._col_separated_rsa_public_key_sha1_fingerprint = (
+            extract_private_key_sha1_fingerprint(self._rsa_private_key)
         )
 
     @property
-    def fingerprint(self):
-        """Colon-separated SHA1 hash string value of the public key.
+    def fingerprint(self) -> str:
+        """Colon-separated SHA-1 fingerprint string value.
 
-        :returns: colon-separated SHA-1 hash string
+        :returns: colon-separated SHA-1 fingerprint
         :rtype: str
         """
-        return self._col_separated_rsa_public_key_sha1_hash_digest
+        return self._col_separated_rsa_public_key_sha1_fingerprint
 
     def __str__(self):
         """Avoid leaking private key contents via string protocol.
@@ -82,12 +82,12 @@ class GitHubPrivateKey:
         r"""Construct a GitHubPrivateKey object representation.
 
         :returns: GitHubPrivateKey object representation \
-                  with a SHA-1 of the public key
+                  with its SHA-1 fingerprint
         :rtype: str
         """
         return (
             "<GitHubPrivateKey(b_raw_data=b'<SECRET>') "
-            f"with public key SHA-1 hash digest '{self.fingerprint}'>"
+            f"with SHA-1 fingerprint '{self.fingerprint}'>"
         )
 
     def __eq__(self, other_private_key):
@@ -100,9 +100,9 @@ class GitHubPrivateKey:
         return self.matches_fingerprint(other_private_key.fingerprint)
 
     def matches_fingerprint(self, other_hash):
-        """Compare our public key SHA-1 with ``other_hash``.
+        """Compare our SHA-1 fingerprint with ``other_hash``.
 
-        :returns: the result of own SHA-1 hash comparison with ``other_hash``
+        :returns: the result of own fingerprint comparison with ``other_hash``
         :rtype: bool
         """
         return self.fingerprint == other_hash

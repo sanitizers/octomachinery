@@ -98,7 +98,7 @@ def test_github_private_key____repr__(github_private_key):
     """Verify what repr protocol only exposes fingerprint."""
     repr_pattern = re.compile(
         r"^<GitHubPrivateKey\(b_raw_data=b'<SECRET>'\)\s"
-        r'with\spublic\skey\sSHA\-1\shash\sdigest\s'
+        r'with\sSHA\-1\sfingerprint\s'
         r"'[a-f0-9]{2}(:[a-f0-9]{2}){19}'>$",
     )
     assert repr_pattern.match(repr(github_private_key))
