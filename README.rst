@@ -2,6 +2,10 @@
    :target: https://pypi.org/project/octomachinery
    :alt: octomachinery @ PyPI
 
+.. image:: https://tidelift.com/badges/package/pypi/octomachinery
+   :target: https://tidelift.com/subscription/pkg/pypi-octomachinery?utm_source=pypi-octomachinery&utm_medium=readme
+   :alt: octomachinery is available as part of the Tidelift Subscription
+
 .. DO-NOT-REMOVE-docs-badges-END
 
 .. image:: https://img.shields.io/travis/com/sanitizers/octomachinery/master.svg?label=Linux%20builds&logo=travis&logoColor=white
