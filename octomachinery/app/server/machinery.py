@@ -34,7 +34,12 @@ async def start_tcp_site(server_config, aiohttp_server_runner):
 async def get_server_runner(http_handler):
     """Initialize server runner."""
     aiohttp_server = web.Server(http_handler)
-    aiohttp_server_runner = web.ServerRunner(aiohttp_server)
+    aiohttp_server_runner = web.ServerRunner(
+        aiohttp_server,
+        # handle SIGTERM and SIGINT
+        # by raising aiohttp.web_runner.GracefulExit exception
+        handle_signals=True,
+    )
     await aiohttp_server_runner.setup()
     return aiohttp_server_runner
 

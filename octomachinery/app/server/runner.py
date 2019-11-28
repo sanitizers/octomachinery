@@ -5,6 +5,7 @@ import logging
 import sys
 from typing import Optional
 
+from aiohttp.web_runner import GracefulExit
 import attr
 
 # pylint: disable=relative-beyond-top-level
@@ -62,5 +63,5 @@ def run(
 
     try:
         asyncio.run(run_server_forever(config))
-    except KeyboardInterrupt:
+    except (GracefulExit, KeyboardInterrupt):
         logger.info(' Exiting the app '.center(50, '='))
