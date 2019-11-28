@@ -1,8 +1,7 @@
 """A very low-level GitHub API client."""
 
-from typing import Any, Dict, Mapping, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
-from aiohttp import ClientSession
 from gidgethub.aiohttp import GitHubAPI
 
 # pylint: disable=relative-beyond-top-level
@@ -18,7 +17,6 @@ class RawGitHubAPI(GitHubAPI):
             self,
             token: GitHubToken,
             *,
-            session: Optional[ClientSession] = None,
             user_agent: Optional[str] = None,
             **kwargs: Any,
     ) -> None:
@@ -28,7 +26,6 @@ class RawGitHubAPI(GitHubAPI):
         kwargs.pop('jwt', None)
         super().__init__(
             requester=user_agent,
-            session=session,
             **kwargs,
         )
 
@@ -71,32 +68,6 @@ class RawGitHubAPI(GitHubAPI):
             oauth_token=oauth_token,
             jwt=jwt,
         )
-
-    async def _request(
-            self,
-            method: str,
-            url: str,
-            headers: Mapping[str, str],
-            body: bytes = b'',
-    ) -> Tuple[int, Mapping[str, str], bytes]:
-        has_persistent_session = self._session is not None
-
-        if has_persistent_session:
-            return await super()._request(
-                method, url,
-                headers, body,
-            )
-
-        try:
-            self._session = ClientSession()
-
-            async with self._session:
-                return await super()._request(
-                    method, url,
-                    headers, body,
-                )
-        finally:
-            self._session = None
 
     getitem = accept_preview_version(GitHubAPI.getitem)
     getiter = accept_preview_version(GitHubAPI.getiter)
