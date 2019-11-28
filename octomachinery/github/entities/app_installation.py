@@ -8,8 +8,6 @@ import typing
 import attr
 
 # pylint: disable=relative-beyond-top-level
-from ..api.client import GitHubAPIClient
-# pylint: disable=relative-beyond-top-level
 from ..api.raw_client import RawGitHubAPI
 # pylint: disable=relative-beyond-top-level
 from ..api.tokens import GitHubOAuthToken
@@ -51,28 +49,30 @@ class GitHubAppInstallation:
 
     async def retrieve_access_token(self):
         """Retrieve installation access token from GitHub API."""
-        async with self._github_app.github_app_client as gh_api:
-            self._token = GitHubInstallationAccessToken(**(await gh_api.post(
+        self._token = GitHubInstallationAccessToken(**(
+            await self._github_app.github_app_client.post(
                 self._metadata.access_tokens_url,
                 data=b'',
-                accept='application/vnd.github.machine-man-preview+json',
-            )))
+                preview_api_version='machine-man',
+            )
+        ))
         return self._token
 
     def get_github_api_client(self):
         """Gidgethub API client instance."""
         return RawGitHubAPI(
             token=self.token,
-            session=self._github_app.http_session,
+            # pylint: disable=protected-access
+            session=self._github_app._http_session,
             # pylint: disable=protected-access
             user_agent=self._github_app._config.user_agent,
         )
 
     @property
     def github_installation_client(self):  # noqa: D401
-        """The GitHub App client with an async CM interface."""
-        return GitHubAPIClient(
-            github_token=self.token,
+        """The GitHub App client."""
+        return RawGitHubAPI(
+            token=self.token,
             # pylint: disable=protected-access
             session=self._github_app._http_session,
             # pylint: disable=protected-access

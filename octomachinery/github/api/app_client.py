@@ -21,7 +21,7 @@ from ..config.app import GitHubAppIntegrationConfig
 from ..entities.app_installation import GitHubAppInstallation
 # pylint: disable=relative-beyond-top-level
 from ..models import GitHubAppInstallation as GitHubAppInstallationModel
-from .client import GitHubAPIClient
+from .raw_client import RawGitHubAPI
 from .tokens import GitHubJWTToken
 
 
@@ -110,8 +110,8 @@ class GitHubApp(AbstractAsyncContextManager):
     @property
     def github_app_client(self):  # noqa: D401
         """The GitHub App client with an async CM interface."""
-        return GitHubAPIClient(
-            github_token=self.gh_jwt,
+        return RawGitHubAPI(
+            token=self.gh_jwt,
             session=self._http_session,
             user_agent=self._config.user_agent,
         )
@@ -151,16 +151,15 @@ class GitHubApp(AbstractAsyncContextManager):
     async def get_installations(self):
         """Retrieve all installations with access tokens via API."""
         installations = defaultdict(dict)
-        async with self.github_app_client as gh_api:
-            async for install in amap(
-                    dict_to_kwargs_cb(GitHubAppInstallationModel),
-                    gh_api.getiter(
-                        '/app/installations',
-                        preview_api_version='machine-man',
-                    ),
-            ):
-                installations[install.id] = GitHubAppInstallation(
-                    install, self,
-                )
-                await installations[install.id].retrieve_access_token()
+        async for install in amap(
+                dict_to_kwargs_cb(GitHubAppInstallationModel),
+                self.github_app_client.getiter(
+                    '/app/installations',
+                    preview_api_version='machine-man',
+                ),
+        ):
+            installations[install.id] = GitHubAppInstallation(
+                install, self,
+            )
+            await installations[install.id].retrieve_access_token()
         return installations

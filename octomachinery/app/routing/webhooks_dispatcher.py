@@ -94,15 +94,12 @@ async def route_github_webhook_event(request):
     )
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
-    async with github_app.github_app_client:
-        github_installation = await github_app.get_installation(event)
-        github_installation_client = (
-            github_installation.github_installation_client
-        )
-        async with github_installation_client as gh_install_client:
-            # pylint: disable=assigning-non-slot
-            RUNTIME_CONTEXT.app_installation_client = gh_install_client
-            await dispatch_event(event)
+    github_installation = await github_app.get_installation(event)
+    # pylint: disable=assigning-non-slot
+    RUNTIME_CONTEXT.app_installation_client = (
+        github_installation.github_installation_client
+    )
+    await dispatch_event(event)
     return web.Response(
         text=f'OK: GitHub event received. It is {event.event!s} ({event!r})',
     )
@@ -116,7 +113,8 @@ async def route_github_action_event(github_action):
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.github_event = github_action.event
 
-    async with github_action.github_installation_client as gh_install_client:
-        # pylint: disable=assigning-non-slot
-        RUNTIME_CONTEXT.app_installation_client = gh_install_client
-        await dispatch_event(github_action.event)
+    # pylint: disable=assigning-non-slot
+    RUNTIME_CONTEXT.app_installation_client = (
+        github_action.github_installation_client
+    )
+    await dispatch_event(github_action.event)

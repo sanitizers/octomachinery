@@ -11,7 +11,7 @@ from gidgethub.sansio import Event
 # pylint: disable=relative-beyond-top-level
 from ...app.action.config import GitHubActionConfig
 # pylint: disable=relative-beyond-top-level
-from ..api.client import GitHubAPIClient
+from ..api.raw_client import RawGitHubAPI
 # pylint: disable=relative-beyond-top-level
 from ..api.tokens import GitHubOAuthToken
 
@@ -54,9 +54,9 @@ class GitHubAction:
 
     @property
     def github_installation_client(self):  # noqa: D401
-        """The GitHub App client with an async CM interface."""
-        return GitHubAPIClient(
-            github_token=self.token,
+        """The GitHub App client."""
+        return RawGitHubAPI(
+            token=self.token,
             session=self._http_session,
             user_agent=self._user_agent,
         )
