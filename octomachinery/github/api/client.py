@@ -4,7 +4,7 @@ from contextlib import AbstractAsyncContextManager
 import types
 import typing
 
-import aiohttp
+from aiohttp.client import ClientSession
 import attr
 
 # pylint: disable=relative-beyond-top-level
@@ -23,58 +23,30 @@ class GitHubAPIClient(AbstractAsyncContextManager):
     _github_token: GitHubToken
     _user_agent: str
     """A User-Agent string to use in HTTP requests to the GitHub API."""
-    _external_session: typing.Optional[aiohttp.ClientSession] = (
-        attr.ib(default=None)
-    )
+    _session: ClientSession
     """A session created externally."""
-    _current_session: aiohttp.ClientSession = attr.ib(init=False, default=None)
-    """A session created per CM if there's no external one."""
     _api_client: RawGitHubAPI = attr.ib(init=False, default=None)
     """A Gidgethub client for GitHub API."""
 
     def __attrs_post_init__(self):
         """Gidgethub API client instance initializer."""
         try:
-            self._api_client = self.get_github_api_client(
-                session=self._open_session(),
-            )
+            self._api_client = self.get_github_api_client()
         except (AttributeError, TypeError):
             pass
 
-    def get_github_api_client(
-            self,
-            *,
-            session: typing.Optional[aiohttp.ClientSession] = None,
-    ):
+    def get_github_api_client(self) -> RawGitHubAPI:
         """Gidgethub API client instance."""
-        extra_kwargs = {'session': session} if session is not None else {}
-
         return RawGitHubAPI(
             token=self._github_token,
+            session=self._session,
             user_agent=self._user_agent,
-            **extra_kwargs,
         )
 
     @property
     def is_initialized(self):
         """Return GitHub token presence."""
         return self._github_token is not None
-
-    def _open_session(self) -> aiohttp.ClientSession:
-        """Return a session to use with GitHub API."""
-        assert self._current_session is None
-        self._current_session = (
-            aiohttp.ClientSession() if self._external_session is None
-            else self._external_session
-        )
-        return self._current_session
-
-    async def _close_session(self) -> None:
-        """Free up the current session."""
-        assert self._current_session is not None
-        if self._external_session is None:
-            await self._current_session.close()
-        self._current_session = None
 
     async def __aenter__(self) -> RawGitHubAPI:
         """Return a GitHub API wrapper."""
@@ -87,4 +59,3 @@ class GitHubAPIClient(AbstractAsyncContextManager):
             exc_tb: typing.Optional[types.TracebackType],
     ) -> typing.Optional[bool]:
         """Close the current session resource."""
-        await self._close_session()

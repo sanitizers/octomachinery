@@ -3,6 +3,7 @@
 import asyncio
 import logging
 
+from aiohttp.client import ClientSession
 from aiohttp import web
 
 # pylint: disable=relative-beyond-top-level
@@ -38,41 +39,52 @@ async def get_server_runner(http_handler):
     return aiohttp_server_runner
 
 
+async def _prepare_github_app(github_app):
+    """Set GitHub App in the context."""
+    logger.info('Starting the following GitHub App:')
+    logger.info(
+        '* app id: %s',
+        github_app._config.app_id,  # pylint: disable=protected-access
+    )
+    logger.info(
+        '* private key SHA-1 fingerprint: %s',
+        # pylint: disable=protected-access
+        github_app._config.private_key.fingerprint,
+    )
+    logger.info(
+        '* user agent: %s',
+        github_app._config.user_agent,  # pylint: disable=protected-access
+    )
+    RUNTIME_CONTEXT.github_app = (  # pylint: disable=assigning-non-slot
+        github_app
+    )
+
+
+async def _launch_web_server_and_wait_until_it_stops(web_server_config):
+    """Start a web server.
+
+    And then block until SIGINT comes in.
+    """
+    aiohttp_server_runner = await get_server_runner(route_github_webhook_event)
+    aiohttp_tcp_site = await start_tcp_site(
+        web_server_config,
+        aiohttp_server_runner,
+    )
+
+    try:
+        await asyncio.get_event_loop().create_future()  # block
+    except asyncio.CancelledError:
+        logger.info(' Stopping the server '.center(50, '='))
+        await aiohttp_tcp_site.stop()
+
+
 async def run_forever(config):
     """Spawn an HTTP server in asyncio context."""
-    async with GitHubApp(config.github) as github_app:
-        logger.info('Starting the following GitHub App:')
-        logger.info(
-            '* app id: %s',
-            github_app._config.app_id,  # pylint: disable=protected-access
-        )
-        logger.info(
-            '* private key SHA-1 fingerprint: %s',
-            # pylint: disable=protected-access
-            github_app._config.private_key.fingerprint,
-        )
-        logger.info(
-            '* user agent: %s',
-            github_app._config.user_agent,  # pylint: disable=protected-access
-        )
-        RUNTIME_CONTEXT.github_app = (  # pylint: disable=assigning-non-slot
-            github_app
-        )
-        aiohttp_server_runner = await get_server_runner(
-            route_github_webhook_event,
-        )
-        aiohttp_tcp_site = await start_tcp_site(
-            config.server, aiohttp_server_runner,
-        )
-
-        if RUNTIME_CONTEXT.config.runtime.debug:
-            logger.debug(
-                'Running a GitHub App under env=%s',
-                RUNTIME_CONTEXT.config.runtime.env,
-            )
-
-        try:
-            await asyncio.get_event_loop().create_future()  # block
-        except asyncio.CancelledError:
-            logger.info(' Stopping the server '.center(50, '='))
-            await aiohttp_tcp_site.stop()
+    logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
+    async with ClientSession() as aiohttp_client_session:
+        async with GitHubApp(
+                config.github,
+                http_session=aiohttp_client_session,
+        ) as github_app:
+            await _prepare_github_app(github_app)
+            await _launch_web_server_and_wait_until_it_stops(config.server)

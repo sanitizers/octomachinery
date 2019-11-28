@@ -4,6 +4,7 @@ import json
 import logging
 from uuid import uuid4
 
+from aiohttp.client import ClientSession
 import attr
 from gidgethub.sansio import Event
 
@@ -24,6 +25,8 @@ class GitHubAction:
 
     _metadata: GitHubActionConfig
     """A GitHub Action metadata from envronment vars."""
+    _http_session: ClientSession
+    """An externally created aiohttp client session."""
     _user_agent: str
     """A User-Agent string to use in HTTP requests to the GitHub API."""
 
@@ -54,5 +57,6 @@ class GitHubAction:
         """The GitHub App client with an async CM interface."""
         return GitHubAPIClient(
             github_token=self.token,
+            session=self._http_session,
             user_agent=self._user_agent,
         )

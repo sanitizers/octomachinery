@@ -6,6 +6,7 @@ import logging
 import types
 import typing
 
+from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
 import attr
 from gidgethub.sansio import Event
@@ -35,6 +36,7 @@ class GitHubApp(AbstractAsyncContextManager):
     """GitHub API wrapper."""
 
     _config: GitHubAppIntegrationConfig
+    _http_session: ClientSession
 
     def __attrs_post_init__(self):
         """Initialize installations store."""
@@ -110,6 +112,7 @@ class GitHubApp(AbstractAsyncContextManager):
         """The GitHub App client with an async CM interface."""
         return GitHubAPIClient(
             github_token=self.gh_jwt,
+            session=self._http_session,
             user_agent=self._config.user_agent,
         )
 

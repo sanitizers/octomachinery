@@ -4,6 +4,8 @@ import asyncio
 import logging
 import typing
 
+from aiohttp.client import ClientSession
+
 # pylint: disable=relative-beyond-top-level
 from ...github.entities.action import GitHubAction
 # pylint: disable=relative-beyond-top-level
@@ -29,13 +31,15 @@ async def process_github_action(config):
     """Schedule GitHub Action event for processing."""
     logger.info('Processing GitHub Action event...')
 
-    github_action = GitHubAction(
-        metadata=config.action,
-        user_agent=config.github.user_agent,
-    )
-    logger.info('GitHub Action=%r', config.action)
+    async with ClientSession() as http_client_session:
+        github_action = GitHubAction(
+            metadata=config.action,
+            http_session=http_client_session,
+            user_agent=config.github.user_agent,
+        )
+        logger.info('GitHub Action=%r', config.action)
 
-    await route_github_action_event(github_action)
+        await route_github_action_event(github_action)
     return ActionSuccess('GitHub Action has been processed')
 
 

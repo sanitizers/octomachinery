@@ -5,7 +5,6 @@ from __future__ import annotations
 import logging
 import typing
 
-import aiohttp
 import attr
 
 # pylint: disable=relative-beyond-top-level
@@ -60,19 +59,13 @@ class GitHubAppInstallation:
             )))
         return self._token
 
-    def get_github_api_client(
-            self,
-            *,
-            session: typing.Optional[aiohttp.ClientSession] = None,
-    ):
+    def get_github_api_client(self):
         """Gidgethub API client instance."""
-        extra_kwargs = {'session': session} if session is not None else {}
-
         return RawGitHubAPI(
             token=self.token,
+            session=self._github_app.http_session,
             # pylint: disable=protected-access
             user_agent=self._github_app._config.user_agent,
-            **extra_kwargs,
         )
 
     @property
@@ -80,6 +73,8 @@ class GitHubAppInstallation:
         """The GitHub App client with an async CM interface."""
         return GitHubAPIClient(
             github_token=self.token,
+            # pylint: disable=protected-access
+            session=self._github_app._http_session,
             # pylint: disable=protected-access
             user_agent=self._github_app._config.user_agent,
         )
