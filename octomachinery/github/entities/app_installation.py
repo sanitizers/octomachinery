@@ -58,16 +58,6 @@ class GitHubAppInstallation:
         ))
         return self._token
 
-    def get_github_api_client(self):
-        """Gidgethub API client instance."""
-        return RawGitHubAPI(
-            token=self.token,
-            # pylint: disable=protected-access
-            session=self._github_app._http_session,
-            # pylint: disable=protected-access
-            user_agent=self._github_app._config.user_agent,
-        )
-
     @property
     def github_installation_client(self):  # noqa: D401
         """The GitHub App client."""
