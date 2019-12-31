@@ -81,9 +81,8 @@ class GitHubApp(AbstractAsyncContextManager):
         # pylint: disable=protected-access
         for install_id, install_val in self._installations.items():
             logger.info(
-                '* Installation id %s (expires at %s, installed to %s)',
+                '* Installation id %s (installed to %s)',
                 install_id,
-                install_val._token.expires_at,
                 install_val._metadata.account['login'],
             )
 
@@ -124,7 +123,6 @@ class GitHubApp(AbstractAsyncContextManager):
             GitHubAppInstallationModel(**install),
             self,
         )
-        await self._installations[install_id].retrieve_access_token()
         return self._installations[install_id]
 
     async def get_installation(self, event):
@@ -137,9 +135,6 @@ class GitHubApp(AbstractAsyncContextManager):
 
         install_id = event.data['installation']['id']
         app_installation = self._installations.get(install_id)
-
-        if app_installation is not None:
-            await app_installation.retrieve_access_token()
 
         # pylint: disable=assigning-non-slot
         RUNTIME_CONTEXT.app_installation = (
@@ -161,5 +156,4 @@ class GitHubApp(AbstractAsyncContextManager):
             installations[install.id] = GitHubAppInstallation(
                 install, self,
             )
-            await installations[install.id].retrieve_access_token()
         return installations
