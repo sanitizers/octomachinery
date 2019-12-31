@@ -108,7 +108,7 @@ class GitHubApp(AbstractAsyncContextManager):
         return GitHubJWTToken(token)
 
     @property
-    def github_app_client(self):  # noqa: D401
+    def api_client(self):  # noqa: D401
         """The GitHub App client with an async CM interface."""
         return RawGitHubAPI(
             token=self.gh_jwt,
@@ -153,7 +153,7 @@ class GitHubApp(AbstractAsyncContextManager):
         installations = defaultdict(dict)
         async for install in amap(
                 dict_to_kwargs_cb(GitHubAppInstallationModel),
-                self.github_app_client.getiter(
+                self.api_client.getiter(
                     '/app/installations',
                     preview_api_version='machine-man',
                 ),
