@@ -1,5 +1,6 @@
 """A very low-level GitHub API client."""
 
+from asyncio import iscoroutinefunction
 from typing import Any, Dict, Optional, Tuple
 
 from gidgethub.aiohttp import GitHubAPI
@@ -53,11 +54,14 @@ class RawGitHubAPI(GitHubAPI):
             jwt: Optional[str] = None,
             oauth_token: Optional[str] = None,
     ) -> Tuple[bytes, Optional[str]]:
-        if isinstance(self._token, GitHubOAuthToken):
-            oauth_token = str(self._token)
+        token = self._token
+        if iscoroutinefunction(token):
+            token = await token()
+        if isinstance(token, GitHubOAuthToken):
+            oauth_token = str(token)
             jwt = None
-        if isinstance(self._token, GitHubJWTToken):
-            jwt = str(self._token)
+        if isinstance(token, GitHubJWTToken):
+            jwt = str(token)
             oauth_token = None
         return await super()._make_request(
             method=method,
