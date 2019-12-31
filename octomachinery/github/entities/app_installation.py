@@ -59,8 +59,8 @@ class GitHubAppInstallation:
         return self._token
 
     @property
-    def github_installation_client(self):  # noqa: D401
-        """The GitHub App client."""
+    def api_client(self):  # noqa: D401
+        """The GitHub App Installation client."""
         return RawGitHubAPI(
             token=self.token,
             # pylint: disable=protected-access

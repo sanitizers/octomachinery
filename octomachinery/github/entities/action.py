@@ -53,7 +53,7 @@ class GitHubAction:
         return GitHubOAuthToken(self._metadata.token)
 
     @property
-    def github_installation_client(self):  # noqa: D401
+    def app_client(self):  # noqa: D401
         """The GitHub App client."""
         return RawGitHubAPI(
             token=self.token,
