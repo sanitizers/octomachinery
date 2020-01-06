@@ -1,10 +1,7 @@
 """GitHub App API client."""
 
 from collections import defaultdict
-from contextlib import AbstractAsyncContextManager
 import logging
-import types
-import typing
 
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
@@ -32,7 +29,7 @@ GH_INSTALL_EVENTS = {'integration_installation', 'installation'}
 
 
 @attr.dataclass
-class GitHubApp(AbstractAsyncContextManager):
+class GitHubApp:
     """GitHub API wrapper."""
 
     _config: GitHubAppIntegrationConfig
@@ -59,7 +56,7 @@ class GitHubApp(AbstractAsyncContextManager):
         if event.event in GH_INSTALL_EVENTS and action == 'created':
             await self.add_installation(event)
 
-    async def __aenter__(self) -> 'GitHubApp':
+    async def pre_fetch_installs(self) -> 'GitHubApp':
         """Store all installations data before starting."""
         # pylint: disable=attribute-defined-outside-init
         try:
@@ -83,16 +80,6 @@ class GitHubApp(AbstractAsyncContextManager):
             )
 
         return self
-
-    async def __aexit__(
-            self,
-            exc_type: typing.Optional[typing.Type[BaseException]],
-            exc_val: typing.Optional[BaseException],
-            exc_tb: typing.Optional[types.TracebackType],
-    ) -> typing.Optional[bool]:
-        """Wipe out the installation store."""
-        # pylint: disable=attribute-defined-outside-init
-        self._installations = defaultdict(dict)
 
     @property
     def gh_jwt(self):
@@ -127,7 +114,20 @@ class GitHubApp(AbstractAsyncContextManager):
             raise LookupError('This event occured outside of an installation')
 
         install_id = event.data['installation']['id']
-        return self._installations.get(install_id)
+        return await self.get_installation_by_id(install_id)
+
+    async def get_installation_by_id(self, install_id):
+        """Retrieve an installation with access tokens via API."""
+        return GitHubAppInstallation(
+            GitHubAppInstallationModel(
+                **(await self.api_client.getitem(
+                    '/app/installations/{installation_id}',
+                    url_vars={'installation_id': install_id},
+                    preview_api_version='machine-man',
+                )),
+            ),
+            self,
+        )
 
     async def get_installations(self):
         """Retrieve all installations with access tokens via API."""

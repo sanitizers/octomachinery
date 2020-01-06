@@ -87,9 +87,10 @@ async def run_forever(config):
     """Spawn an HTTP server in asyncio context."""
     logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
     async with ClientSession() as aiohttp_client_session:
-        async with GitHubApp(
-                config.github,
-                http_session=aiohttp_client_session,
-        ) as github_app:
-            await _prepare_github_app(github_app)
-            await _launch_web_server_and_wait_until_it_stops(config.server)
+        github_app = GitHubApp(
+            config.github,
+            http_session=aiohttp_client_session,
+        )
+        await github_app.pre_fetch_installs()
+        await _prepare_github_app(github_app)
+        await _launch_web_server_and_wait_until_it_stops(config.server)
