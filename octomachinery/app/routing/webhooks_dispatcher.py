@@ -1,6 +1,7 @@
 """GitHub webhook events dispatching logic."""
 
 import asyncio
+import contextlib
 from functools import wraps
 from http import HTTPStatus
 import logging
@@ -93,10 +94,21 @@ async def route_github_webhook_event(request):
         await get_event_from_request(request)
     )
 
+    with contextlib.suppress(LookupError):
+        """Provision an installation API client if possible.
+
+        Some events (like `ping`) are
+        happening application/GitHub-wide and are not bound to
+        a specific installation. The webhook payloads of such events
+        don't contain any reference to an installaion.
+        Some events don't even refer to a GitHub App
+        (e.g. `security_advisory`).
+        """  # pylint: disable=pointless-string-statement
+        github_install = await github_app.get_installation(event)
+        # pylint: disable=assigning-non-slot
+        RUNTIME_CONTEXT.app_installation_client = github_install.api_client
+
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
-    github_installation = await github_app.get_installation(event)
-    # pylint: disable=assigning-non-slot
-    RUNTIME_CONTEXT.app_installation_client = github_installation.api_client
     await dispatch_event(event)
     return web.Response(
         text=f'OK: GitHub event received. It is {event.event!s} ({event!r})',

@@ -130,8 +130,8 @@ class GitHubApp(AbstractAsyncContextManager):
         # pylint: disable=relative-beyond-top-level,import-outside-toplevel
         from ...app.runtime.context import RUNTIME_CONTEXT
 
-        if event.event == 'ping':
-            return GitHubAppInstallation(None, self)
+        if 'installation' not in event.data:
+            raise LookupError('This event occured outside of an installation')
 
         install_id = event.data['installation']['id']
         app_installation = self._installations.get(install_id)
