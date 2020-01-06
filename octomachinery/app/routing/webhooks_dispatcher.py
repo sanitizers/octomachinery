@@ -95,6 +95,7 @@ async def route_github_webhook_event(request):
     )
 
     with contextlib.suppress(LookupError):
+        # pylint: disable=pointless-string-statement
         """Provision an installation API client if possible.
 
         Some events (like `ping`) are
@@ -103,7 +104,7 @@ async def route_github_webhook_event(request):
         don't contain any reference to an installaion.
         Some events don't even refer to a GitHub App
         (e.g. `security_advisory`).
-        """  # pylint: disable=pointless-string-statement
+        """
         github_install = await github_app.get_installation(event)
         # pylint: disable=assigning-non-slot
         RUNTIME_CONTEXT.app_installation_client = github_install.api_client
