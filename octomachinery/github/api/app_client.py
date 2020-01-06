@@ -127,21 +127,11 @@ class GitHubApp(AbstractAsyncContextManager):
 
     async def get_installation(self, event):
         """Retrieve an installation creds from store."""
-        # pylint: disable=relative-beyond-top-level,import-outside-toplevel
-        from ...app.runtime.context import RUNTIME_CONTEXT
-
         if 'installation' not in event.data:
             raise LookupError('This event occured outside of an installation')
 
         install_id = event.data['installation']['id']
-        app_installation = self._installations.get(install_id)
-
-        # pylint: disable=assigning-non-slot
-        RUNTIME_CONTEXT.app_installation = (
-            app_installation
-        )
-
-        return app_installation
+        return self._installations.get(install_id)
 
     async def get_installations(self):
         """Retrieve all installations with access tokens via API."""

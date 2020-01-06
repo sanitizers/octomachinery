@@ -107,6 +107,8 @@ async def route_github_webhook_event(request):
         """
         github_install = await github_app.get_installation(event)
         # pylint: disable=assigning-non-slot
+        RUNTIME_CONTEXT.app_installation = github_install
+        # pylint: disable=assigning-non-slot
         RUNTIME_CONTEXT.app_installation_client = github_install.api_client
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
