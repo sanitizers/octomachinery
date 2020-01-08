@@ -48,6 +48,10 @@ async def get_event_from_request(request):
             request.headers.get('X-GitHub-Delivery'),
             webhook_event_signature,
         )
+        logger.debug(
+            'Webhook HTTP query signature validation failed because: %s',
+            no_signature_exc,
+        )
         raise web.HTTPForbidden from no_signature_exc
     else:
         logger.info(
