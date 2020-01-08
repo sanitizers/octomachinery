@@ -11,8 +11,6 @@ import attr
 # pylint: disable=relative-beyond-top-level
 from ..config import BotAppConfig
 # pylint: disable=relative-beyond-top-level
-from ..runtime.context import RUNTIME_CONTEXT
-# pylint: disable=relative-beyond-top-level
 from .config import WebServerConfig
 # pylint: disable=relative-beyond-top-level
 from .machinery import run_forever as run_server_forever
@@ -48,7 +46,6 @@ def run(
                 config,
                 server=WebServerConfig(*sys.argv[1:3]),
             )
-    RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
 
     logging.basicConfig(
         level=logging.DEBUG

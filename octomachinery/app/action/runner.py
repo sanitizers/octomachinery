@@ -29,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 async def process_github_action(config):
     """Schedule GitHub Action event for processing."""
+    RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
     logger.info('Processing GitHub Action event...')
 
     async with ClientSession() as http_client_session:
@@ -47,7 +48,6 @@ def run(*, config: typing.Optional[BotAppConfig] = None) -> None:
     """Start up a server using CLI args for host and port."""
     if config is None:
         config = BotAppConfig.from_dotenv()
-    RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
 
     logging.basicConfig(
         level=logging.DEBUG

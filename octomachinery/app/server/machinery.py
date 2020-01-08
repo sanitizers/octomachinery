@@ -85,6 +85,7 @@ async def _launch_web_server_and_wait_until_it_stops(web_server_config):
 
 async def run_forever(config):
     """Spawn an HTTP server in asyncio context."""
+    RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
     logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
     async with ClientSession() as aiohttp_client_session:
         github_app = GitHubApp(
