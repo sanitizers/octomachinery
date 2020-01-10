@@ -94,7 +94,7 @@ async def run_forever(config):
             config.github,
             http_session=aiohttp_client_session,
         )
-        await github_app.pre_fetch_installs()
+        await github_app.log_installs_list()
         await _prepare_github_app(github_app)
         await _launch_web_server_and_wait_until_it_stops(
             config.server, github_app,
