@@ -1,6 +1,7 @@
 """Web-server constructors."""
 
 import asyncio
+import functools
 import logging
 
 from aiohttp.client import ClientSession
@@ -60,17 +61,21 @@ async def _prepare_github_app(github_app):
         '* user agent: %s',
         github_app._config.user_agent,  # pylint: disable=protected-access
     )
-    RUNTIME_CONTEXT.github_app = (  # pylint: disable=assigning-non-slot
-        github_app
-    )
 
 
-async def _launch_web_server_and_wait_until_it_stops(web_server_config):
+async def _launch_web_server_and_wait_until_it_stops(
+        web_server_config, github_app: GitHubApp,
+) -> None:
     """Start a web server.
 
     And then block until SIGINT comes in.
     """
-    aiohttp_server_runner = await get_server_runner(route_github_webhook_event)
+    aiohttp_server_runner = await get_server_runner(
+        functools.partial(
+            route_github_webhook_event,
+            github_app=github_app,
+        ),
+    )
     aiohttp_tcp_site = await start_tcp_site(
         web_server_config,
         aiohttp_server_runner,
@@ -94,4 +99,6 @@ async def run_forever(config):
         )
         await github_app.pre_fetch_installs()
         await _prepare_github_app(github_app)
-        await _launch_web_server_and_wait_until_it_stops(config.server)
+        await _launch_web_server_and_wait_until_it_stops(
+            config.server, github_app,
+        )

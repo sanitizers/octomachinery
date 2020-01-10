@@ -73,25 +73,26 @@ def validate_allowed_http_methods(*allowed_methods: str):
 
     def decorator(wrapped_function):
         @wraps(wrapped_function)
-        async def wrapper(request):
+        async def wrapper(request, *, github_app):
             if request.method not in _allowed_methods:
                 raise web.HTTPMethodNotAllowed(
                     method=request.method,
                     allowed_methods=_allowed_methods,
                 ) from BadRequest(HTTPStatus.METHOD_NOT_ALLOWED)
-            return await wrapped_function(request)
+            return await wrapped_function(request, github_app=github_app)
         return wrapper
     return decorator
 
 
 @validate_allowed_http_methods('POST')
-async def route_github_webhook_event(request):
+async def route_github_webhook_event(request, *, github_app):
     """Dispatch incoming webhook events to corresponsing handlers."""
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.IS_GITHUB_ACTION = False
     RUNTIME_CONTEXT.IS_GITHUB_APP = True  # pylint: disable=assigning-non-slot
 
-    github_app = RUNTIME_CONTEXT.github_app
+    # pylint: disable=assigning-non-slot
+    RUNTIME_CONTEXT.github_app = github_app
 
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.github_event = event = (
