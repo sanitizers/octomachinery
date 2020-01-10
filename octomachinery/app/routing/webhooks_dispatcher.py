@@ -34,13 +34,13 @@ EVENT_LOG_VALID_MSG = EVENT_LOG_TMPL.format(EVENT_VALID_CHUNK)
 EVENT_LOG_INVALID_MSG = EVENT_LOG_TMPL.format(EVENT_INVALID_CHUNK)
 
 
-async def get_event_from_request(request):
+async def get_event_from_request(request, github_app):
     """Retrieve Event out of HTTP request if it's valid."""
     webhook_event_signature = request.headers.get(
         'X-Hub-Signature', '<MISSING>',
     )
     try:
-        event = await RUNTIME_CONTEXT.github_app.event_from_request(request)
+        event = await github_app.event_from_request(request)
     except ValidationFailure as no_signature_exc:
         logger.info(
             EVENT_LOG_INVALID_MSG,
@@ -96,7 +96,7 @@ async def route_github_webhook_event(request, *, github_app):
 
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.github_event = event = (
-        await get_event_from_request(request)
+        await get_event_from_request(request, github_app)
     )
 
     with contextlib.suppress(LookupError):
