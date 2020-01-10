@@ -81,6 +81,8 @@ Finally, use
     import asyncio
     import pathlib
 
+    from aiohttp.client import ClientSession
+
     from octomachinery.github.api.app_client import GitHubApp
     from octomachinery.github.config.app import GitHubAppIntegrationConfig
 
@@ -100,10 +102,9 @@ Finally, use
         app_version='1.0',
         app_url='https://awesome-app.dev',
     )
-    github_app = GitHubApp(github_app_config)
 
 
-    async def get_github_client(account):
+    async def get_github_client(github_app, account):
         github_app_installations = await github_app.get_installations()
         target_github_app_installation = next(  # find the one
             (
@@ -112,16 +113,21 @@ Finally, use
             ),
             None,
         )
-        return target_github_app_installation.get_github_api_client()
+        return target_github_app_installation.api_client
 
 
     async def main():
-        github_api = await get_github_client(target_github_account_or_org)
-        user = await github_api.getitem(
-            f'/users/{target_github_account_or_org}',
-        )
-        print(f'User found: {user["login"]}')
-        print(f'Rate limit stats: {github_api.rate_limit!s}')
+        async with ClientSession() as http_session:
+            github_app = GitHubApp(github_app_config, http_session)
+            github_api = await get_github_client(
+                github_app, target_github_account_or_org,
+            )
+            user = await github_api.getitem(
+                '/users/{account_name}',
+                url_vars={'account_name': target_github_account_or_org},
+            )
+            print(f'User found: {user["login"]}')
+            print(f'Rate limit stats: {github_api.rate_limit!s}')
 
 
     asyncio.run(main())
