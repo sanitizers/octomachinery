@@ -13,8 +13,6 @@ from ...github.api.app_client import GitHubApp
 from ..routing.webhooks_dispatcher import (
     route_github_webhook_event,
 )
-# pylint: disable=relative-beyond-top-level
-from ..runtime.context import RUNTIME_CONTEXT
 
 
 logger = logging.getLogger(__name__)
@@ -90,7 +88,6 @@ async def _launch_web_server_and_wait_until_it_stops(
 
 async def run_forever(config):
     """Spawn an HTTP server in asyncio context."""
-    RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
     logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
     async with ClientSession() as aiohttp_client_session:
         github_app = GitHubApp(

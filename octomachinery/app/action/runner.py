@@ -20,8 +20,6 @@ from ..config import BotAppConfig
 from ..routing.webhooks_dispatcher import (
     route_github_action_event,
 )
-# pylint: disable=relative-beyond-top-level
-from ..runtime.context import RUNTIME_CONTEXT
 
 
 logger = logging.getLogger(__name__)
@@ -29,7 +27,6 @@ logger = logging.getLogger(__name__)
 
 async def process_github_action(config):
     """Schedule GitHub Action event for processing."""
-    RUNTIME_CONTEXT.config = config  # pylint: disable=assigning-non-slot
     logger.info('Processing GitHub Action event...')
 
     async with ClientSession() as http_client_session:
