@@ -59,6 +59,7 @@ async def _prepare_github_app(github_app):
         '* user agent: %s',
         github_app._config.user_agent,  # pylint: disable=protected-access
     )
+    await github_app.log_installs_list()
 
 
 async def _launch_web_server_and_wait_until_it_stops(
@@ -94,7 +95,6 @@ async def run_forever(config):
             config.github,
             http_session=aiohttp_client_session,
         )
-        await github_app.log_installs_list()
         await _prepare_github_app(github_app)
         await _launch_web_server_and_wait_until_it_stops(
             config.server, github_app,
