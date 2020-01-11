@@ -80,6 +80,11 @@ async def _launch_web_server_and_wait_until_it_stops(
         aiohttp_server_runner,
     )
 
+    await _stop_site_on_cancel(aiohttp_tcp_site)
+
+
+async def _stop_site_on_cancel(aiohttp_tcp_site):
+    """Stop the server after SIGINT."""
     try:
         await asyncio.get_event_loop().create_future()  # block
     except asyncio.CancelledError:
