@@ -21,6 +21,8 @@ class GitHubAppInstallation:  # pylint: disable=too-few-public-methods
     """Installation ID."""
     app_id: int = attr.ib(converter=int)
     """GitHub App ID."""
+    app_slug: str = attr.ib(converter=str)
+    """GitHub App slug."""
 
     # FIXME: unignore once this is solved:  # pylint: disable=fixme
     # https://github.com/python/mypy/issues/6172#issuecomment-515718727
