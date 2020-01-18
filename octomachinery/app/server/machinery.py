@@ -69,18 +69,24 @@ async def _launch_web_server_and_wait_until_it_stops(
 
     And then block until SIGINT comes in.
     """
+    aiohttp_tcp_site = await start_site(web_server_config, github_app)
+    await _stop_site_on_cancel(aiohttp_tcp_site)
+
+
+async def start_site(
+        web_server_config, github_app: GitHubApp,
+) -> web.TCPSite:
+    """Return a started aiohttp TCP site."""
     aiohttp_server_runner = await get_server_runner(
         functools.partial(
             route_github_webhook_event,
             github_app=github_app,
         ),
     )
-    aiohttp_tcp_site = await start_tcp_site(
+    return await start_tcp_site(
         web_server_config,
         aiohttp_server_runner,
     )
-
-    await _stop_site_on_cancel(aiohttp_tcp_site)
 
 
 async def _stop_site_on_cancel(aiohttp_tcp_site):
