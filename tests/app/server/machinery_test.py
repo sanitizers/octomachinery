@@ -23,7 +23,7 @@ def octomachinery_config(
 ) -> None:
     """Initialize a GitHub App bot config."""
     # https://github.com/hynek/environ-config/blob/master/CHANGELOG.rst#1910-2019-09-02
-    return BotAppConfig.from_environ({
+    return BotAppConfig.from_environ({  # pylint: disable=no-member
         'GITHUB_APP_IDENTIFIER': str(github_app_id),
         'GITHUB_PRIVATE_KEY': rsa_private_key_bytes.decode(),
     })
