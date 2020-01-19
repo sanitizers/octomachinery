@@ -17,6 +17,9 @@ from octomachinery.github.utils.event_utils import (
 )
 
 
+UNCHANGED_UUID4_STR = str(uuid4())
+
+
 @pytest.mark.parametrize(
     'vcr_contents, vcr_headers',
     (
@@ -230,15 +233,20 @@ def test_validate_http_headers__invalid(http_headers, error_message):
     'incomplete_http_headers, expected_headers',
     (
         pytest.param(
-            *(
-                {
-                    'content-type': 'application/json',
-                    'user-agent': 'GitHub-Hookshot/dict-test',
-                    'x-github-delivery': str(uuid4()),
-                    'x-github-event': 'pull_request',
-                    'x-header': 'x_value',
-                } * 2,
-            ),
+            {
+                'content-type': 'application/json',
+                'user-agent': 'GitHub-Hookshot/dict-test',
+                'x-github-delivery': UNCHANGED_UUID4_STR,
+                'x-github-event': 'pull_request',
+                'x-header': 'x_value',
+            },
+            {
+                'content-type': 'application/json',
+                'user-agent': 'GitHub-Hookshot/dict-test',
+                'x-github-delivery': UNCHANGED_UUID4_STR,
+                'x-github-event': 'pull_request',
+                'x-header': 'x_value',
+            },
             id='unchanged',
         ),
         pytest.param(
