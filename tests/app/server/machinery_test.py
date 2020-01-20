@@ -4,11 +4,28 @@
 import uuid
 
 from aiohttp.client import ClientSession
+from aiohttp.web import SockSite
+from aiohttp.test_utils import get_unused_port_socket
 import pytest
 
 from octomachinery.app.config import BotAppConfig
-from octomachinery.app.server.machinery import start_site
+from octomachinery.app.server.machinery import setup_server_runner
 from octomachinery.github.api.app_client import GitHubApp
+
+
+IPV4_LOCALHOST = '127.0.0.1'
+
+
+@pytest.fixture
+def ephemeral_port_tcp_sock():
+    """Initialize an ephemeral TCP socket."""
+    return get_unused_port_socket(IPV4_LOCALHOST)
+
+
+@pytest.fixture
+def ephemeral_port_tcp_sock_addr(ephemeral_port_tcp_sock):
+    """Return final host and port addr of the ephemeral TCP socket."""
+    return ephemeral_port_tcp_sock.getsockname()[:2]
 
 
 @pytest.fixture
@@ -20,12 +37,16 @@ def github_app_id() -> int:
 @pytest.fixture
 def octomachinery_config(
         github_app_id: int, rsa_private_key_bytes: bytes,
+        ephemeral_port_tcp_sock_addr: tuple,
 ) -> None:
     """Initialize a GitHub App bot config."""
+    host, port = ephemeral_port_tcp_sock_addr
     # https://github.com/hynek/environ-config/blob/master/CHANGELOG.rst#1910-2019-09-02
     return BotAppConfig.from_environ({  # pylint: disable=no-member
         'GITHUB_APP_IDENTIFIER': str(github_app_id),
         'GITHUB_PRIVATE_KEY': rsa_private_key_bytes.decode(),
+        'HOST': host,
+        'PORT': port,
     })
 
 
@@ -57,30 +78,36 @@ def github_app(octomachinery_config_github_app, aiohttp_client_session):
 
 
 @pytest.fixture
-async def octomachinery_app(github_app, octomachinery_config_server):
+async def octomachinery_app_server_runner(github_app):
+    """Set up an HTTP handler for webhooks."""
+    return await setup_server_runner(github_app)
+
+
+@pytest.fixture
+async def octomachinery_app_tcp(
+        ephemeral_port_tcp_sock,
+        octomachinery_app_server_runner,
+):
     """Run octomachinery web server and tear-down after testing."""
-    tcp_site = await start_site(octomachinery_config_server, github_app)
+    tcp_site = SockSite(
+        octomachinery_app_server_runner, ephemeral_port_tcp_sock,
+    )
+    await tcp_site.start()
     try:
-        yield
+        yield tcp_site
     finally:
         await tcp_site.stop()
 
 
 @pytest.fixture
 async def send_webhook_event(
-        octomachinery_app,  # pylint: disable=unused-argument
-        octomachinery_config_server,
-        github_app,  # pylint: disable=unused-argument
-        aiohttp_client_session,
+        octomachinery_app_tcp, aiohttp_client_session,
 ):
     """Return a webhook sender coroutine."""
     def _send_event(webhook_payload=None):
         post_body = {} if webhook_payload is None else webhook_payload
 
-        webhook_endpoint_url = (
-            f'http://{octomachinery_config_server.host}'
-            f':{octomachinery_config_server.port}/'
-        )
+        webhook_endpoint_url = octomachinery_app_tcp.name
         return aiohttp_client_session.post(
             webhook_endpoint_url, json=post_body,
             headers={

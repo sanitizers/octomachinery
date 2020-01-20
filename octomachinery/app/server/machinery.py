@@ -18,14 +18,16 @@ from ..routing.webhooks_dispatcher import (
 logger = logging.getLogger(__name__)
 
 
-async def start_tcp_site(server_config, aiohttp_server_runner):
+async def start_tcp_site(
+        server_config, aiohttp_server_runner: web.ServerRunner,
+) -> web.TCPSite:
     """Return initialized and listening TCP site."""
     host, port = server_config.host, server_config.port
     aiohttp_tcp_site = web.TCPSite(aiohttp_server_runner, host, port)
     await aiohttp_tcp_site.start()
     logger.info(
-        f' Serving on http://%s:%s/ '.center(50, '='),
-        host, port,
+        ' Serving on %s '.center(50, '='),
+        aiohttp_tcp_site.name,
     )
     return aiohttp_tcp_site
 
@@ -69,23 +71,20 @@ async def _launch_web_server_and_wait_until_it_stops(
 
     And then block until SIGINT comes in.
     """
-    aiohttp_tcp_site = await start_site(web_server_config, github_app)
+    aiohttp_server_runner = await setup_server_runner(github_app)
+    aiohttp_tcp_site = await start_tcp_site(
+        web_server_config, aiohttp_server_runner,
+    )
     await _stop_site_on_cancel(aiohttp_tcp_site)
 
 
-async def start_site(
-        web_server_config, github_app: GitHubApp,
-) -> web.TCPSite:
-    """Return a started aiohttp TCP site."""
-    aiohttp_server_runner = await get_server_runner(
+async def setup_server_runner(github_app: GitHubApp) -> web.ServerRunner:
+    """Return a server runner with a webhook dispatcher set up."""
+    return await get_server_runner(
         functools.partial(
             route_github_webhook_event,
             github_app=github_app,
         ),
-    )
-    return await start_tcp_site(
-        web_server_config,
-        aiohttp_server_runner,
     )
 
 
