@@ -34,7 +34,7 @@ async def _get_file_contents_from_api(
 ) -> typing.Optional[str]:
     """Read file contents using GitHub API."""
     github_api = RUNTIME_CONTEXT.app_installation_client
-    repo_slug = RUNTIME_CONTEXT.github_event.data['repository']['full_name']
+    repo_slug = RUNTIME_CONTEXT.github_event.payload['repository']['full_name']
 
     api_query_params = f'?ref={ref}' if ref else ''
     try:

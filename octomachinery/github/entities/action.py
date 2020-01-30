@@ -1,12 +1,9 @@
 """GitHub Action wrapper."""
 
-import json
 import logging
-from uuid import uuid4
 
 from aiohttp.client import ClientSession
 import attr
-from gidgethub.sansio import Event
 
 # pylint: disable=relative-beyond-top-level
 from ...app.action.config import GitHubActionConfig
@@ -14,16 +11,18 @@ from ...app.action.config import GitHubActionConfig
 from ..api.raw_client import RawGitHubAPI
 # pylint: disable=relative-beyond-top-level
 from ..api.tokens import GitHubOAuthToken
+# pylint: disable=relative-beyond-top-level,import-error
+from ..models.events import GidgetHubActionEvent
 
 
 logger = logging.getLogger(__name__)
 
 
 @attr.dataclass
-class GitHubAction:
+class GitHubAction:  # FIXME: should inherit GitHubApp?
     """GitHub Action API wrapper."""
 
-    _metadata: GitHubActionConfig
+    _metadata: GitHubActionConfig  # FIXME: _config?
     """A GitHub Action metadata from envronment vars."""
     _http_session: ClientSession
     """An externally created aiohttp client session."""
@@ -33,19 +32,10 @@ class GitHubAction:
     @property
     def event(self):  # noqa: D401
         """Parsed GitHub Action event data."""
-        try:
-            # NOTE: This could be async but it probably doesn't matter
-            # NOTE: since it's called just once during init and GitHub
-            # NOTE: Action runtime only has one event to process
-            # pylint: disable=no-member
-            with self._metadata.event_path.open() as event_source:
-                return Event(
-                    json.load(event_source),
-                    event=self._metadata.event_name,
-                    delivery_id=uuid4(),
-                )
-        except TypeError:
-            return None
+        return GidgetHubActionEvent.from_file(
+            self._metadata.event_name,
+            self._metadata.event_path,
+        )
 
     @property
     def token(self):

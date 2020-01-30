@@ -131,8 +131,10 @@ async def test_ping_response(send_webhook_event, github_app_id):
 
     resp_content_type = gh_app_http_resp.headers['Content-Type']
     expected_response_start = (
-        'OK: GitHub event received. '
-        'It is ping (<gidgethub.sansio.Event object at '
+        'OK: GitHub event received. It is '
+        "GidgetHubWebhookEvent(name='ping', payload={'hook': {"
+        f"'app_id': {github_app_id}"
+        "}, 'hook_id': 0, 'zen': 'Hey zen!'}, delivery_id=UUID('"
     )
 
     assert resp_content_type == 'text/plain; charset=utf-8'

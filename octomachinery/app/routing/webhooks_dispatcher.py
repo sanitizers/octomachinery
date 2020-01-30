@@ -56,7 +56,7 @@ async def get_event_from_request(request, github_app):
     else:
         logger.info(
             EVENT_LOG_VALID_MSG,
-            event.event,
+            event.name,
             event.delivery_id,
             webhook_event_signature,
         )
@@ -84,8 +84,20 @@ def validate_allowed_http_methods(*allowed_methods: str):
     return decorator
 
 
+def webhook_request_to_event(wrapped_function):
+    """Pass event extracted from request into the wrapped function."""
+    @wraps(wrapped_function)
+    async def wrapper(request, *, github_app):
+        event = await get_event_from_request(request, github_app)
+        return await wrapped_function(
+            github_event=event, github_app=github_app,
+        )
+    return wrapper
+
+
 @validate_allowed_http_methods('POST')
-async def route_github_webhook_event(request, *, github_app):
+@webhook_request_to_event
+async def route_github_webhook_event(*, github_event, github_app):
     """Dispatch incoming webhook events to corresponsing handlers."""
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.IS_GITHUB_ACTION = False
@@ -95,9 +107,7 @@ async def route_github_webhook_event(request, *, github_app):
     RUNTIME_CONTEXT.github_app = github_app
 
     # pylint: disable=assigning-non-slot
-    RUNTIME_CONTEXT.github_event = event = (
-        await get_event_from_request(request, github_app)
-    )
+    RUNTIME_CONTEXT.github_event = github_event
 
     with contextlib.suppress(LookupError):
         # pylint: disable=pointless-string-statement
@@ -110,20 +120,20 @@ async def route_github_webhook_event(request, *, github_app):
         Some events don't even refer to a GitHub App
         (e.g. `security_advisory`).
         """
-        github_install = await github_app.get_installation(event)
+        github_install = await github_app.get_installation(github_event)
         # pylint: disable=assigning-non-slot
         RUNTIME_CONTEXT.app_installation = github_install
         # pylint: disable=assigning-non-slot
         RUNTIME_CONTEXT.app_installation_client = github_install.api_client
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
-    await dispatch_event(event)
+    await dispatch_event(github_event)
     return web.Response(
-        text=f'OK: GitHub event received. It is {event.event!s} ({event!r})',
+        text=f'OK: GitHub event received. It is {github_event!r}',
     )
 
 
-async def route_github_action_event(github_action):
+async def route_github_action_event(github_action, *, github_app=None):
     """Dispatch a GitHub action event to corresponsing handlers."""
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.IS_GITHUB_ACTION = True

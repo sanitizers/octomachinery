@@ -6,7 +6,8 @@ import logging
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
 import attr
-from gidgethub.sansio import Event
+from gidgethub import ValidationFailure
+from gidgethub.sansio import validate_event as validate_webhook_payload
 
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import (
@@ -18,6 +19,8 @@ from ..config.app import GitHubAppIntegrationConfig
 from ..entities.app_installation import GitHubAppInstallation
 # pylint: disable=relative-beyond-top-level
 from ..models import GitHubAppInstallation as GitHubAppInstallationModel
+# pylint: disable=relative-beyond-top-level,import-error
+from ..models.events import GidgetHubWebhookEvent
 from .raw_client import RawGitHubAPI
 from .tokens import GitHubJWTToken
 
@@ -52,10 +55,28 @@ class GitHubApp:
 
     async def event_from_request(self, request):
         """Get an event object out of HTTP request."""
-        return Event.from_http(
-            request.headers,
-            await request.read(),
-            secret=self._config.webhook_secret,
+        http_req_headers = request.headers
+        is_secret_provided = self._config.webhook_secret is not None
+        is_payload_signed = 'x-hub-signature' in http_req_headers
+
+        if is_payload_signed and not is_secret_provided:
+            raise ValidationFailure('secret not provided')
+
+        if not is_payload_signed and is_secret_provided:
+            raise ValidationFailure('signature is missing')
+
+        raw_http_req_body_payload = await request.read()
+
+        if is_payload_signed and is_secret_provided:
+            validate_webhook_payload(
+                payload=raw_http_req_body_payload,
+                signature=http_req_headers['x-hub-signature'],
+                secret=self._config.webhook_secret,
+            )
+
+        return GidgetHubWebhookEvent.from_http_request(
+            http_req_headers=http_req_headers,
+            http_req_body=raw_http_req_body_payload,
         )
 
     async def log_installs_list(self) -> None:
@@ -99,10 +120,10 @@ class GitHubApp:
 
     async def get_installation(self, event):
         """Retrieve an installation creds from store."""
-        if 'installation' not in event.data:
+        if 'installation' not in event.payload:
             raise LookupError('This event occured outside of an installation')
 
-        install_id = event.data['installation']['id']
+        install_id = event.payload['installation']['id']
         return await self.get_installation_by_id(install_id)
 
     async def get_installation_by_id(self, install_id):

@@ -1,9 +1,9 @@
 """Test event routing decorator helpers."""
 
-from gidgethub.sansio import Event
 import pytest
 
 from octomachinery.app.routing.decorators import process_webhook_payload
+from octomachinery.github.models.events import GitHubEvent
 
 
 @process_webhook_payload
@@ -24,7 +24,7 @@ def fake_event_handler(*, arg1, arg2):
 )
 def test_process_webhook_payload(incoming_event, is_successful):
     """Test that @process_webhook_payload unpacks event into kw-args."""
-    event = Event(data=incoming_event, event=None, delivery_id=None)
+    event = GitHubEvent(name=None, payload=incoming_event)
 
     if is_successful:
         assert (
