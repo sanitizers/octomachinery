@@ -133,6 +133,7 @@ async def route_github_webhook_event(*, github_event, github_app):
     )
 
 
+# pylint: disable=unused-argument
 async def route_github_action_event(github_action, *, github_app=None):
     """Dispatch a GitHub action event to corresponsing handlers."""
     # pylint: disable=assigning-non-slot

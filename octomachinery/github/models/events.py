@@ -46,6 +46,7 @@ class GitHubEvent:
     payload: dict = attr.ib(converter=_to_dict)
     """Event payload object."""
 
+    # pylint: disable=no-self-use
     @payload.validator
     def _is_payload_dict(self, attribute: str, value: dict) -> None:
         """Verify that the attribute value is a dict.
@@ -191,7 +192,7 @@ class GitHubWebhookEvent(GitHubEvent):
         """Produce GidgetHub Event from self."""
         return _GidgetHubEvent(
             data=self.payload,
-            event=self.name,
+            event=self.name,  # pylint: disable=no-member
             delivery_id=self.delivery_id,
         )
 

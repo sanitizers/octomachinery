@@ -19,10 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 @attr.dataclass
-class GitHubAction:  # FIXME: should inherit GitHubApp?
+class GitHubAction:  # FIXME: inherit GitHubApp?  # pylint: disable=fixme
     """GitHub Action API wrapper."""
 
-    _metadata: GitHubActionConfig  # FIXME: _config?
+    _metadata: GitHubActionConfig  # FIXME: _config?  # pylint: disable=fixme
     """A GitHub Action metadata from envronment vars."""
     _http_session: ClientSession
     """An externally created aiohttp client session."""
