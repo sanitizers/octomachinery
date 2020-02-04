@@ -46,11 +46,11 @@ class GitHubApp:
             if webhook_secret else ''
         )
         logger.info(
-            'Webhook secret%s is %sSET.%s',
+            'Webhook secret%s is [%sSET]: %s',
             webhook_secret_repr,
             '' if webhook_secret else 'NOT ',
-            ' SIGNATURE VERIFICATION WILL BE ENFORCED'
-            if webhook_secret else '',
+            'SIGNATURE VERIFICATION WILL BE ENFORCED'
+            if webhook_secret else 'SIGNED WEBHOOKS WILL BE REJECTED',
         )
 
     async def event_from_request(self, request):
