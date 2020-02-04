@@ -127,7 +127,7 @@ async def route_github_webhook_event(*, github_event, github_app):
         RUNTIME_CONTEXT.app_installation_client = github_install.api_client
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
-    await dispatch_event(github_event)
+    asyncio.create_task(dispatch_event(github_event))
     return web.Response(
         text=f'OK: GitHub event received. It is {github_event!r}',
     )
