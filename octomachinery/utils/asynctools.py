@@ -1,5 +1,18 @@
 """Asynchronous tools set."""
 
+from functools import wraps
+
+from anyio import create_task_group as all_subtasks_awaited
+
+
+def auto_cleanup_aio_tasks(async_func):
+    """Ensure all subtasks finish."""
+    @wraps(async_func)
+    async def async_func_wrapper(*args, **kwargs):
+        async with all_subtasks_awaited():
+            return await async_func(*args, **kwargs)
+    return async_func_wrapper
+
 
 async def try_await(potentially_awaitable):
     """Try awaiting the arg and return it regardless."""

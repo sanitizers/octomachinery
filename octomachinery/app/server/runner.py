@@ -1,11 +1,11 @@
 """Octomachinery CLI runner."""
 
-import asyncio
 import logging
 import sys
 from typing import Optional
 
 from aiohttp.web_runner import GracefulExit
+from anyio import run as run_until_complete
 import attr
 
 # pylint: disable=relative-beyond-top-level
@@ -59,6 +59,6 @@ def run(
         )
 
     try:
-        asyncio.run(run_server_forever(config))
+        run_until_complete(run_server_forever, config)
     except (GracefulExit, KeyboardInterrupt):
         logger.info(' Exiting the app '.center(50, '='))

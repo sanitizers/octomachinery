@@ -10,6 +10,8 @@ from aiohttp import web
 # pylint: disable=relative-beyond-top-level
 from ...github.api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level
+from ...utils.asynctools import auto_cleanup_aio_tasks
+# pylint: disable=relative-beyond-top-level
 from ..routing.webhooks_dispatcher import (
     route_github_webhook_event,
 )
@@ -97,6 +99,7 @@ async def _stop_site_on_cancel(aiohttp_tcp_site):
         await aiohttp_tcp_site.stop()
 
 
+@auto_cleanup_aio_tasks
 async def run_forever(config):
     """Spawn an HTTP server in asyncio context."""
     logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
