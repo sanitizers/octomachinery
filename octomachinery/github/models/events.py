@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 import pathlib
-from typing import Any, Mapping, Union
+from typing import Any, Mapping, TYPE_CHECKING, Union
 import uuid
 import warnings
 
@@ -13,9 +13,11 @@ import attr
 from gidgethub.sansio import Event as _GidgetHubEvent
 
 # pylint: disable=relative-beyond-top-level
-from ...app.routing.routers import OctomachineryRouterBase
-# pylint: disable=relative-beyond-top-level
 from ..utils.event_utils import parse_event_stub_from_fd
+
+if TYPE_CHECKING:
+    # pylint: disable=relative-beyond-top-level
+    from ...app.routing.abc import OctomachineryRouterBase
 
 
 __all__ = 'GitHubEvent', 'GitHubWebhookEvent'

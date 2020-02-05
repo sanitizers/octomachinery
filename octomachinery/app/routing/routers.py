@@ -10,9 +10,10 @@ from ...github.models.events import (
     GidgetHubWebhookEvent, GitHubEvent,
     _GidgetHubEvent,
 )
+from .abc import OctomachineryRouterBase
 
 
-class OctomachineryRouterBase(_GidgetHubRouter):
+class GidgetHubRouterBase(_GidgetHubRouter, OctomachineryRouterBase):
     """GidgetHub-based router exposing callback matching separately."""
 
     def emit_routes_for(
@@ -56,7 +57,7 @@ class OctomachineryRouterBase(_GidgetHubRouter):
             await coro
 
 
-class ConcurrentRouter(OctomachineryRouterBase):
+class ConcurrentRouter(GidgetHubRouterBase):
     """GitHub event router invoking event handlers simultaneously."""
 
     async def dispatch(
