@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import pathlib
-from typing import Mapping, Union
+from typing import Any, Mapping, Union
 import uuid
 import warnings
 
@@ -106,13 +107,22 @@ class GitHubEvent:
         )
 
     # pylint: disable=no-self-use
-    def dispatch_via(self, *routers, ctx=None) -> None:
-        """Invoke this event handlers."""
+    async def dispatch_via(
+            self,
+            *routers: Any,  # NOTE: change to a real router class
+            ctx: Mapping[str, Any] = None,
+    ) -> None:
+        """Invoke this event handlers from different routers."""
         if not routers:
             raise ValueError('At least one router must be supplied')
 
-        raise NotImplementedError
-        # await asyncio.gather(r.dispatch(self, ctx) for r in routers)
+        if ctx is None:
+            ctx = {}
+
+        await asyncio.gather(*(
+            r.dispatch(self, **ctx)
+            for r in routers
+        ))
 
 
 @attr.dataclass(frozen=True)

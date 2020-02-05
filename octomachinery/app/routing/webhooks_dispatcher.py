@@ -12,7 +12,7 @@ from gidgethub import BadRequest, ValidationFailure
 
 # pylint: disable=relative-beyond-top-level,import-error
 from ..runtime.context import RUNTIME_CONTEXT
-from . import dispatch_event
+from . import WEBHOOK_EVENTS_ROUTER
 
 
 __all__ = ('route_github_action_event', 'route_github_webhook_event', )
@@ -127,7 +127,7 @@ async def route_github_webhook_event(*, github_event, github_app):
         RUNTIME_CONTEXT.app_installation_client = github_install.api_client
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
-    asyncio.create_task(dispatch_event(github_event))
+    asyncio.create_task(github_event.dispatch_via(WEBHOOK_EVENTS_ROUTER))
     return web.Response(
         text=f'OK: GitHub event received. It is {github_event!r}',
     )
@@ -144,4 +144,4 @@ async def route_github_action_event(github_action, *, github_app=None):
 
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.app_installation_client = github_action.api_client
-    await dispatch_event(github_action.event)
+    await github_action.event.dispatch_via(WEBHOOK_EVENTS_ROUTER)
