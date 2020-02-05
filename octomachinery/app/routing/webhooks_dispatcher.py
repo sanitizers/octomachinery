@@ -128,9 +128,8 @@ async def route_github_webhook_event(*, github_event, github_app):
 
     await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
     asyncio.create_task(github_event.dispatch_via(WEBHOOK_EVENTS_ROUTER))
-    return web.Response(
-        text=f'OK: GitHub event received. It is {github_event!r}',
-    )
+    event_ack_msg = f'GitHub event received. It is {github_event!r}'
+    return web.Response(text=f'OK: {event_ack_msg}')
 
 
 # pylint: disable=unused-argument
