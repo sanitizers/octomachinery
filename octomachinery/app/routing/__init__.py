@@ -2,13 +2,13 @@
 
 from functools import wraps
 
-from gidgethub.routing import Router
+from .routers import ConcurrentRouter
 
 
 __all__ = ('dispatch_event', 'process_event', 'process_event_actions')
 
 
-WEBHOOK_EVENTS_ROUTER = Router()
+WEBHOOK_EVENTS_ROUTER = ConcurrentRouter()
 """An event dispatcher for webhooks."""
 
 
