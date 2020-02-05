@@ -13,6 +13,8 @@ import attr
 from gidgethub.sansio import Event as _GidgetHubEvent
 
 # pylint: disable=relative-beyond-top-level
+from ...app.routing.routers import OctomachineryRouterBase
+# pylint: disable=relative-beyond-top-level
 from ..utils.event_utils import parse_event_stub_from_fd
 
 
@@ -109,7 +111,7 @@ class GitHubEvent:
     # pylint: disable=no-self-use
     async def dispatch_via(
             self,
-            *routers: Any,  # NOTE: change to a real router class
+            *routers: OctomachineryRouterBase,
             ctx: Mapping[str, Any] = None,
     ) -> None:
         """Invoke this event handlers from different routers."""
