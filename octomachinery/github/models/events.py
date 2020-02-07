@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import json
 import pathlib
 from typing import Any, Mapping, TYPE_CHECKING, Union
@@ -12,6 +11,8 @@ import warnings
 import attr
 from gidgethub.sansio import Event as _GidgetHubEvent
 
+# pylint: disable=relative-beyond-top-level
+from ...utils.asynctools import aio_gather
 # pylint: disable=relative-beyond-top-level
 from ..utils.event_utils import parse_event_stub_from_fd
 
@@ -123,7 +124,7 @@ class GitHubEvent:
         if ctx is None:
             ctx = {}
 
-        await asyncio.gather(*(
+        await aio_gather(*(
             r.dispatch(self, **ctx)
             for r in routers
         ))
