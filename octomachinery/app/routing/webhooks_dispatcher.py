@@ -62,7 +62,7 @@ async def get_event_from_request(request, github_app):
         )
         logger.info(
             EVENT_LOG_VALID_MSG,
-            event.name,
+            event.name,  # pylint: disable=no-member
             event.delivery_id,
             webhook_event_signature,
         )
