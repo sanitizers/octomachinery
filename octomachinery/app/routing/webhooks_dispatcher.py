@@ -42,7 +42,7 @@ async def get_event_from_request(request, github_app):
     try:
         event = await github_app.event_from_request(request)
     except ValidationFailure as no_signature_exc:
-        logger.info(
+        logger.error(
             EVENT_LOG_INVALID_MSG,
             request.headers.get('X-GitHub-Event'),
             request.headers.get('X-GitHub-Delivery'),
