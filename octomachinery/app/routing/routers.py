@@ -6,6 +6,7 @@ from typing import Any, Iterator, Set, Union
 
 from gidgethub.routing import AsyncCallback, Router as _GidgetHubRouter
 
+from ...utils.asynctools import aio_gather
 from ...github.models.events import (
     GidgetHubWebhookEvent, GitHubEvent,
     _GidgetHubEvent,
@@ -68,7 +69,7 @@ class ConcurrentRouter(GidgetHubRouterBase):
         callback_gen = self.emit_routes_for(event.name, event.payload)
         callback_coros = (cb(event, *args, **kwargs) for cb in callback_gen)
 
-        await asyncio.gather(*callback_coros)
+        await aio_gather(*callback_coros)
 
 
 class NonBlockingConcurrentRouter(ConcurrentRouter):

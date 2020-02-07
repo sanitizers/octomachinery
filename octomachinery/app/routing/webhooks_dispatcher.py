@@ -8,6 +8,7 @@ import logging
 import typing
 
 from aiohttp import web
+from anyio import sleep as async_sleep
 from gidgethub import BadRequest, ValidationFailure
 
 # pylint: disable=relative-beyond-top-level,import-error
@@ -132,7 +133,7 @@ async def route_github_webhook_event(*, github_event, github_app):
         # pylint: disable=assigning-non-slot
         RUNTIME_CONTEXT.app_installation_client = github_install.api_client
 
-    await asyncio.sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
+    await async_sleep(1)  # Give GitHub a sec to deal w/ eventual consistency
     asyncio.create_task(github_event.dispatch_via(WEBHOOK_EVENTS_ROUTER))
     event_ack_msg = f'GitHub event received. It is {github_event!r}'
     return web.Response(text=f'OK: {event_ack_msg}')
