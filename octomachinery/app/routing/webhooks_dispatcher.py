@@ -11,6 +11,8 @@ from aiohttp import web
 from gidgethub import BadRequest, ValidationFailure
 
 # pylint: disable=relative-beyond-top-level,import-error
+from ...github.models.events import GidgetHubWebhookEvent
+# pylint: disable=relative-beyond-top-level,import-error
 from ..runtime.context import RUNTIME_CONTEXT
 from . import WEBHOOK_EVENTS_ROUTER
 
@@ -40,7 +42,7 @@ async def get_event_from_request(request, github_app):
         'X-Hub-Signature', '<MISSING>',
     )
     try:
-        event = await github_app.event_from_request(request)
+        http_req_body = await github_app.trusted_payload_from_request(request)
     except ValidationFailure as no_signature_exc:
         logger.error(
             EVENT_LOG_INVALID_MSG,
@@ -54,6 +56,10 @@ async def get_event_from_request(request, github_app):
         )
         raise web.HTTPForbidden from no_signature_exc
     else:
+        event = GidgetHubWebhookEvent.from_http_request(
+            http_req_headers=request.headers,
+            http_req_body=http_req_body,
+        )
         logger.info(
             EVENT_LOG_VALID_MSG,
             event.name,
