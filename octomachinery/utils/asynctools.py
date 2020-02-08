@@ -19,7 +19,7 @@ async def _send_task_res_to_q(res_q, task_id, aio_task):
     """Await task and put its result to the queue."""
     try:
         task_res = await aio_task
-    except Exception as exc:
+    except (BaseException, Exception) as exc:
         task_res = exc
         raise
     finally:
