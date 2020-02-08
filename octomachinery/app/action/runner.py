@@ -37,7 +37,9 @@ async def process_github_action(config):
         )
         logger.info('GitHub Action=%r', config.action)
 
-        await route_github_action_event(github_action)
+        await route_github_action_event(
+            github_action, github_event=github_action.event,
+        )
     return ActionSuccess('GitHub Action has been processed')
 
 

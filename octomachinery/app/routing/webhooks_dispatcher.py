@@ -179,14 +179,19 @@ async def route_github_event(*, github_event, github_app):
 
 
 # pylint: disable=unused-argument
-async def route_github_action_event(github_action, *, github_app=None):
+async def route_github_action_event(
+        github_action,
+        *,
+        github_event,
+        github_app=None,
+):
     """Dispatch a GitHub action event to corresponsing handlers."""
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.IS_GITHUB_ACTION = True
     RUNTIME_CONTEXT.IS_GITHUB_APP = False  # pylint: disable=assigning-non-slot
     # pylint: disable=assigning-non-slot
-    RUNTIME_CONTEXT.github_event = github_action.event
+    RUNTIME_CONTEXT.github_event = github_event
 
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.app_installation_client = github_action.api_client
-    await github_action.event.dispatch_via(WEBHOOK_EVENTS_ROUTER)
+    await github_event.dispatch_via(WEBHOOK_EVENTS_ROUTER)
