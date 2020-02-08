@@ -6,8 +6,6 @@ import logging
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
 import attr
-from gidgethub import ValidationFailure
-from gidgethub.sansio import validate_event as validate_webhook_payload
 
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import (
@@ -20,7 +18,6 @@ from ..entities.app_installation import GitHubAppInstallation
 # pylint: disable=relative-beyond-top-level
 from ..models import GitHubAppInstallation as GitHubAppInstallationModel
 # pylint: disable=relative-beyond-top-level,import-error
-from ..models.events import GidgetHubWebhookEvent
 from .raw_client import RawGitHubAPI
 from .tokens import GitHubJWTToken
 
@@ -51,38 +48,6 @@ class GitHubApp:
             '' if webhook_secret else 'NOT ',
             'SIGNATURE VERIFICATION WILL BE ENFORCED'
             if webhook_secret else 'SIGNED WEBHOOKS WILL BE REJECTED',
-        )
-
-    async def trusted_payload_from_request(self, request):
-        """Get a verified HTTP request body from request."""
-        http_req_headers = request.headers
-        is_secret_provided = self._config.webhook_secret is not None
-        is_payload_signed = 'x-hub-signature' in http_req_headers
-
-        if is_payload_signed and not is_secret_provided:
-            raise ValidationFailure('secret not provided')
-
-        if not is_payload_signed and is_secret_provided:
-            raise ValidationFailure('signature is missing')
-
-        raw_http_req_body = await request.read()
-
-        if is_payload_signed and is_secret_provided:
-            validate_webhook_payload(
-                payload=raw_http_req_body,
-                signature=http_req_headers['x-hub-signature'],
-                secret=self._config.webhook_secret,
-            )
-
-        return raw_http_req_body
-
-    async def event_from_request(self, request):
-        """Get an event object out of HTTP request."""
-        raw_http_req_body = await self.trusted_payload_from_request(request)
-
-        return GidgetHubWebhookEvent.from_http_request(
-            http_req_headers=request.headers,
-            http_req_body=raw_http_req_body,
         )
 
     async def log_installs_list(self) -> None:

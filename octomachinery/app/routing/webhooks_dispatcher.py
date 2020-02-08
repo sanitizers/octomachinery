@@ -10,6 +10,7 @@ import typing
 from aiohttp import web
 from anyio import sleep as async_sleep
 from gidgethub import BadRequest, ValidationFailure
+from gidgethub.sansio import validate_event as validate_webhook_payload
 
 # pylint: disable=relative-beyond-top-level,import-error
 from ...github.models.events import GidgetHubWebhookEvent
@@ -37,13 +38,39 @@ EVENT_LOG_VALID_MSG = EVENT_LOG_TMPL.format(EVENT_VALID_CHUNK)
 EVENT_LOG_INVALID_MSG = EVENT_LOG_TMPL.format(EVENT_INVALID_CHUNK)
 
 
-async def get_event_from_request(request, github_app):
+async def get_trusted_http_payload(request, webhook_secret):
+    """Get a verified HTTP request body from request."""
+    http_req_headers = request.headers
+    is_secret_provided = webhook_secret is not None
+    is_payload_signed = 'x-hub-signature' in http_req_headers
+
+    if is_payload_signed and not is_secret_provided:
+        raise ValidationFailure('secret not provided')
+
+    if not is_payload_signed and is_secret_provided:
+        raise ValidationFailure('signature is missing')
+
+    raw_http_req_body = await request.read()
+
+    if is_payload_signed and is_secret_provided:
+        validate_webhook_payload(
+            payload=raw_http_req_body,
+            signature=http_req_headers['x-hub-signature'],
+            secret=webhook_secret,
+        )
+
+    return raw_http_req_body
+
+
+async def get_event_from_request(request, webhook_secret):
     """Retrieve Event out of HTTP request if it's valid."""
     webhook_event_signature = request.headers.get(
         'X-Hub-Signature', '<MISSING>',
     )
     try:
-        http_req_body = await github_app.trusted_payload_from_request(request)
+        http_req_body = await get_trusted_http_payload(
+            request, webhook_secret,
+        )
     except ValidationFailure as no_signature_exc:
         logger.error(
             EVENT_LOG_INVALID_MSG,
@@ -80,13 +107,17 @@ def validate_allowed_http_methods(*allowed_methods: str):
 
     def decorator(wrapped_function):
         @wraps(wrapped_function)
-        async def wrapper(request, *, github_app):
+        async def wrapper(request, *, github_app, webhook_secret=None):
             if request.method not in _allowed_methods:
                 raise web.HTTPMethodNotAllowed(
                     method=request.method,
                     allowed_methods=_allowed_methods,
                 ) from BadRequest(HTTPStatus.METHOD_NOT_ALLOWED)
-            return await wrapped_function(request, github_app=github_app)
+            return await wrapped_function(
+                request,
+                github_app=github_app,
+                webhook_secret=webhook_secret,
+            )
         return wrapper
     return decorator
 
@@ -94,8 +125,8 @@ def validate_allowed_http_methods(*allowed_methods: str):
 def webhook_request_to_event(wrapped_function):
     """Pass event extracted from request into the wrapped function."""
     @wraps(wrapped_function)
-    async def wrapper(request, *, github_app):
-        event = await get_event_from_request(request, github_app)
+    async def wrapper(request, *, github_app, webhook_secret=None):
+        event = await get_event_from_request(request, webhook_secret)
         return await wrapped_function(
             github_event=event, github_app=github_app,
         )
@@ -106,6 +137,14 @@ def webhook_request_to_event(wrapped_function):
 @webhook_request_to_event
 async def route_github_webhook_event(*, github_event, github_app):
     """Dispatch incoming webhook events to corresponsing handlers."""
+    return await route_github_event(
+        github_event=github_event,
+        github_app=github_app,
+    )
+
+
+async def route_github_event(*, github_event, github_app):
+    """Dispatch GitHub event to corresponsing handlers."""
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.IS_GITHUB_ACTION = False
     RUNTIME_CONTEXT.IS_GITHUB_APP = True  # pylint: disable=assigning-non-slot
