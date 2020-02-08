@@ -35,21 +35,6 @@ class GitHubApp:
     _config: GitHubAppIntegrationConfig
     _http_session: ClientSession
 
-    def __attrs_post_init__(self):
-        """Initialize installations store."""
-        webhook_secret = self._config.webhook_secret
-        webhook_secret_repr = (
-            f' ({webhook_secret[:1]}...{webhook_secret[-1:]})'
-            if webhook_secret else ''
-        )
-        logger.info(
-            'Webhook secret%s is [%sSET]: %s',
-            webhook_secret_repr,
-            '' if webhook_secret else 'NOT ',
-            'SIGNATURE VERIFICATION WILL BE ENFORCED'
-            if webhook_secret else 'SIGNED WEBHOOKS WILL BE REJECTED',
-        )
-
     async def log_installs_list(self) -> None:
         """Store all installations data before starting."""
         try:

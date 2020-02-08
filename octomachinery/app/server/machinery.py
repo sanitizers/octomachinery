@@ -107,10 +107,26 @@ async def _stop_site_on_cancel(aiohttp_tcp_site):
         await aiohttp_tcp_site.stop()
 
 
+def log_webhook_secret_status(webhook_secret):
+    """Log HTTP body signature verification behavior."""
+    webhook_secret_repr = (
+        f' ({webhook_secret[:1]}...{webhook_secret[-1:]})'
+        if webhook_secret else ''
+    )
+    logger.info(
+        'Webhook secret%s is [%sSET]: %s',
+        webhook_secret_repr,
+        '' if webhook_secret else 'NOT ',
+        'SIGNATURE VERIFICATION WILL BE ENFORCED'
+        if webhook_secret else 'SIGNED WEBHOOKS WILL BE REJECTED',
+    )
+
+
 @auto_cleanup_aio_tasks
 async def run_forever(config):
     """Spawn an HTTP server in asyncio context."""
     logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
+    log_webhook_secret_status(config.github.webhook_secret)
     async with ClientSession() as aiohttp_client_session:
         github_app = GitHubApp(
             config.github,
