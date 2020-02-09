@@ -2,11 +2,12 @@
 
 import logging
 
-from aiohttp.client import ClientSession
 import attr
 
 # pylint: disable=relative-beyond-top-level
 from ...app.action.config import GitHubActionConfig
+# pylint: disable=relative-beyond-top-level
+from ..api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level
 from ..api.raw_client import RawGitHubAPI
 # pylint: disable=relative-beyond-top-level
@@ -19,15 +20,11 @@ logger = logging.getLogger(__name__)
 
 
 @attr.dataclass
-class GitHubAction:  # FIXME: inherit GitHubApp?  # pylint: disable=fixme
+class GitHubAction(GitHubApp):
     """GitHub Action API wrapper."""
 
     _metadata: GitHubActionConfig  # FIXME: _config?  # pylint: disable=fixme
     """A GitHub Action metadata from envronment vars."""
-    _http_session: ClientSession
-    """An externally created aiohttp client session."""
-    _user_agent: str
-    """A User-Agent string to use in HTTP requests to the GitHub API."""
 
     @property
     def event(self):  # noqa: D401
@@ -48,5 +45,5 @@ class GitHubAction:  # FIXME: inherit GitHubApp?  # pylint: disable=fixme
         return RawGitHubAPI(
             token=self.token,
             session=self._http_session,
-            user_agent=self._user_agent,
+            user_agent=self._config.user_agent,
         )
