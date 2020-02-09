@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import pathlib
-from typing import Any, Mapping, TYPE_CHECKING, Union
+from typing import Any, Mapping, TextIO, TYPE_CHECKING, Union
 import uuid
 import warnings
 
@@ -83,6 +83,18 @@ class GitHubEvent:
             return cls(event_name, json.load(event_source))
 
     @classmethod
+    def from_fixture_fd(
+            cls: GitHubEvent,
+            event_fixture_fd: TextIO,
+            *,
+            event: str = None,
+    ) -> GitHubEvent:
+        """Make a GitHubEvent from a fixture fd and an optional name."""
+        headers, payload = parse_event_stub_from_fd(event_fixture_fd)
+        event_name = event or headers['x-github-event']
+        return cls(event_name, payload)
+
+    @classmethod
     def from_fixture(
             cls: GitHubEvent,
             event_fixture_path: Union[pathlib.Path, str],
@@ -91,9 +103,7 @@ class GitHubEvent:
     ) -> GitHubEvent:
         """Make a GitHubEvent from a fixture and an optional name."""
         with pathlib.Path(event_fixture_path).open() as event_source:
-            headers, payload = parse_event_stub_from_fd(event_source)
-            event_name = event or headers['x-github-event']
-            return cls(event_name, payload)
+            return cls.from_fixture_fd(event_source, event=event)
 
     @classmethod
     def from_gidgethub(cls, event: _GidgetHubEvent) -> GitHubEvent:
@@ -164,6 +174,23 @@ class GitHubWebhookEvent(GitHubEvent):
         )
 
     @classmethod
+    def from_fixture_fd(
+            cls: GitHubWebhookEvent,
+            event_fixture_fd: TextIO,
+            *,
+            event: str = None,
+    ) -> GitHubWebhookEvent:
+        """Make GitHubWebhookEvent from fixture fd and optional name."""
+        headers, payload = parse_event_stub_from_fd(event_fixture_fd)
+        event_name = event or headers['x-github-event']
+        delivery_id = headers.get('x-github-delivery', uuid.uuid4())
+        return cls(
+            name=event_name,
+            payload=payload,
+            delivery_id=delivery_id,
+        )
+
+    @classmethod
     def from_fixture(
             cls: GitHubWebhookEvent,
             event_fixture_path: Union[pathlib.Path, str],
@@ -172,14 +199,7 @@ class GitHubWebhookEvent(GitHubEvent):
     ) -> GitHubWebhookEvent:
         """Make a GitHubWebhookEvent from fixture and optional name."""
         with pathlib.Path(event_fixture_path).open() as event_source:
-            headers, payload = parse_event_stub_from_fd(event_source)
-        event_name = event or headers['x-github-event']
-        delivery_id = headers.get('x-github-delivery', uuid.uuid4())
-        return cls(
-            name=event_name,
-            payload=payload,
-            delivery_id=delivery_id,
-        )
+            return cls.from_fixture_fd(event_source, event=event)
 
     @classmethod
     def from_http_request(
