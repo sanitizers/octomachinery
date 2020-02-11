@@ -17,6 +17,8 @@ from ...github.models.action_outcomes import (
 # pylint: disable=relative-beyond-top-level
 from ..config import BotAppConfig
 # pylint: disable=relative-beyond-top-level
+from ..routing import WEBHOOK_EVENTS_ROUTER
+# pylint: disable=relative-beyond-top-level
 from ..routing.webhooks_dispatcher import route_github_event
 
 
@@ -32,6 +34,7 @@ async def process_github_action(config):
             metadata=config.action,
             http_session=http_client_session,
             config=config.github,
+            event_routers={WEBHOOK_EVENTS_ROUTER},
         )
         logger.info('GitHub Action=%r', config.action)
 

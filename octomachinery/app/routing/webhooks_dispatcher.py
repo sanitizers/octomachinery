@@ -18,7 +18,6 @@ from ...github.entities.action import GitHubAction
 from ...github.models.events import GidgetHubWebhookEvent
 # pylint: disable=relative-beyond-top-level,import-error
 from ..runtime.context import RUNTIME_CONTEXT
-from . import WEBHOOK_EVENTS_ROUTER
 
 
 __all__ = 'route_github_event', 'route_github_webhook_event'
@@ -200,4 +199,4 @@ async def route_github_event(*, github_event, github_app):
         # and actions are executed in workflows that rely on those VMs.
         await async_sleep(1)
 
-    return await github_event.dispatch_via(WEBHOOK_EVENTS_ROUTER)
+    return await github_app.dispatch_event(github_event)

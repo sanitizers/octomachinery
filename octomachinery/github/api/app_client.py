@@ -2,11 +2,14 @@
 
 from collections import defaultdict
 import logging
+from typing import Any, Iterable
 
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
 import attr
 
+# pylint: disable=relative-beyond-top-level
+from ...app.routing.abc import OctomachineryRouterBase
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import (
     amap, dict_to_kwargs_cb,
@@ -17,7 +20,8 @@ from ..config.app import GitHubAppIntegrationConfig
 from ..entities.app_installation import GitHubAppInstallation
 # pylint: disable=relative-beyond-top-level
 from ..models import GitHubAppInstallation as GitHubAppInstallationModel
-# pylint: disable=relative-beyond-top-level,import-error
+# pylint: disable=relative-beyond-top-level
+from ..models.events import GitHubEvent
 from .raw_client import RawGitHubAPI
 from .tokens import GitHubJWTToken
 
@@ -34,6 +38,11 @@ class GitHubApp:
 
     _config: GitHubAppIntegrationConfig
     _http_session: ClientSession
+    _event_routers: Iterable[OctomachineryRouterBase]
+
+    async def dispatch_event(self, github_event: GitHubEvent) -> Iterable[Any]:
+        """Dispatch ``github_event`` into the embedded routers."""
+        return await github_event.dispatch_via(*self._event_routers)
 
     async def log_installs_list(self) -> None:
         """Store all installations data before starting."""
