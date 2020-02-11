@@ -12,8 +12,6 @@ from ...github.api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import auto_cleanup_aio_tasks
 # pylint: disable=relative-beyond-top-level
-from ..routing import WEBHOOK_EVENTS_ROUTER
-# pylint: disable=relative-beyond-top-level
 from ..routing.webhooks_dispatcher import (
     route_github_webhook_event,
 )
@@ -125,7 +123,7 @@ def log_webhook_secret_status(webhook_secret):
 
 
 @auto_cleanup_aio_tasks
-async def run_forever(config):
+async def run_forever(config, event_routers):
     """Spawn an HTTP server in asyncio context."""
     logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
     log_webhook_secret_status(config.github.webhook_secret)
@@ -133,7 +131,7 @@ async def run_forever(config):
         github_app = GitHubApp(
             config.github,
             http_session=aiohttp_client_session,
-            event_routers={WEBHOOK_EVENTS_ROUTER},
+            event_routers=event_routers,
         )
         await _prepare_github_app(github_app)
         await _launch_web_server_and_wait_until_it_stops(

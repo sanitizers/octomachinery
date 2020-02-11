@@ -2,7 +2,7 @@
 
 import logging
 import sys
-from typing import Optional
+from typing import Iterable, Optional
 
 from aiohttp.web_runner import GracefulExit
 from anyio import run as run_until_complete
@@ -10,6 +10,10 @@ import attr
 
 # pylint: disable=relative-beyond-top-level
 from ..config import BotAppConfig
+# pylint: disable=relative-beyond-top-level
+from ..routing import WEBHOOK_EVENTS_ROUTER
+# pylint: disable=relative-beyond-top-level
+from ..routing.abc import OctomachineryRouterBase
 # pylint: disable=relative-beyond-top-level
 from .config import WebServerConfig
 # pylint: disable=relative-beyond-top-level
@@ -25,8 +29,12 @@ def run(
         version: Optional[str] = None,
         url: Optional[str] = None,
         config: Optional[BotAppConfig] = None,
+        event_routers: Optional[Iterable[OctomachineryRouterBase]] = None,
 ):
     """Start up a server using CLI args for host and port."""
+    if event_routers is None:
+        event_routers = {WEBHOOK_EVENTS_ROUTER}
+
     if (
             config is not None and
             (name is not None or version is not None or url is not None)
@@ -59,6 +67,6 @@ def run(
         )
 
     try:
-        run_until_complete(run_server_forever, config)
+        run_until_complete(run_server_forever, config, event_routers)
     except (GracefulExit, KeyboardInterrupt):
         logger.info(' Exiting the app '.center(50, '='))

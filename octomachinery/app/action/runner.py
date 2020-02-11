@@ -2,7 +2,7 @@
 
 import asyncio
 import logging
-import typing
+from typing import Iterable, Optional
 
 from aiohttp.client import ClientSession
 
@@ -19,13 +19,15 @@ from ..config import BotAppConfig
 # pylint: disable=relative-beyond-top-level
 from ..routing import WEBHOOK_EVENTS_ROUTER
 # pylint: disable=relative-beyond-top-level
+from ..routing.abc import OctomachineryRouterBase
+# pylint: disable=relative-beyond-top-level
 from ..routing.webhooks_dispatcher import route_github_event
 
 
 logger = logging.getLogger(__name__)
 
 
-async def process_github_action(config):
+async def process_github_action(config, event_routers):
     """Schedule GitHub Action event for processing."""
     logger.info('Processing GitHub Action event...')
 
@@ -34,7 +36,7 @@ async def process_github_action(config):
             metadata=config.action,
             http_session=http_client_session,
             config=config.github,
-            event_routers={WEBHOOK_EVENTS_ROUTER},
+            event_routers=event_routers,
         )
         logger.info('GitHub Action=%r', config.action)
 
@@ -45,8 +47,15 @@ async def process_github_action(config):
     return ActionSuccess('GitHub Action has been processed')
 
 
-def run(*, config: typing.Optional[BotAppConfig] = None) -> None:
+def run(
+        *,
+        config: Optional[BotAppConfig] = None,
+        event_routers: Optional[Iterable[OctomachineryRouterBase]] = None,
+) -> None:
     """Start up a server using CLI args for host and port."""
+    if event_routers is None:
+        event_routers = {WEBHOOK_EVENTS_ROUTER}
+
     if config is None:
         config = BotAppConfig.from_dotenv()
 
@@ -57,7 +66,9 @@ def run(*, config: typing.Optional[BotAppConfig] = None) -> None:
     )
 
     try:
-        processing_outcome = asyncio.run(process_github_action(config))
+        processing_outcome = asyncio.run(
+            process_github_action(config, event_routers),
+        )
     except GitHubActionError as action_error:
         action_error.terminate_action()
     except KeyboardInterrupt:
