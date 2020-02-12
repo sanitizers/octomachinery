@@ -23,21 +23,29 @@ logger = logging.getLogger(__name__)
 class GitHubAction(GitHubApp):
     """GitHub Action API wrapper."""
 
-    _metadata: GitHubActionConfig  # FIXME: _config?  # pylint: disable=fixme
+    _metadata: GitHubActionConfig = attr.ib(default=None)
     """A GitHub Action metadata from envronment vars."""
+
+    # pylint: disable=no-self-use
+    @_metadata.validator
+    def _verify_metadata_is_set(self, attribute, value):
+        if value is None:
+            raise ValueError(f'{attribute} must be set.')
 
     @property
     def event(self):  # noqa: D401
         """Parsed GitHub Action event data."""
         return GidgetHubActionEvent.from_file(
-            self._metadata.event_name,
-            self._metadata.event_path,
+            self._metadata.event_name,  # pylint: disable=no-member
+            self._metadata.event_path,  # pylint: disable=no-member
         )
 
     @property
     def token(self):
         """Return GitHub Action access token."""
-        return GitHubOAuthToken(self._metadata.token)
+        return GitHubOAuthToken(
+            self._metadata.token,  # pylint: disable=no-member
+        )
 
     @property
     def api_client(self):  # noqa: D401

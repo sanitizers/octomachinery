@@ -9,6 +9,8 @@ from aiohttp.client_exceptions import ClientConnectorError
 import attr
 
 # pylint: disable=relative-beyond-top-level
+from ...app.routing import WEBHOOK_EVENTS_ROUTER
+# pylint: disable=relative-beyond-top-level
 from ...app.routing.abc import OctomachineryRouterBase
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import (
@@ -38,11 +40,16 @@ class GitHubApp:
 
     _config: GitHubAppIntegrationConfig
     _http_session: ClientSession
-    _event_routers: Iterable[OctomachineryRouterBase]
+    _event_routers: Iterable[OctomachineryRouterBase] = attr.ib(
+        default={WEBHOOK_EVENTS_ROUTER},
+        converter=frozenset,
+    )
 
     async def dispatch_event(self, github_event: GitHubEvent) -> Iterable[Any]:
         """Dispatch ``github_event`` into the embedded routers."""
-        return await github_event.dispatch_via(*self._event_routers)
+        return await github_event.dispatch_via(
+            *self._event_routers,  # pylint: disable=not-an-iterable
+        )
 
     async def log_installs_list(self) -> None:
         """Store all installations data before starting."""
