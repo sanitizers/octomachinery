@@ -9,6 +9,7 @@ from aiohttp.test_utils import get_unused_port_socket
 import pytest
 
 from octomachinery.app.config import BotAppConfig
+from octomachinery.app.routing import WEBHOOK_EVENTS_ROUTER
 from octomachinery.app.server.machinery import setup_server_runner
 from octomachinery.github.api.app_client import GitHubApp
 
@@ -72,9 +73,22 @@ async def aiohttp_client_session(
 
 
 @pytest.fixture
-def github_app(octomachinery_config_github_app, aiohttp_client_session):
+def octomachinery_event_routers():
+    """Construct a set of routers for use in the GitHub App."""
+    return frozenset({WEBHOOK_EVENTS_ROUTER})
+
+
+@pytest.fixture
+def github_app(
+        octomachinery_config_github_app, aiohttp_client_session,
+        octomachinery_event_routers,
+):
     """Initizalize a GitHub App instance."""
-    return GitHubApp(octomachinery_config_github_app, aiohttp_client_session)
+    return GitHubApp(
+        octomachinery_config_github_app,
+        aiohttp_client_session,
+        octomachinery_event_routers,
+    )
 
 
 @pytest.fixture
