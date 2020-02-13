@@ -14,7 +14,11 @@ from gidgethub.sansio import Event as _GidgetHubEvent
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import aio_gather
 # pylint: disable=relative-beyond-top-level
-from ..utils.event_utils import parse_event_stub_from_fd
+from ..utils.event_utils import (
+    augment_http_headers,
+    parse_event_stub_from_fd,
+    validate_http_headers,
+)
 
 if TYPE_CHECKING:
     # pylint: disable=relative-beyond-top-level
@@ -91,6 +95,11 @@ class GitHubEvent:
     ) -> GitHubEvent:
         """Make a GitHubEvent from a fixture fd and an optional name."""
         headers, payload = parse_event_stub_from_fd(event_fixture_fd)
+        if event and 'x-github-event' in headers:
+            raise ValueError(
+                'Supply only one of an event name '
+                'or an event header in the fixture file',
+            )
         event_name = event or headers['x-github-event']
         return cls(event_name, payload)
 
@@ -182,12 +191,19 @@ class GitHubWebhookEvent(GitHubEvent):
     ) -> GitHubWebhookEvent:
         """Make GitHubWebhookEvent from fixture fd and optional name."""
         headers, payload = parse_event_stub_from_fd(event_fixture_fd)
-        event_name = event or headers['x-github-event']
-        delivery_id = headers.get('x-github-delivery', uuid.uuid4())
+        if event and 'x-github-event' in headers:
+            raise ValueError(
+                'Supply only one of an event name '
+                'or an event header in the fixture file',
+            )
+        headers['x-github-event'] = event or headers['x-github-event']
+        headers = augment_http_headers(headers)
+        validate_http_headers(headers)
+
         return cls(
-            name=event_name,
+            name=headers['x-github-event'],
             payload=payload,
-            delivery_id=delivery_id,
+            delivery_id=headers['x-github-delivery'],
         )
 
     @classmethod
