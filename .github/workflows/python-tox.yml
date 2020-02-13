@@ -26,17 +26,6 @@ jobs:
         - TOXENV: build-docs
         - TOXENV: build-dists
         - TOXENV: python
-        exclude:
-        # Excluded until the following Sphinx bug is fixed.
-        # Ref: https://github.com/sphinx-doc/sphinx/issues/6803
-        - os: macOS-latest
-          python-version: 3.8
-          env:
-            TOXENV: build-docs
-        - os: macOS-latest
-          python-version: 3.8
-          env:
-            TOXENV: check-docs
 
     steps:
     - uses: actions/checkout@master
