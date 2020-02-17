@@ -27,9 +27,9 @@ logger = logging.getLogger(__name__)
 
 
 EVENT_LOG_TMPL = (
-    'Got a{}valid X-GitHub-Event=%s '
-    'with X-GitHub-Delivery=%s '
-    'and X-Hub-Signature=%s'
+    'Got a{!s}valid X-GitHub-Event={{!s}} '
+    'with X-GitHub-Delivery={{!s}} '
+    'and X-Hub-Signature={{!s}}'
 )
 
 EVENT_INVALID_CHUNK = 'n in'
@@ -80,7 +80,7 @@ async def get_event_from_request(request, webhook_secret):
             webhook_event_signature,
         )
         logger.debug(
-            'Webhook HTTP query signature validation failed because: %s',
+            'Webhook HTTP query signature validation failed because: {!s}',
             no_signature_exc,
         )
         raise web.HTTPForbidden from no_signature_exc

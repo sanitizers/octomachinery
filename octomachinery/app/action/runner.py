@@ -38,7 +38,7 @@ async def process_github_action(config, event_routers):
             config=config.github,
             event_routers=event_routers,
         )
-        logger.info('GitHub Action=%r', config.action)
+        logger.info('GitHub Action={!r}', config.action)
 
         await route_github_event(
             github_event=github_action.event,

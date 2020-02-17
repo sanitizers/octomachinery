@@ -59,7 +59,7 @@ class GitHubApp:
             logger.info('It looks like the GitHub API is offline...')
             logger.error(
                 'The following error has happened while trying to grab '
-                'installations list: %s',
+                'installations list: {!s}',
                 client_error,
             )
             return
@@ -68,7 +68,7 @@ class GitHubApp:
         # pylint: disable=protected-access
         for install_id, install_val in installations.items():
             logger.info(
-                '* Installation id %s (installed to %s)',
+                '* Installation id {!s} (installed to {!s})',
                 install_id,
                 install_val._metadata.account['login'],
             )

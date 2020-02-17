@@ -68,7 +68,7 @@ def detect_env_mode():
         if f'GITHUB_{var_suffix}' not in os.environ:
             logger.info(
                 'Detected GitHub App mode since '
-                'GITHUB_%s is missing from the env',
+                'GITHUB_{!s} is missing from the env',
                 var_suffix,
             )
             return 'app'
