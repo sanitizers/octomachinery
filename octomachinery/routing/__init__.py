@@ -1,7 +1,8 @@
-"""GitHub webhooks routing proxy."""
+"""GitHub webhooks routing."""
+
 
 # pylint: disable=unused-import
-from ...routing.default_router import (  # noqa: F401
+from .default_router import (  # noqa: F401
     dispatch_event,
     process_event,
     process_event_actions,

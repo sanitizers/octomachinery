@@ -1,17 +1,18 @@
 """GitHub App API client."""
 
+from __future__ import annotations
+
 from collections import defaultdict
 import logging
-from typing import Any, Iterable
+from typing import Any, Iterable, TYPE_CHECKING
 
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
 import attr
 
 # pylint: disable=relative-beyond-top-level
-from ...app.routing import WEBHOOK_EVENTS_ROUTER
-# pylint: disable=relative-beyond-top-level
-from ...app.routing.abc import OctomachineryRouterBase
+from ...routing import WEBHOOK_EVENTS_ROUTER
+
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import (
     amap, dict_to_kwargs_cb,
@@ -26,6 +27,10 @@ from ..models import GitHubAppInstallation as GitHubAppInstallationModel
 from ..models.events import GitHubEvent
 from .raw_client import RawGitHubAPI
 from .tokens import GitHubJWTToken
+
+if TYPE_CHECKING:
+    # pylint: disable=relative-beyond-top-level
+    from ...routing.abc import OctomachineryRouterBase
 
 
 logger = logging.getLogger(__name__)

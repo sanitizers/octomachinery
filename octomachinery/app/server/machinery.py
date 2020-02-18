@@ -12,9 +12,7 @@ from ...github.api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import auto_cleanup_aio_tasks
 # pylint: disable=relative-beyond-top-level
-from ..routing.webhooks_dispatcher import (
-    route_github_webhook_event,
-)
+from ..routing.webhooks_dispatcher import route_github_webhook_event
 
 
 logger = logging.getLogger(__name__)

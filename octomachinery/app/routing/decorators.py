@@ -1,11 +1,4 @@
-"""Webhook event processing helper decorators."""
+"""Webhook event processing helper decorators proxy."""
 
-from functools import wraps
-
-
-def process_webhook_payload(wrapped_function):
-    """Bypass event object keys-values as args to the handler."""
-    @wraps(wrapped_function)
-    def wrapper(event):
-        return wrapped_function(**event.payload)
-    return wrapper
+# pylint: disable=unused-import
+from ...routing.decorators import process_webhook_payload  # noqa: F401
