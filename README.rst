@@ -42,8 +42,8 @@ Here's how you 👍 a just-created comment:
 
     from octomachinery.app.routing import process_event_actions
     from octomachinery.app.routing.decorators import process_webhook_payload
-    from octomachinery.app.runtime.context import RUNTIME_CONTEXT
     from octomachinery.app.server.runner import run as run_app
+    from octomachinery.runtime.context import RUNTIME_CONTEXT
 
 
     @process_event_actions('issue_comment', {'created'})

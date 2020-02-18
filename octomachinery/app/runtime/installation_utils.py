@@ -9,7 +9,8 @@ import typing
 import gidgethub
 import yaml
 
-from .context import RUNTIME_CONTEXT
+# pylint: disable=relative-beyond-top-level
+from ...runtime.context import RUNTIME_CONTEXT
 
 
 def _get_file_contents_from_fs(file_name: str) -> typing.Optional[str]:

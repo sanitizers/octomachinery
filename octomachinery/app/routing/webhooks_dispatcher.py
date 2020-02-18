@@ -17,7 +17,7 @@ from ...github.entities.action import GitHubAction
 # pylint: disable=relative-beyond-top-level,import-error
 from ...github.models.events import GidgetHubWebhookEvent
 # pylint: disable=relative-beyond-top-level,import-error
-from ..runtime.context import RUNTIME_CONTEXT
+from ...runtime.context import RUNTIME_CONTEXT
 
 
 __all__ = 'route_github_event', 'route_github_webhook_event'
