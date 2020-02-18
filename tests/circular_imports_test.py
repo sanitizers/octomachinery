@@ -55,27 +55,9 @@ def _discover_path_importables(pkg_pth, pkg_name):
         )
 
 
-def _mark_xfails(*import_paths, failing_imports=frozenset()):
-    for import_path in import_paths:
-        if import_path not in failing_imports:
-            yield import_path
-            continue
-
-        yield pytest.param(
-            import_path,
-            marks=pytest.mark.xfail(reason='Causes cyclic imports'),
-        )
-
-
 @pytest.mark.parametrize(
     'import_path',
-    _mark_xfails(
-        *_find_all_importables(octomachinery),
-        failing_imports={
-            'octomachinery.github.entities.action',
-            'octomachinery.github.api.app_client',
-        },
-    ),
+    _find_all_importables(octomachinery),
 )
 def test_no_warnings(import_path):
     """Verify that exploding importables doesn't explode.

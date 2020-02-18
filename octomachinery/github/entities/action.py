@@ -1,11 +1,12 @@
 """GitHub Action wrapper."""
 
+from __future__ import annotations
+
 import logging
+import typing
 
 import attr
 
-# pylint: disable=relative-beyond-top-level
-from ...app.action.config import GitHubActionConfig
 # pylint: disable=relative-beyond-top-level
 from ..api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level
@@ -14,6 +15,10 @@ from ..api.raw_client import RawGitHubAPI
 from ..api.tokens import GitHubOAuthToken
 # pylint: disable=relative-beyond-top-level,import-error
 from ..models.events import GidgetHubActionEvent
+
+if typing.TYPE_CHECKING:
+    # pylint: disable=relative-beyond-top-level
+    from ...app.action.config import GitHubActionConfig
 
 
 logger = logging.getLogger(__name__)
