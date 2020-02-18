@@ -26,7 +26,7 @@ async def start_tcp_site(
     aiohttp_tcp_site = web.TCPSite(aiohttp_server_runner, host, port)
     await aiohttp_tcp_site.start()
     logger.info(
-        ' Serving on {!s} '.center(50, '='),
+        ' Serving on %s '.center(50, '='),
         aiohttp_tcp_site.name,
     )
     return aiohttp_tcp_site
@@ -49,16 +49,16 @@ async def _prepare_github_app(github_app):
     """Set GitHub App in the context."""
     logger.info('Starting the following GitHub App:')
     logger.info(
-        '* app id: {!s}',
+        '* app id: %s',
         github_app._config.app_id,  # pylint: disable=protected-access
     )
     logger.info(
-        '* private key SHA-1 fingerprint: {!s}',
+        '* private key SHA-1 fingerprint: %s',
         # pylint: disable=protected-access
         github_app._config.private_key.fingerprint,
     )
     logger.info(
-        '* user agent: {!s}',
+        '* user agent: %s',
         github_app._config.user_agent,  # pylint: disable=protected-access
     )
     await github_app.log_installs_list()
@@ -112,7 +112,7 @@ def log_webhook_secret_status(webhook_secret):
         if webhook_secret else ''
     )
     logger.info(
-        'Webhook secret{!s} is [{!s}SET]: {!s}',
+        'Webhook secret%s is [%sSET]: %s',
         webhook_secret_repr,
         '' if webhook_secret else 'NOT ',
         'SIGNATURE VERIFICATION WILL BE ENFORCED'
@@ -123,7 +123,7 @@ def log_webhook_secret_status(webhook_secret):
 @auto_cleanup_aio_tasks
 async def run_forever(config, event_routers):
     """Spawn an HTTP server in asyncio context."""
-    logger.debug('The GitHub App env is set to `{!s}`', config.runtime.env)
+    logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
     log_webhook_secret_status(config.github.webhook_secret)
     async with ClientSession() as aiohttp_client_session:
         github_app = GitHubApp(

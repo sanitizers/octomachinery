@@ -21,7 +21,7 @@ class ActionOutcome:  # pylint: disable=too-few-public-methods
     def raise_it(self):
         """Print the message and exit the program with current code."""
         logger.info(
-            'Terminating the GitHub Action processing: {!s}',
+            'Terminating the GitHub Action processing: %s',
             self.message,
         )
         raise SystemExit(self.return_code)

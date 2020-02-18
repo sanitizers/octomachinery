@@ -62,7 +62,7 @@ def run(
     )
     if config.runtime.debug:  # pylint: disable=no-member
         logger.debug(
-            ' App version: {!s} '.center(50, '='),
+            ' App version: %s '.center(50, '='),
             config.github.app_version,
         )
 
