@@ -7,6 +7,7 @@ It is supposed to be used as follows:
 Or shorter:
 >>> from octomachinery import RUNTIME_CONTEXT
 """
+# pylint: disable=relative-beyond-top-level
 from .utils import _ContextMap
 
 
