@@ -16,7 +16,7 @@ class GitHubToken:  # pylint: disable=too-few-public-methods
 
     def __str__(self):
         """Render the token as its string value."""
-        return self._token_value
+        return str(self._token_value)
 
 
 @attr.dataclass

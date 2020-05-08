@@ -95,7 +95,7 @@ def test_get_self_version_in_git_repo(
 
     with monkeypatch.context() as mp_ctx:
         mp_ctx.setenv('PYPI_UPLOAD', 'true')
-        assert get_self_version() == f'1.3.10.dev1'
+        assert get_self_version() == '1.3.10.dev1'
 
 
 def test_get_self_version_outside_git_repo(
