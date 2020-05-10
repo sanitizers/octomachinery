@@ -1,9 +1,9 @@
 """Web-server constructors."""
 
-import asyncio
 import functools
 import logging
 
+import anyio
 from aiohttp.client import ClientSession
 from aiohttp import web
 
@@ -99,8 +99,8 @@ async def setup_server_runner(
 async def _stop_site_on_cancel(aiohttp_tcp_site):
     """Stop the server after SIGINT."""
     try:
-        await asyncio.get_event_loop().create_future()  # block
-    except asyncio.CancelledError:
+        await anyio.sleep(float('inf'))
+    except anyio.get_cancelled_exc_class():
         logger.info(' Stopping the server '.center(50, '='))
         await aiohttp_tcp_site.stop()
 
@@ -122,7 +122,7 @@ def log_webhook_secret_status(webhook_secret):
 
 @auto_cleanup_aio_tasks
 async def run_forever(config, event_routers):
-    """Spawn an HTTP server in asyncio context."""
+    """Spawn an HTTP server in anyio context."""
     logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
     log_webhook_secret_status(config.github.webhook_secret)
     async with ClientSession() as aiohttp_client_session:
