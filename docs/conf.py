@@ -369,3 +369,8 @@ def set_up_travis_context(
 def setup(app):
     """Patch the sphinx theme set up stage."""
     app.connect('html-page-context', set_up_travis_context)
+
+
+# Ref: https://github.com/python-attrs/attrs/pull/571/files\
+#      #diff-85987f48f1258d9ee486e3191495582dR82
+default_role = 'any'
