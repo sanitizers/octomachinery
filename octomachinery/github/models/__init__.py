@@ -56,6 +56,9 @@ class GitHubAppInstallation:  # pylint: disable=too-few-public-methods
     repositories_url: str = attr.ib(converter=str)
     """API endpoint listing repositories accissible by this Installation."""
 
+    suspended_at: typing.Optional[str]
+    suspended_by: typing.Optional[str]
+
 
 @attr.dataclass
 class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
