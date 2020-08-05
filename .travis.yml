@@ -12,7 +12,7 @@ python:
 - "3.7"
 
 before_install:
-- python -m pip install -U tox --user
+- python -m pip install -U tox
 install:
 - python -m tox --notest
 
