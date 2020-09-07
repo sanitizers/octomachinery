@@ -21,6 +21,7 @@ __all__ = (
 )
 
 
+# FIXME: add register sugar methods
 class GidgetHubRouterBase(_GidgetHubRouter, OctomachineryRouterBase):
     """GidgetHub-based router exposing callback matching separately."""
 
@@ -65,6 +66,7 @@ class GidgetHubRouterBase(_GidgetHubRouter, OctomachineryRouterBase):
             await coro
 
 
+# TODO: new methods?
 class ConcurrentRouter(GidgetHubRouterBase):
     """GitHub event router invoking event handlers simultaneously."""
 

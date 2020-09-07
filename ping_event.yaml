@@ -1,0 +1,13 @@
+---
+# This needs to be a sequence of mappings;
+# it cannot be just a mapping because headers
+# may occur multiple times
+- Content-Type: application/json
+- X-GitHub-Delivery: 2791443c-641a-40fa-836d-031a26f0d45f
+- X-GitHub-Event: ping
+---
+{
+  "hook": {"app_id": 0},
+  "hook_id": 0,
+  "zen": "Hey zen!"
+}

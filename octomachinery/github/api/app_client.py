@@ -21,7 +21,10 @@ from ..config.app import GitHubAppIntegrationConfig
 # pylint: disable=relative-beyond-top-level
 from ..entities.app_installation import GitHubAppInstallation
 # pylint: disable=relative-beyond-top-level
-from ..models import GitHubAppInstallation as GitHubAppInstallationModel
+from ..models import (
+    GitHubAppInstallation as GitHubAppInstallationModel,
+    GitHubInstallationAccessToken,
+)
 # pylint: disable=relative-beyond-top-level
 from ..models.events import GitHubEvent
 from .raw_client import RawGitHubAPI
@@ -40,7 +43,7 @@ GH_INSTALL_EVENTS = {'integration_installation', 'installation'}
 
 
 @attr.dataclass
-class GitHubApp:
+class GitHubApp:  # TODO: have ctx here?
     """GitHub API wrapper."""
 
     _config: GitHubAppIntegrationConfig
@@ -103,6 +106,20 @@ class GitHubApp:
             session=self._http_session,
             user_agent=self._config.user_agent,
         )
+
+    async def get_token_for(
+            self,
+            installation_id: int,
+    ) -> GitHubInstallationAccessToken:
+        """Return an access token for the given installation."""
+        return GitHubInstallationAccessToken(**(
+            await self.api_client.post(
+                '/app/installations/{installation_id}/access_tokens',
+                url_vars={'installation_id': installation_id},
+                data=b'',
+                preview_api_version='machine-man',
+            )
+        ))
 
     async def get_installation(self, event):
         """Retrieve an installation creds from store."""
