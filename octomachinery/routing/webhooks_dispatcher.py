@@ -5,7 +5,7 @@ from __future__ import annotations
 import contextlib
 import logging
 
-from anyio import sleep as async_sleep
+from anyio import get_cancelled_exc_class, sleep as async_sleep
 
 # pylint: disable=relative-beyond-top-level,import-error
 from ..runtime.context import RUNTIME_CONTEXT
@@ -77,4 +77,35 @@ async def route_github_event(
         # and actions are executed in workflows that rely on those VMs.
         await async_sleep(1)
 
-    return await github_app.dispatch_event(github_event)
+    try:
+        return await github_app.dispatch_event(github_event)
+    except get_cancelled_exc_class():
+        raise
+    except Exception as exc:  # pylint: disable=broad-except
+        # NOTE: Framework-wise, these exceptions are meaningless because they
+        # NOTE: can be anything random that the webhook author (octomachinery
+        # NOTE: end-user) forgot to handle. There's nothing we can do about
+        # NOTE: them except put in the log so that the end-user would be able
+        # NOTE: to properly debug their problem by inspecting the logs.
+        # NOTE: P.S. This is also where we'd inject Sentry
+        if isinstance(exc.__context__, get_cancelled_exc_class()):
+            # The CancelledError context is irrelevant to the
+            # user-defined webhook event handler workflow so we're
+            # dropping it from the logs:
+            exc.__context__ = None
+        logger.exception(
+            'An unhandled exception happened while running webhook '
+            'event handlers for "%s"...',
+            github_event.name,
+        )
+        delivery_id = getattr(github_event, 'delivery_id', None)
+        delivery_id_msg = (
+            '' if delivery_id is None
+            else f' (Delivery ID: {delivery_id!s})'
+        )
+        logger.debug(
+            'The payload of "%s" event%s is: %r',
+            github_event.name, delivery_id_msg, github_event.payload,
+        )
+    except BaseException:  # SystemExit + KeyboardInterrupt + GeneratorExit
+        raise
