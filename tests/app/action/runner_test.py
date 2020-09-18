@@ -25,7 +25,7 @@ async def unmatched_event_happened(action):  # pylint: disable=unused-argument
 @process_event('check_run', action='created')
 async def check_run_created(action):  # pylint: disable=unused-argument
     """Handle a check_run event."""
-    assert False
+    raise RuntimeError('Emulate an unhandled error in the handler')
 
 
 @process_event_actions('neutral_event', {'qwerty'})

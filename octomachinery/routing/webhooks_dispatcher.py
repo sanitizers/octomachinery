@@ -14,6 +14,8 @@ from ..github.api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level,import-error
 from ..github.entities.action import GitHubAction
 # pylint: disable=relative-beyond-top-level,import-error
+from ..github.errors import GitHubActionError
+# pylint: disable=relative-beyond-top-level,import-error
 from ..github.models.events import GitHubEvent
 
 
@@ -79,6 +81,10 @@ async def route_github_event(
 
     try:
         return await github_app.dispatch_event(github_event)
+    except GitHubActionError:
+        # Bypass GitHub Actions errors as they are supposed to be a
+        # mechanism for communicating outcomes and are expected.
+        raise
     except get_cancelled_exc_class():
         raise
     except Exception as exc:  # pylint: disable=broad-except
@@ -93,19 +99,27 @@ async def route_github_event(
             # user-defined webhook event handler workflow so we're
             # dropping it from the logs:
             exc.__context__ = None
+
         logger.exception(
             'An unhandled exception happened while running webhook '
             'event handlers for "%s"...',
             github_event.name,
         )
-        delivery_id = getattr(github_event, 'delivery_id', None)
         delivery_id_msg = (
-            '' if delivery_id is None
-            else f' (Delivery ID: {delivery_id!s})'
+            '' if is_gh_action
+            else f' (Delivery ID: {github_event.delivery_id!s})'
         )
         logger.debug(
             'The payload of "%s" event%s is: %r',
             github_event.name, delivery_id_msg, github_event.payload,
         )
+
+        if is_gh_action:
+            # NOTE: In GitHub Actions env, the app is supposed to run as
+            # NOTE: a foreground single event process rather than a
+            # NOTE: server for multiple events. It's okay to propagate
+            # NOTE: unhandled errors so that they are spit out to the
+            # NOTE: console.
+            raise
     except BaseException:  # SystemExit + KeyboardInterrupt + GeneratorExit
         raise
