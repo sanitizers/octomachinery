@@ -10,7 +10,11 @@ from anyio import sleep as async_sleep
 # pylint: disable=relative-beyond-top-level,import-error
 from ..runtime.context import RUNTIME_CONTEXT
 # pylint: disable=relative-beyond-top-level,import-error
+from ..github.api.app_client import GitHubApp
+# pylint: disable=relative-beyond-top-level,import-error
 from ..github.entities.action import GitHubAction
+# pylint: disable=relative-beyond-top-level,import-error
+from ..github.models.events import GitHubEvent
 
 
 __all__ = ('route_github_event', )
@@ -19,7 +23,11 @@ __all__ = ('route_github_event', )
 logger = logging.getLogger(__name__)
 
 
-async def route_github_event(*, github_event, github_app):
+async def route_github_event(
+        *,
+        github_event: GitHubEvent,
+        github_app: GitHubApp,
+) -> None:
     """Dispatch GitHub event to corresponsing handlers.
 
     Set up ``RUNTIME_CONTEXT`` before doing that. This is so
