@@ -32,7 +32,9 @@ class _ContextMap:
         try:
             return self.__map__[name].get()
         except LookupError:
-            raise ContextLookupError(f'No `{name}` present in the context')
+            raise ContextLookupError(
+                f'No `{name}` present in the context',
+            ) from None
 
     def __setattr__(self, name, value):
         if name in ('__map__', '__token_map__'):

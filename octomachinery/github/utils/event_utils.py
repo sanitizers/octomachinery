@@ -18,8 +18,8 @@ def _probe_yaml(event_file_fd):
             ),
             3,
         )
-    except yaml.parser.ParserError:
-        raise ValueError('YAML file is not valid')
+    except yaml.parser.ParserError as yaml_err:
+        raise ValueError('YAML file is not valid') from yaml_err
     finally:
         event_file_fd.seek(0)
 
@@ -108,8 +108,8 @@ def validate_http_headers(headers):
     x_gh_delivery_exc = ValueError('X-GitHub-Delivery must be of type UUID4')
     try:
         x_gh_delivery_uuid = UUID(headers['x-github-delivery'])
-    except ValueError:
-        raise x_gh_delivery_exc
+    except ValueError as val_err:
+        raise x_gh_delivery_exc from val_err
     if x_gh_delivery_uuid.version != 4:
         raise x_gh_delivery_exc
 
