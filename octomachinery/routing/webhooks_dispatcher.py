@@ -6,6 +6,7 @@ import contextlib
 import logging
 
 from anyio import get_cancelled_exc_class, sleep as async_sleep
+import sentry_sdk
 
 # pylint: disable=relative-beyond-top-level,import-error
 from ..runtime.context import RUNTIME_CONTEXT
@@ -88,6 +89,12 @@ async def route_github_event(
     except get_cancelled_exc_class():
         raise
     except Exception as exc:  # pylint: disable=broad-except
+        # NOTE: It's probably better to wrap each event handler with
+        # NOTE: try/except and call `capture_exception()` there instead.
+        # NOTE: We'll also need to figure out the magic of associating
+        # NOTE: breadcrumbs with event handlers.
+        sentry_sdk.capture_exception(exc)
+
         # NOTE: Framework-wise, these exceptions are meaningless because they
         # NOTE: can be anything random that the webhook author (octomachinery
         # NOTE: end-user) forgot to handle. There's nothing we can do about

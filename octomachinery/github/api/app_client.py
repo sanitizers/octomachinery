@@ -9,6 +9,7 @@ from typing import Any, Iterable, TYPE_CHECKING
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
 import attr
+import sentry_sdk
 
 # pylint: disable=relative-beyond-top-level
 from ...routing import WEBHOOK_EVENTS_ROUTER
@@ -49,6 +50,14 @@ class GitHubApp:
         default={WEBHOOK_EVENTS_ROUTER},
         converter=frozenset,
     )
+
+    def __attrs_post_init__(self) -> None:  # pylint: disable=no-self-use
+        """Initialize the Sentry SDK library."""
+        # NOTE: Under the hood, it will set up the DSN from `SENTRY_DSN`
+        # NOTE: env var. We don't need to care about it not existing as
+        # NOTE: Sentry SDK helpers don't fail loudly and if not
+        # NOTE: configured, it'll be ignored.
+        sentry_sdk.init()
 
     async def dispatch_event(self, github_event: GitHubEvent) -> Iterable[Any]:
         """Dispatch ``github_event`` into the embedded routers."""
