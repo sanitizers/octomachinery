@@ -1,5 +1,4 @@
 """Actions processor test suite."""
-# pylint: disable=redefined-outer-name
 
 import json
 

@@ -1,5 +1,4 @@
 """Tests for GitHub private key class."""
-# pylint: disable=redefined-outer-name
 from datetime import date
 from pathlib import Path
 import random

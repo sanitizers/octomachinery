@@ -21,7 +21,6 @@ def rsa_private_key():
 
 
 @pytest.fixture
-# pylint: disable=redefined-outer-name
 def rsa_private_key_bytes(rsa_private_key) -> bytes:
     r"""Generate an unencrypted PKCS#1 formatted RSA private key.
 

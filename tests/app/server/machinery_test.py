@@ -1,5 +1,4 @@
 """Test app server machinery."""
-# pylint: disable=redefined-outer-name
 
 import uuid
 
@@ -64,9 +63,7 @@ def octomachinery_config_server(octomachinery_config):
 
 
 @pytest.fixture
-async def aiohttp_client_session(
-        loop,  # pylint: disable=unused-argument
-) -> ClientSession:
+async def aiohttp_client_session(loop) -> ClientSession:
     """Initialize an aiohttp HTTP client session."""
     async with ClientSession() as http_session:
         yield http_session

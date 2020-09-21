@@ -1,5 +1,4 @@
 """Test suite for version utility helper functions."""
-# pylint: disable=redefined-outer-name
 
 import contextlib
 import os
@@ -39,9 +38,9 @@ def temporary_working_directory():
 @pytest.fixture
 def git_cmd():
     """Provide a Git command helper."""
-    git_cmd = ('git', )
+    git_cmd_ = ('git', )
     # pylint: disable=unexpected-keyword-arg
-    return lambda *args: subprocess.check_output(git_cmd + args, text=True)
+    return lambda *args: subprocess.check_output(git_cmd_ + args, text=True)
 
 
 @pytest.fixture
@@ -79,7 +78,7 @@ def tmp_git_repo(temporary_working_directory, git_config_cmd, git_init_cmd):
 
 def test_get_self_version_in_git_repo(
         monkeypatch,
-        tmp_git_repo,  # pylint: disable=unused-argument
+        tmp_git_repo,
         git_cmd, git_commit_cmd, git_tag_cmd,
 ):
     """Check that get_self_version works properly in existing Git repo."""
@@ -98,17 +97,12 @@ def test_get_self_version_in_git_repo(
         assert get_self_version() == '1.3.10.dev1'
 
 
-def test_get_self_version_outside_git_repo(
-        temporary_working_directory,  # pylint: disable=unused-argument
-):
+def test_get_self_version_outside_git_repo(temporary_working_directory):
     """Check that version is unknown outside of Git repo."""
     assert get_self_version() == 'unknown'
 
 
-def test_cut_local_version_on_upload(
-        monkeypatch,
-        tmp_git_repo,  # pylint: disable=unused-argument
-):
+def test_cut_local_version_on_upload(monkeypatch, tmp_git_repo):
     """Test that PEP440 local version isn't emitted when upload."""
     scm_node = 'gfe99188'
     ver = setuptools_scm.version.ScmVersion(
@@ -125,7 +119,7 @@ def test_cut_local_version_on_upload(
 
 def test_get_version_from_scm_tag_in_git_repo(
         monkeypatch,
-        tmp_git_repo,  # pylint: disable=unused-argument
+        tmp_git_repo,
         git_cmd, git_commit_cmd, git_tag_cmd,
 ):
     """Check that get_version_from_scm_tag works properly in Git repo."""
@@ -145,7 +139,7 @@ def test_get_version_from_scm_tag_in_git_repo(
 
 
 def test_get_version_from_scm_tag_outside_git_repo(
-        temporary_working_directory,  # pylint: disable=unused-argument
+        temporary_working_directory,
 ):
     """Check that version is unknown outside of Git repo."""
     assert get_version_from_scm_tag() == 'unknown'
