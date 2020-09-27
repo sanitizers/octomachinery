@@ -70,8 +70,6 @@ class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
     """Token expiration time."""
     permissions: typing.Dict[str, str]
     """Permission levels of access to API endpoints types."""
-    single_file: typing.Optional[str]
-    """File path the GitHub app controls."""
     repository_selection: str = attr.ib(converter=str)
     """Repository selection mode."""
     repositories: typing.List[typing.Dict[str, typing.Any]] = attr.ib(
@@ -79,6 +77,8 @@ class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
         converter=list,
     )
     """List of accessible repositories."""
+    single_file: typing.Optional[str] = attr.ib(default=None)
+    """File path the GitHub app controls."""
 
     @property
     def expired(self):
