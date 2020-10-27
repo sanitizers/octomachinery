@@ -59,6 +59,9 @@ class GitHubAppInstallation:  # pylint: disable=too-few-public-methods
     suspended_at: typing.Optional[str]
     suspended_by: typing.Optional[str]
 
+    has_multiple_single_files: typing.Optional[bool]
+    single_file_paths: typing.List[str]
+
 
 @attr.dataclass
 class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
