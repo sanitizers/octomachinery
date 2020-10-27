@@ -83,6 +83,9 @@ class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
     single_file: typing.Optional[str] = attr.ib(default=None)
     """File path the GitHub app controls."""
 
+    has_multiple_single_files: typing.Optional[bool] = attr.ib(default=False)
+    single_file_paths: typing.List[str] = attr.ib(default=None)
+
     @property
     def expired(self):
         """Check whether this token has expired already."""
