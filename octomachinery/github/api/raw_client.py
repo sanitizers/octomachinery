@@ -3,6 +3,7 @@
 from asyncio import iscoroutinefunction
 from typing import Any, Dict, Optional, Tuple
 
+from gidgethub.abc import JSON_CONTENT_TYPE
 from gidgethub.aiohttp import GitHubAPI
 
 # pylint: disable=relative-beyond-top-level
@@ -53,6 +54,7 @@ class RawGitHubAPI(GitHubAPI):
             data: Any, accept: str = None,
             jwt: Optional[str] = None,
             oauth_token: Optional[str] = None,
+            content_type: str = JSON_CONTENT_TYPE,
     ) -> Tuple[bytes, Optional[str]]:
         token = self._token
         if iscoroutinefunction(token):
@@ -71,6 +73,7 @@ class RawGitHubAPI(GitHubAPI):
             accept=accept,
             oauth_token=oauth_token,
             jwt=jwt,
+            content_type=content_type,
         )
 
     getitem = accept_preview_version(GitHubAPI.getitem)
