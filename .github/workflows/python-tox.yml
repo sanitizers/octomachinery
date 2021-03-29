@@ -26,6 +26,7 @@ jobs:
         - TOXENV: build-docs
         - TOXENV: build-dists
         - TOXENV: python
+        - TOXENV: old-deps
 
     steps:
     - uses: actions/checkout@master
