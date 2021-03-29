@@ -6,12 +6,12 @@ build:
   image: latest
 
 python:
-  version: 3.7
+  version: 3
   install: []
   #- requirements: .docs-requirements.txt
   #- method: pip
   #  path: pip >= 19.0.3
-  #- method: pip
-  #  path: .
-  #  extra_requirements:
-  #  - docs
+  - method: pip
+    path: .
+    extra_requirements:
+    - docs

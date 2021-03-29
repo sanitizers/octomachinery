@@ -192,7 +192,9 @@ language = None
 exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+# NOTE: These values are commented out so that Furo fall back to a nice style
+# pygments_style = 'sphinx'
+# pygments_dark_style = 'monokai'
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -200,27 +202,13 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'furo'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {
-    'description': PRJ_SUMMARY,
-    'github_user': PRJ_GITHUB_USER,
-    'github_repo': PRJ_GITHUB_REPO,
-    'github_type': 'star',
-    'github_banner': True,
-    'travis_button': True,
-    # 'travis_tld': 'com',
-    'show_relbars': True,
-    'show_related': True,
-    'extra_nav_links': {
-        'Create a GitHub bot 🤖': 'https://tutorial.octomachinery.dev',
-        'octomachinery [www] 🤖': 'https://octomachinery.dev',
-    },
-}
+# html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -235,7 +223,18 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
+html_sidebars = {
+    '**': (
+        'sidebar/brand.html',
+        'project-description.html',
+        'sidebar/search.html',
+        'sidebar/scroll-start.html',
+        'sidebar/navigation.html',
+        'github-sponsors.html',
+        'sidebar/ethical-ads.html',
+        'sidebar/scroll-end.html',
+    ),
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
@@ -270,7 +269,7 @@ latex_elements = {
 latex_documents = [
     (
         master_doc, f'{project}.tex', f'{project} Documentation',
-        'Sviatoslav Sydorenko (@webknjaz)', 'manual',
+        author, 'manual',
     ),
 ]
 
@@ -339,36 +338,18 @@ intersphinx_mapping = {
 todo_include_todos = True
 
 
-# Patch alabaster theme
-# Ref: https://github.com/bitprophet/alabaster/pull/147
-# FIXME: drop this hack once the PR is merged & released; pylint: disable=fixme
-def set_up_travis_context(
+def set_up_template_context(
         app, pagename, templatename,  # pylint: disable=unused-argument
         context,
         doctree,  # pylint: disable=unused-argument
 ):
-    """Add complete Travis URLs to Jinja2 context."""
-    github_slug = '/'.join(
-        # (context['theme_github_user'], context['theme_github_repo']),
-        (PRJ_GITHUB_USER, PRJ_GITHUB_REPO),
-    )
-
-    travis_button = 'true'  # str(context['theme_travis_button']).lower()
-    travis_button_enabled = travis_button == 'true'
-
-    travis_slug = github_slug if travis_button_enabled else travis_button
-
-    travis_tld = 'com'  # context["theme_travis_tld"].strip(".").lower()
-    travis_base_uri = 'travis-ci.{}/{}'.format(travis_tld, travis_slug)
-    context['theme_travis_build_url'] = 'https://{}'.format(travis_base_uri)
-    context['theme_travis_badge_url'] = 'https://api.{}.svg?branch={}'.format(
-        travis_base_uri, 'master',  # context['theme_badge_branch'],
-    )
+    """Add a dist summary to Jinja2 context."""
+    context['theme_prj_summary'] = PRJ_SUMMARY
 
 
 def setup(app):
     """Patch the sphinx theme set up stage."""
-    app.connect('html-page-context', set_up_travis_context)
+    app.connect('html-page-context', set_up_template_context)
 
 
 # Ref: https://github.com/python-attrs/attrs/pull/571/files\

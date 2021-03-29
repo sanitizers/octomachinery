@@ -19,6 +19,12 @@
    getting-started
    howto-guides
 
+.. toctree::
+   :caption: Extras:
+
+   Create a GitHub bot 🤖 <https://tutorial.octomachinery.dev>
+   octomachinery [www] 🤖 <https://octomachinery.dev>
+
 
 
 Indices and tables

@@ -6,8 +6,6 @@
    :target: https://tidelift.com/subscription/pkg/pypi-octomachinery?utm_source=pypi-octomachinery&utm_medium=readme
    :alt: octomachinery is available as part of the Tidelift Subscription
 
-.. DO-NOT-REMOVE-docs-badges-END
-
 .. image:: https://img.shields.io/travis/com/sanitizers/octomachinery/master.svg?label=Linux%20builds&logo=travis&logoColor=white
    :target: https://travis-ci.com/sanitizers/octomachinery
    :alt: Travis CI build status
@@ -15,6 +13,8 @@
 .. image:: https://github.com/sanitizers/octomachinery/workflows/Python%20package/badge.svg
    :target: https://github.com/sanitizers/octomachinery/actions?workflow=Python%20package
    :alt: GitHub Actions CI/CD build status — Python package
+
+.. DO-NOT-REMOVE-docs-badges-END
 
 .. image:: https://img.shields.io/readthedocs/octomachinery/latest.svg?logo=Read%20The%20Docs&logoColor=white
    :target: https://docs.octomachinery.dev/en/latest/?badge=latest
