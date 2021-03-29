@@ -7,7 +7,7 @@ build:
 
 python:
   version: 3
-  install: []
+  install:
   #- requirements: .docs-requirements.txt
   #- method: pip
   #  path: pip >= 19.0.3
