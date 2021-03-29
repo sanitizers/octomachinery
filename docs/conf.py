@@ -11,60 +11,6 @@ from itertools import chain
 import pkg_resources
 
 
-# RTD hack start
-def patch_setuptools_in_rtd():
-    """Install newer setuptools and octomachinery in RTD."""
-    import os  # pylint: disable=import-outside-toplevel
-    import sys  # pylint: disable=import-outside-toplevel
-    import subprocess  # pylint: disable=import-outside-toplevel
-
-    if not os.getenv('READTHEDOCS') or os.getenv('READTHEDOCS_EXEC'):
-        return
-
-    # pylint: disable=unexpected-keyword-arg
-    pyenv_python_executable = subprocess.check_output(
-        ('pyenv', 'which', 'python3.7'), text=True,
-    ).strip()
-    setuptools_update_cmd = (
-        pyenv_python_executable, '-m',
-        'pip', 'install', '--force-reinstall',
-        '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
-        '/octomachinery/.cache/pip', 'setuptools >= 40.9.0',
-    )
-    pip_update_cmd = (
-        sys.executable, '-m',
-        'pip', 'install', '--force-reinstall',
-        '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
-        '/octomachinery/.cache/pip', 'pip >= 19.0.3',
-    )
-    octomachinery_install_cmd = (
-        sys.executable, '-m',
-        'pip', 'install', '--force-reinstall',
-        '--cache-dir', '/home/docs/checkouts/readthedocs.org/user_builds'
-        '/octomachinery/.cache/pip', '..[docs]',
-    )
-    print('>>>>> Bumping setuptools...', file=sys.stderr)
-    subprocess.check_call(setuptools_update_cmd)
-    print('>>>>> Bumping pip...', file=sys.stderr)
-    subprocess.check_call(pip_update_cmd)
-    print('>>>>> Installing octomachinery...', file=sys.stderr)
-    subprocess.check_call(octomachinery_install_cmd)
-
-    new_env = dict(os.environ)
-    new_env['READTHEDOCS_EXEC'] = 'True'
-
-    print('>>>>> Restarting Sphinx build...', file=sys.stderr)
-    print(
-        f'Sphinx build command is `{sys.executable} {" ".join(sys.argv)}`',
-        file=sys.stderr,
-    )
-    os.execve(sys.executable, (sys.executable, *sys.argv), new_env)
-
-
-patch_setuptools_in_rtd()
-del patch_setuptools_in_rtd
-# RTD hack end
-
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
