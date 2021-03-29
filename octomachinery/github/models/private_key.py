@@ -144,4 +144,4 @@ class GitHubPrivateKey:
             payload,
             key=self._rsa_private_key,
             algorithm='RS256',
-        ).decode('utf-8')
+        )
