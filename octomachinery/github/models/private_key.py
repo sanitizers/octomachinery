@@ -6,7 +6,8 @@ from time import time
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
-from jwt import encode as compute_jwt
+
+from ._compat import compute_jwt
 
 
 def extract_private_key_sha1_fingerprint(rsa_private_key):
