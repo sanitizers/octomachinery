@@ -68,6 +68,13 @@ def test_no_warnings(import_path):
     imp_cmd = (
         sys.executable,
         '-W', 'error',
+
+        # NOTE: This one is necessary for `tox -e old-deps`
+        '-W', "ignore:Using or importing the ABCs from 'collections' instead "
+        "of from 'collections.abc' is deprecated since "
+        'Python 3.3, and in 3.10 it will stop working:'
+        'DeprecationWarning:jwt.api_jwt',
+
         '-W', 'ignore:"@coroutine" decorator is deprecated '
         'since Python 3.8, use "async def" instead:'
         'DeprecationWarning:aiohttp.helpers',
