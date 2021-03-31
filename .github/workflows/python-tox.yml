@@ -28,6 +28,10 @@ jobs:
         - TOXENV: python
         - TOXENV: old-deps
 
+    env:
+      PY_COLORS: 1
+      TOX_PARALLEL_NO_SPINNER: 1
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
