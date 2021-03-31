@@ -119,7 +119,7 @@ jobs:
 
     env:
       PY_COLORS: 1
-      TOXENV: ${{ matrix.python-version }}
+      TOXENV: ${{ matrix.toxenv }}
       TOX_PARALLEL_NO_SPINNER: 1
 
     steps:
