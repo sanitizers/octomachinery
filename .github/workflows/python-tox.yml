@@ -67,14 +67,27 @@ jobs:
           ${{ runner.os }}-pip-
           ${{ runner.os }}-
     - name: Install tox
-      run: |
-        python -m pip install --upgrade tox
+      run: >-
+        python -m
+        pip install
+        --upgrade
+        tox
     - name: 'Initialize tox envs: ${{ matrix.toxenv }}'
-      run: |
-        python -m tox --parallel auto --notest
+      run: >-
+        python -m
+        tox
+        --parallel auto
+        --parallel-live
+        -vv
+        --skip-missing-interpreters false
+        --notest
     - name: Initialize pre-commit envs if needed
       run: |
         test -d .tox/pre-commit-ci && .tox/pre-commit-ci/bin/python -m pre_commit install-hooks || :
     - name: Test with tox
-      run: |
-        python -m tox --parallel 0
+      run: >-
+        python -m
+        tox
+        --parallel auto
+        --parallel-live
+        -vv
