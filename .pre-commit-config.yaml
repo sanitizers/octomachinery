@@ -58,10 +58,22 @@ repos:
     args: []
 
 - repo: git://github.com/pre-commit/mirrors-mypy.git
-  rev: v0.720
+  rev: v0.910
   hooks:
   - id: mypy
-    # args:
-    # - --strict-optional
-    # - --no-strict-optional
-    # - --ignore-missing-imports
+    additional_dependencies:
+    - .
+    - attrs
+    - types-PyYAML
+    args:
+    - --namespace-packages
+    - --pretty
+    - --show-column-numbers
+    - --show-error-codes
+    - --show-error-context
+    - --strict-optional
+    - -p
+    - octomachinery
+    - -p
+    - tests
+    pass_filenames: false
