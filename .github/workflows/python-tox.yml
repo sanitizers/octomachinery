@@ -31,12 +31,23 @@ jobs:
         - ubuntu-16.04
         - macOS-latest
         toxenv:
-        - pre-commit-ci
-        - check-docs
-        - build-docs
-        - build-dists
         - python
-        - old-deps
+        include:
+        - os: ubuntu-latest
+          python-version: 3.9
+          toxenv: pre-commit-ci
+        - os: ubuntu-latest
+          python-version: 3.9
+          toxenv: check-docs
+        - os: ubuntu-latest
+          python-version: 3.9
+          toxenv: build-docs
+        - os: ubuntu-latest
+          python-version: 3.9
+          toxenv: build-dists
+        - os: ubuntu-latest
+          python-version: 3.9
+          toxenv: old-deps
 
     env:
       PY_COLORS: 1
