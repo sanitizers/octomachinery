@@ -104,6 +104,7 @@ async def receive(  # pylint: disable=too-many-arguments,too-many-locals
         target_routers = set(
             load_event_routers(
                 entrypoint_module,
+                # pylint: disable=fixme
                 event_routers,  # type: ignore[arg-type]  # FIXME: typing
             ),
         )
@@ -128,7 +129,7 @@ async def receive(  # pylint: disable=too-many-arguments,too-many-locals
     async with ClientSession() as http_client_session:
         github_app = make_gh_app(
             http_session=http_client_session,
-            # FIXME: typing
+            # FIXME: typing  # pylint: disable=fixme
             event_routers=target_routers or None,  # type: ignore[arg-type]
             **gh_app_kwargs,
         )

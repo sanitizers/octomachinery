@@ -62,8 +62,10 @@ def config(monkeypatch, event_file, request):
         'octomachinery.app.runtime.utils.detect_env_mode',
         lambda: 'action',
     )
+    # pylint: disable=fixme
     return BotAppConfig(  # type: ignore[call-arg]  # FIXME
         github=GitHubAppIntegrationConfig(),
+        # pylint: disable=fixme
         action=GitHubActionConfig(  # type: ignore[call-arg]  # FIXME
             workflow='Test Workflow',
             action='Test Action',

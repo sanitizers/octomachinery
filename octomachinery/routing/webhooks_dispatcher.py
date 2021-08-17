@@ -27,6 +27,7 @@ __all__ = ('route_github_event', )
 logger = logging.getLogger(__name__)
 
 
+# pylint: disable=fixme
 async def route_github_event(  # type: ignore[return]  # FIXME
         *,
         github_event: GitHubEvent,
@@ -116,7 +117,7 @@ async def route_github_event(  # type: ignore[return]  # FIXME
         delivery_id_msg = (
             '' if is_gh_action
             else ' (Delivery ID: '
-            # FIXME:
+            # FIXME:  # pylint: disable=fixme
             f'{github_event.delivery_id!s})'  # type: ignore[attr-defined]
         )
         logger.debug(

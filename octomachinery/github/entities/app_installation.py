@@ -65,6 +65,7 @@ class GitHubAppInstallation:
     def api_client(self):  # noqa: D401
         """The GitHub App Installation client."""
         return RawGitHubAPI(
+            # pylint: disable=fixme
             token=self._refresh_api_token,  # type: ignore[arg-type]  # FIXME
             # pylint: disable=protected-access
             session=self.app._http_session,

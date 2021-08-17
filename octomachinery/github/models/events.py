@@ -268,6 +268,7 @@ class GidgetHubEventMixin:
             category=PendingDeprecationWarning,
             stacklevel=2,
         )
+        # pylint: disable=fixme
         return self.payload  # type: ignore[attr-defined]  # FIXME
 
     @property
@@ -280,6 +281,7 @@ class GidgetHubEventMixin:
             category=PendingDeprecationWarning,
             stacklevel=2,
         )
+        # pylint: disable=fixme
         return self.name  # type: ignore[attr-defined]  # FIXME
 
 

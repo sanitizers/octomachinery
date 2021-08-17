@@ -57,7 +57,8 @@ class GitHubApp:
         # NOTE: env var. We don't need to care about it not existing as
         # NOTE: Sentry SDK helpers don't fail loudly and if not
         # NOTE: configured, it'll be ignored.
-        sentry_sdk.init()
+        # FIXME:  # pylint: disable=fixme
+        sentry_sdk.init()  # pylint: disable=abstract-class-instantiated
 
     async def dispatch_event(self, github_event: GitHubEvent) -> Iterable[Any]:
         """Dispatch ``github_event`` into the embedded routers."""
