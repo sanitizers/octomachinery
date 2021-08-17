@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import json
 import pathlib
-from typing import Any, Mapping, TextIO, TYPE_CHECKING, Union
+from typing import (
+    Any, cast, Iterable, Mapping, TextIO, Type, TYPE_CHECKING, Union,
+)
 import uuid
 import warnings
 
@@ -36,7 +38,7 @@ def _to_uuid4(value: Union[str, uuid.UUID]) -> uuid.UUID:
     return uuid.UUID(value, version=4)
 
 
-def _to_dict(value: Union[dict, bytes, str]) -> dict:
+def _to_dict(value: Union[Mapping[str, Any], bytes, str]) -> Mapping[str, Any]:
     """Return a dict from the value."""
     if isinstance(value, dict):
         return value
@@ -44,7 +46,7 @@ def _to_dict(value: Union[dict, bytes, str]) -> dict:
     if isinstance(value, bytes):
         value = value.decode()
 
-    return json.loads(value)
+    return json.loads(cast(str, value))
 
 
 @attr.dataclass(frozen=True)
@@ -53,12 +55,14 @@ class GitHubEvent:
 
     name: str
     """Event name."""
-    payload: dict = attr.ib(converter=_to_dict)
+    payload: Mapping[str, Any] = attr.ib(converter=_to_dict)
     """Event payload object."""
 
     # pylint: disable=no-self-use
     @payload.validator
-    def _is_payload_dict(self, attribute: str, value: dict) -> None:
+    def _is_payload_dict(
+            self, attribute: str, value: Mapping[str, Any],
+    ) -> None:
         """Verify that the attribute value is a dict.
 
         :raises ValueError: if it's not
@@ -73,7 +77,7 @@ class GitHubEvent:
 
     @classmethod
     def from_file(
-            cls: GitHubEvent,
+            cls: Type[GitHubEvent],
             event_name: str,
             event_path: Union[pathlib.Path, str],
     ) -> GitHubEvent:
@@ -88,7 +92,7 @@ class GitHubEvent:
 
     @classmethod
     def from_fixture_fd(
-            cls: GitHubEvent,
+            cls: Type[GitHubEvent],
             event_fixture_fd: TextIO,
             *,
             event: str = None,
@@ -105,7 +109,7 @@ class GitHubEvent:
 
     @classmethod
     def from_fixture(
-            cls: GitHubEvent,
+            cls: Type[GitHubEvent],
             event_fixture_path: Union[pathlib.Path, str],
             *,
             event: str = None,
@@ -130,12 +134,11 @@ class GitHubEvent:
             delivery_id=str(uuid.uuid4()),
         )
 
-    # pylint: disable=no-self-use
     async def dispatch_via(
             self,
             *routers: OctomachineryRouterBase,
             ctx: Mapping[str, Any] = None,
-    ) -> None:
+    ) -> Iterable[Any]:
         """Invoke this event handlers from different routers."""
         if not routers:
             raise ValueError('At least one router must be supplied')
@@ -143,7 +146,7 @@ class GitHubEvent:
         if ctx is None:
             ctx = {}
 
-        await aio_gather(*(
+        return await aio_gather(*(
             r.dispatch(self, **ctx)
             for r in routers
         ))
@@ -173,7 +176,7 @@ class GitHubWebhookEvent(GitHubEvent):
 
     @classmethod
     def from_file(
-            cls: GitHubWebhookEvent,
+            cls: Type[GitHubWebhookEvent],
             event_name: str,
             event_path: Union[pathlib.Path, str],
     ) -> GitHubWebhookEvent:
@@ -184,7 +187,7 @@ class GitHubWebhookEvent(GitHubEvent):
 
     @classmethod
     def from_fixture_fd(
-            cls: GitHubWebhookEvent,
+            cls: Type[GitHubWebhookEvent],
             event_fixture_fd: TextIO,
             *,
             event: str = None,
@@ -208,7 +211,7 @@ class GitHubWebhookEvent(GitHubEvent):
 
     @classmethod
     def from_fixture(
-            cls: GitHubWebhookEvent,
+            cls: Type[GitHubWebhookEvent],
             event_fixture_path: Union[pathlib.Path, str],
             *,
             event: str = None,
@@ -219,7 +222,7 @@ class GitHubWebhookEvent(GitHubEvent):
 
     @classmethod
     def from_http_request(
-            cls: GitHubWebhookEvent,
+            cls: Type[GitHubWebhookEvent],
             http_req_headers: Mapping[str, str],
             http_req_body: bytes,
     ):
@@ -265,7 +268,7 @@ class GidgetHubEventMixin:
             category=PendingDeprecationWarning,
             stacklevel=2,
         )
-        return self.payload
+        return self.payload  # type: ignore[attr-defined]  # FIXME
 
     @property
     def event(self):
@@ -277,7 +280,7 @@ class GidgetHubEventMixin:
             category=PendingDeprecationWarning,
             stacklevel=2,
         )
-        return self.name
+        return self.name  # type: ignore[attr-defined]  # FIXME
 
 
 class GidgetHubActionEvent(GidgetHubEventMixin, GitHubEvent):

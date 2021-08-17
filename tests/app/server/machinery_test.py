@@ -1,5 +1,6 @@
 """Test app server machinery."""
 
+from typing import Tuple
 import uuid
 
 from aiohttp.client import ClientSession
@@ -37,12 +38,13 @@ def github_app_id() -> int:
 @pytest.fixture
 def octomachinery_config(
         github_app_id: int, rsa_private_key_bytes: bytes,
-        ephemeral_port_tcp_sock_addr: tuple,
+        ephemeral_port_tcp_sock_addr: Tuple[str, int],
 ) -> None:
     """Initialize a GitHub App bot config."""
     host, port = ephemeral_port_tcp_sock_addr
     # https://github.com/hynek/environ-config/blob/master/CHANGELOG.rst#1910-2019-09-02
-    return BotAppConfig.from_environ({  # pylint: disable=no-member
+    # pylint: disable=no-member
+    return BotAppConfig.from_environ({  # type: ignore[attr-defined]
         'GITHUB_APP_IDENTIFIER': str(github_app_id),
         'GITHUB_PRIVATE_KEY': rsa_private_key_bytes.decode(),
         'HOST': host,

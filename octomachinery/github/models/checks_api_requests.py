@@ -149,7 +149,7 @@ class BaseCheckRequestMixin:
     external_id: Optional[str] = optional_str_attrib()
     status: Optional[str] = attr.ib(
         default='queued',
-        validator=attr.validators.optional(
+        validator=attr.validators.optional(  # type: ignore[arg-type]
             attr.validators.in_(
                 (
                     'queued',

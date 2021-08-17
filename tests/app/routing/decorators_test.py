@@ -24,7 +24,10 @@ def fake_event_handler(*, arg1, arg2):
 )
 def test_process_webhook_payload(incoming_event, is_successful):
     """Test that @process_webhook_payload unpacks event into kw-args."""
-    event = GitHubEvent(name=None, payload=incoming_event)
+    event = GitHubEvent(
+        name=None,  # type: ignore[arg-type]
+        payload=incoming_event,
+    )
 
     if is_successful:
         assert (

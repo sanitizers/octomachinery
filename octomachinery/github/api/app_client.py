@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 import logging
-from typing import Any, Iterable, TYPE_CHECKING
+from typing import Any, Dict, Iterable, TYPE_CHECKING, Union
 
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
@@ -127,7 +127,9 @@ class GitHubApp:
 
     async def get_installations(self):
         """Retrieve all installations with access tokens via API."""
-        installations = defaultdict(dict)
+        installations: Dict[
+                int, GitHubAppInstallation,
+        ] = defaultdict(dict)  # type: ignore[arg-type]
         async for install in amap(
                 dict_to_kwargs_cb(GitHubAppInstallationModel),
                 self.api_client.getiter(

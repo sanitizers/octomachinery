@@ -26,7 +26,7 @@ def accept_preview_version(wrapped_coroutine):
     @wraps(wrapped_coroutine)
     def coroutine_wrapper(
             *args: Tuple[Any], **kwargs: Dict[str, Any]
-    ) -> AsyncGeneratorType:
+    ) -> AsyncGeneratorType:  # type: ignore[type-arg]
         accept_media = kwargs.pop('accept', None)
         preview_api_version = kwargs.pop('preview_api_version', None)
 
@@ -64,8 +64,8 @@ def accept_preview_version(wrapped_coroutine):
     )
     wrapped_callable_params.insert(accept_pos, preview_param)
 
-    coroutine_wrapper.__signature__ = original_wrapped_signature.replace(
-        parameters=wrapped_callable_params,
+    coroutine_wrapper.__signature__ = (  # type: ignore[attr-defined]
+        original_wrapped_signature.replace(parameters=wrapped_callable_params)
     )
 
     return coroutine_wrapper

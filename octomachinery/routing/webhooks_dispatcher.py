@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import contextlib
 import logging
+from typing import Any, Iterable
 
 from anyio import get_cancelled_exc_class, sleep as async_sleep
 import sentry_sdk
@@ -26,11 +27,11 @@ __all__ = ('route_github_event', )
 logger = logging.getLogger(__name__)
 
 
-async def route_github_event(
+async def route_github_event(  # type: ignore[return]  # FIXME
         *,
         github_event: GitHubEvent,
         github_app: GitHubApp,
-) -> None:
+) -> Iterable[Any]:
     """Dispatch GitHub event to corresponsing handlers.
 
     Set up ``RUNTIME_CONTEXT`` before doing that. This is so
@@ -114,7 +115,9 @@ async def route_github_event(
         )
         delivery_id_msg = (
             '' if is_gh_action
-            else f' (Delivery ID: {github_event.delivery_id!s})'
+            else ' (Delivery ID: '
+            # FIXME:
+            f'{github_event.delivery_id!s})'  # type: ignore[attr-defined]
         )
         logger.debug(
             'The payload of "%s" event%s is: %r',

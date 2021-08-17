@@ -7,7 +7,9 @@ import importlib
 from io import TextIOWrapper
 import os
 import pathlib
-from typing import Any, Callable, Iterable, Iterator, Set
+from typing import (
+    Any, Callable, Dict, FrozenSet, Iterable, Iterator, Set, Union,
+)
 
 from aiohttp.client import ClientSession
 import click
@@ -100,7 +102,10 @@ async def receive(  # pylint: disable=too-many-arguments,too-many-locals
 
     try:
         target_routers = set(
-            load_event_routers(entrypoint_module, event_routers),
+            load_event_routers(
+                entrypoint_module,
+                event_routers,  # type: ignore[arg-type]  # FIXME: typing
+            ),
         )
     except AttributeError as attr_err:
         ctx.fail(
@@ -123,7 +128,8 @@ async def receive(  # pylint: disable=too-many-arguments,too-many-locals
     async with ClientSession() as http_client_session:
         github_app = make_gh_app(
             http_session=http_client_session,
-            event_routers=target_routers or None,
+            # FIXME: typing
+            event_routers=target_routers or None,  # type: ignore[arg-type]
             **gh_app_kwargs,
         )
         await route_github_event(
@@ -140,7 +146,7 @@ async def receive(  # pylint: disable=too-many-arguments,too-many-locals
 
 def load_event_routers(
         entrypoint_module: str = None,
-        event_routers: Set[str] = frozenset(),
+        event_routers: Union[FrozenSet[str], Set[str]] = frozenset(),
 ) -> Iterator[OctomachineryRouterBase]:
     """Yield event routers from strings."""
     if entrypoint_module is not None:
@@ -155,7 +161,7 @@ def load_event_routers(
 def get_extra_env_vars(
         gh_event: GitHubEvent, token: str, app: int,
         private_key: TextIOWrapper,
-) -> dict:
+) -> Dict[str, str]:
     """Construct additional env vars for App or Action processing."""
     env = {}
 
