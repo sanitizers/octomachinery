@@ -1,7 +1,7 @@
 """A very low-level GitHub API client."""
 
 from asyncio import iscoroutinefunction
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple
 
 from gidgethub.abc import JSON_CONTENT_TYPE
 from gidgethub.aiohttp import GitHubAPI

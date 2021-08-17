@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 import logging
-from typing import Any, Dict, Iterable, TYPE_CHECKING, Union
+from typing import Any, Dict, Iterable, TYPE_CHECKING
 
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
