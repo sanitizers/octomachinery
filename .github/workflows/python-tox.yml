@@ -23,8 +23,8 @@ jobs:
         && matrix.python-version
         || matrix.toxenv
       }}
-      ${{ matrix.toxenv == 'python' && '|' || '' }}
-      ${{ matrix.toxenv == 'python' && matrix.os || '' }}
+      |
+      ${{ matrix.toxenv == 'python' && matrix.os || 'tox' }}
     if: >-  # https://twitter.com/webKnjaZ/status/1308803017001652225
       github.event_name != 'create' ||
       github.event.ref_type == 'tag'
