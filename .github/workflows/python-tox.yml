@@ -17,14 +17,19 @@ jobs:
   tests:
     name: >-
       ${{
-        matrix.toxenv == 'python' && 'py' || ''
+        (matrix.toxenv == 'python' || matrix.toxenv == 'old-deps')
+        && 'py' || ''
       }}${{
-        matrix.toxenv == 'python'
-        && matrix.python-version
-        || matrix.toxenv
+        (matrix.toxenv == 'python' || matrix.toxenv == 'old-deps')
+        && matrix.python-version || matrix.toxenv
       }}
+      ${{ matrix.toxenv == 'old-deps' && '|' || '' }}
+      ${{ matrix.toxenv == 'old-deps' && matrix.toxenv || '' }}
       |
-      ${{ matrix.toxenv == 'python' && matrix.os || 'tox' }}
+      ${{
+        (matrix.toxenv == 'python' || matrix.toxenv == 'old-deps')
+        && matrix.os || 'tox'
+      }}
     if: >-  # https://twitter.com/webKnjaZ/status/1308803017001652225
       github.event_name != 'create' ||
       github.event.ref_type == 'tag'
@@ -42,6 +47,7 @@ jobs:
         - macOS-latest
         toxenv:
         - python
+        - old-deps
         include:
         - os: ubuntu-latest
           python-version: 3.9
@@ -55,9 +61,6 @@ jobs:
         - os: ubuntu-latest
           python-version: 3.9
           toxenv: build-dists
-        - os: ubuntu-latest
-          python-version: 3.9
-          toxenv: old-deps
 
     env:
       PY_COLORS: 1
