@@ -1,0 +1,5 @@
+---
+ignore-failures:
+  python:
+  - setuptools_scm_git_archive
+...
