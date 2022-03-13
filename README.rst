@@ -1,3 +1,7 @@
+.. image:: https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-direct.svg
+   :target: https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md
+   :alt: SWUbanner
+
 .. image:: https://img.shields.io/pypi/v/octomachinery.svg?logo=Python&logoColor=white
    :target: https://pypi.org/project/octomachinery
    :alt: octomachinery @ PyPI
