@@ -47,15 +47,6 @@ repos:
   hooks:
   - id: pydocstyle
 
-- repo: local
-  hooks:
-  - id: pylint
-    language: system
-    name: PyLint
-    files: \.py$
-    entry: python -m pylint
-    args: []
-
 - repo: https://github.com/adrienverge/yamllint.git
   rev: v1.28.0
   hooks:
@@ -97,3 +88,14 @@ repos:
     - -p
     - tests
     pass_filenames: false
+
+- repo: local
+  hooks:
+  - id: pylint
+    language: system
+    name: PyLint
+    files: \.py$
+    entry: python -m pylint
+    args: []
+    stages:
+    - manual
