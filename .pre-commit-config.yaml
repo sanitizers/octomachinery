@@ -43,7 +43,7 @@ repos:
   - id: debug-statements
 
 - repo: https://github.com/PyCQA/pydocstyle.git
-  rev: 4.0.1
+  rev: 6.1.1
   hooks:
   - id: pydocstyle
 
