@@ -56,6 +56,16 @@ repos:
     entry: python -m pylint
     args: []
 
+- repo: https://github.com/adrienverge/yamllint.git
+  rev: v1.28.0
+  hooks:
+  - id: yamllint
+    types:
+    - file
+    - yaml
+    args:
+    - --strict
+
 - repo: https://gitlab.com/PyCQA/flake8.git
   rev: 4.0.1
   hooks:
