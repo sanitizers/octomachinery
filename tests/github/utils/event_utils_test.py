@@ -5,15 +5,13 @@ from textwrap import dedent
 from uuid import uuid1, uuid4
 
 import multidict
+
 import pytest
 
 from octomachinery.github.utils.event_utils import (
-    _probe_json,
-    _transform_http_headers_list_to_multidict,
-    augment_http_headers,
-    make_http_headers_from_event,
-    parse_event_stub_from_fd,
-    validate_http_headers,
+    _probe_json, _transform_http_headers_list_to_multidict,
+    augment_http_headers, make_http_headers_from_event,
+    parse_event_stub_from_fd, validate_http_headers,
 )
 
 

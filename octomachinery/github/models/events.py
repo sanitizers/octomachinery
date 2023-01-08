@@ -4,23 +4,23 @@ from __future__ import annotations
 
 import json
 import pathlib
-from typing import (
-    Any, cast, Iterable, Mapping, TextIO, Type, TYPE_CHECKING, Union,
-)
 import uuid
 import warnings
+from typing import (
+    TYPE_CHECKING, Any, Iterable, Mapping, TextIO, Type, Union, cast,
+)
+
+from gidgethub.sansio import Event as _GidgetHubEvent
 
 import attr
-from gidgethub.sansio import Event as _GidgetHubEvent
 
 # pylint: disable=relative-beyond-top-level
 from ...utils.asynctools import aio_gather
 # pylint: disable=relative-beyond-top-level
 from ..utils.event_utils import (
-    augment_http_headers,
-    parse_event_stub_from_fd,
-    validate_http_headers,
+    augment_http_headers, parse_event_stub_from_fd, validate_http_headers,
 )
+
 
 if TYPE_CHECKING:
     # pylint: disable=relative-beyond-top-level

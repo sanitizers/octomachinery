@@ -6,6 +6,7 @@ from typing import Iterable, Optional
 
 from aiohttp.web_runner import GracefulExit
 from anyio import run as run_until_complete
+
 import attr
 
 # pylint: disable=relative-beyond-top-level

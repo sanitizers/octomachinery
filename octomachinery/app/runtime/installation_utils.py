@@ -1,12 +1,13 @@
 """Utility helpers for App/Action installations."""
 
+import typing
 from base64 import b64decode
 from http import HTTPStatus
 from io import StringIO
 from pathlib import Path
-import typing
 
 import gidgethub
+
 import yaml
 
 # pylint: disable=relative-beyond-top-level

@@ -1,7 +1,8 @@
 """Exceptions collection related to interactions with GitHub."""
 
-import attr
 from gidgethub import GitHubException
+
+import attr
 
 # pylint: disable=relative-beyond-top-level
 from ..models.action_outcomes import ActionOutcome

@@ -3,7 +3,8 @@
 from functools import wraps
 from operator import itemgetter
 
-from anyio import create_queue, create_task_group as all_subtasks_awaited
+from anyio import create_queue
+from anyio import create_task_group as all_subtasks_awaited
 
 
 def auto_cleanup_aio_tasks(async_func):

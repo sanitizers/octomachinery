@@ -1,11 +1,12 @@
 """Test app server machinery."""
 
-from typing import Tuple
 import uuid
+from typing import Tuple
 
 from aiohttp.client import ClientSession
-from aiohttp.web import SockSite
 from aiohttp.test_utils import get_unused_port_socket
+from aiohttp.web import SockSite
+
 import pytest
 
 from octomachinery.app.config import BotAppConfig

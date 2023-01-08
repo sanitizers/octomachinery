@@ -6,7 +6,7 @@ from functools import partial
 import pytest
 
 from octomachinery.github.models.utils import (
-    convert_datetime, SecretStr, SuperSecretStr,
+    SecretStr, SuperSecretStr, convert_datetime,
 )
 
 

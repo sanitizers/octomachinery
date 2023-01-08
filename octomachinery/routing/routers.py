@@ -4,13 +4,13 @@ import asyncio
 from contextlib import suppress
 from typing import Any, Iterator, Set, Union
 
-from gidgethub.routing import AsyncCallback, Router as _GidgetHubRouter
+from gidgethub.routing import AsyncCallback
+from gidgethub.routing import Router as _GidgetHubRouter
 
-from ..utils.asynctools import aio_gather
 from ..github.models.events import (
-    GidgetHubWebhookEvent, GitHubEvent,
-    _GidgetHubEvent,
+    GidgetHubWebhookEvent, GitHubEvent, _GidgetHubEvent,
 )
+from ..utils.asynctools import aio_gather
 from .abc import OctomachineryRouterBase
 
 

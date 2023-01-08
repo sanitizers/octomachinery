@@ -1,7 +1,7 @@
 """GitHub App/bot configuration."""
 
-from functools import lru_cache
 import os
+from functools import lru_cache
 from typing import Optional
 
 import environ

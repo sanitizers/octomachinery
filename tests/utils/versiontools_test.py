@@ -7,12 +7,11 @@ import subprocess
 import tempfile
 
 import pytest
+
 import setuptools_scm.version
 
 from octomachinery.utils.versiontools import (
-    cut_local_version_on_upload,
-    get_self_version,
-    get_version_from_scm_tag,
+    cut_local_version_on_upload, get_self_version, get_version_from_scm_tag,
 )
 
 

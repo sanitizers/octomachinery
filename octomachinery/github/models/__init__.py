@@ -1,11 +1,11 @@
 """Models representing objects in GitHub API."""
 
-from datetime import datetime, timezone
 import typing
+from datetime import datetime, timezone
 
 import attr
 
-from .utils import convert_datetime, SecretStr
+from .utils import SecretStr, convert_datetime
 
 
 @attr.dataclass

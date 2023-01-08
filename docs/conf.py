@@ -8,6 +8,7 @@ http://www.sphinx-doc.org/en/master/config
 
 from email import message_from_string
 from itertools import chain
+
 import pkg_resources
 
 

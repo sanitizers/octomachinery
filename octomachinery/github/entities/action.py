@@ -16,6 +16,7 @@ from ..api.tokens import GitHubOAuthToken
 # pylint: disable=relative-beyond-top-level,import-error
 from ..models.events import GidgetHubActionEvent
 
+
 if typing.TYPE_CHECKING:
     # pylint: disable=relative-beyond-top-level
     from ...app.action.config import GitHubActionConfig

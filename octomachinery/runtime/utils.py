@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from contextvars import ContextVar, Token
 import typing
+from contextvars import ContextVar, Token
 
 
 class ContextLookupError(AttributeError):

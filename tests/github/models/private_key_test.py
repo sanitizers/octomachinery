@@ -1,15 +1,12 @@
 """Tests for GitHub private key class."""
-from datetime import date
-from pathlib import Path
 import random
 import re
+from datetime import date
+from pathlib import Path
 
 import pytest
 
-from cryptography.hazmat.primitives.serialization import (
-    Encoding,
-    PublicFormat,
-)
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from jwt import decode as parse_jwt
 
 from octomachinery.github.models.private_key import GitHubPrivateKey

@@ -1,7 +1,6 @@
 """Config schema for a GitHub App instance details."""
 import environ
 
-
 # pylint: disable=relative-beyond-top-level
 from ..models.private_key import GitHubPrivateKey
 # pylint: disable=relative-beyond-top-level

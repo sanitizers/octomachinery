@@ -7,7 +7,7 @@ from gidgethub.abc import JSON_CONTENT_TYPE
 from gidgethub.aiohttp import GitHubAPI
 
 # pylint: disable=relative-beyond-top-level
-from .tokens import GitHubToken, GitHubOAuthToken, GitHubJWTToken
+from .tokens import GitHubJWTToken, GitHubOAuthToken, GitHubToken
 from .utils import accept_preview_version, mark_uninitialized_in_repr
 
 

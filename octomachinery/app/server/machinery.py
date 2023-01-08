@@ -4,8 +4,8 @@ import functools
 import logging
 
 import anyio
-from aiohttp.client import ClientSession
 from aiohttp import web
+from aiohttp.client import ClientSession
 
 # pylint: disable=relative-beyond-top-level
 from ...github.api.app_client import GitHubApp

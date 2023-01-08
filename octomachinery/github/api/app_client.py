@@ -2,22 +2,20 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
 import logging
-from typing import Any, Dict, Iterable, TYPE_CHECKING
+from collections import defaultdict
+from typing import TYPE_CHECKING, Any, Dict, Iterable
 
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
+
 import attr
 import sentry_sdk
 
 # pylint: disable=relative-beyond-top-level
 from ...routing import WEBHOOK_EVENTS_ROUTER
-
 # pylint: disable=relative-beyond-top-level
-from ...utils.asynctools import (
-    amap, dict_to_kwargs_cb,
-)
+from ...utils.asynctools import amap, dict_to_kwargs_cb
 # pylint: disable=relative-beyond-top-level
 from ..config.app import GitHubAppIntegrationConfig
 # pylint: disable=relative-beyond-top-level
@@ -28,6 +26,7 @@ from ..models import GitHubAppInstallation as GitHubAppInstallationModel
 from ..models.events import GitHubEvent
 from .raw_client import RawGitHubAPI
 from .tokens import GitHubJWTToken
+
 
 if TYPE_CHECKING:
     # pylint: disable=relative-beyond-top-level

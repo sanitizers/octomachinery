@@ -1,10 +1,10 @@
 """GitHub webhook events dispatching logic."""
 
 import asyncio
-from functools import wraps
-from http import HTTPStatus
 import logging
 import typing
+from functools import wraps
+from http import HTTPStatus
 
 from aiohttp import web
 from gidgethub import BadRequest, ValidationFailure

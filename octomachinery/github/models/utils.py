@@ -1,8 +1,8 @@
 """A collection of utility functions helping with models."""
 
+import sys
 from datetime import datetime, timezone
 from functools import singledispatch
-import sys
 
 
 @singledispatch

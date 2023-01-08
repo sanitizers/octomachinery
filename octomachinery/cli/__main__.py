@@ -2,16 +2,17 @@
 """Octomachinery CLI entrypoint."""
 
 import asyncio
-from functools import wraps
 import importlib
-from io import TextIOWrapper
 import os
 import pathlib
+from functools import wraps
+from io import TextIOWrapper
 from typing import (
     Any, Callable, Dict, FrozenSet, Iterable, Iterator, Set, Union,
 )
 
 from aiohttp.client import ClientSession
+
 import click
 
 # pylint: disable=relative-beyond-top-level
@@ -25,9 +26,8 @@ from ..github.api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level
 from ..github.entities.action import GitHubAction
 # pylint: disable=relative-beyond-top-level
-from ..github.models.events import GitHubEvent
 # pylint: disable=relative-beyond-top-level
-from ..github.models.events import GitHubWebhookEvent
+from ..github.models.events import GitHubEvent, GitHubWebhookEvent
 
 
 @click.group()

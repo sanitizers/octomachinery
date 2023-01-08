@@ -2,6 +2,8 @@
 from functools import wraps as _wraps_function
 
 from jwt import encode as _compute_jwt
+
+
 try:
     from jwt import __version__ as _pyjwt_version_str
 except ImportError:

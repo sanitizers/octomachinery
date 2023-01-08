@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from functools import wraps
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 
 if TYPE_CHECKING:
     # pylint: disable=relative-beyond-top-level

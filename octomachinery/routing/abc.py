@@ -1,9 +1,10 @@
 """Octomachinery router base interface definitions."""
 
 from abc import ABCMeta
-from typing import Any, Iterator, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Iterator
 
 from gidgethub.routing import AsyncCallback
+
 
 if TYPE_CHECKING:
     from ..github.models.events import GitHubEvent

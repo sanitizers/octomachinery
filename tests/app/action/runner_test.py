@@ -7,8 +7,7 @@ import pytest
 from octomachinery.app.action.config import GitHubActionConfig
 from octomachinery.app.action.runner import run
 from octomachinery.app.config import BotAppConfig
-from octomachinery.app.routing import process_event
-from octomachinery.app.routing import process_event_actions
+from octomachinery.app.routing import process_event, process_event_actions
 from octomachinery.app.runtime.config import RuntimeConfig
 from octomachinery.app.server.config import WebServerConfig
 from octomachinery.github.config.app import GitHubAppIntegrationConfig

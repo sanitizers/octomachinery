@@ -7,12 +7,12 @@ This module is based on an idea that pytest uses for self-testing:
 * https://github.com/pytest-dev/pytest/blob/d18c75b/testing/test_meta.py
 * https://twitter.com/codewithanthony/status/1229445110510735361
 """
-from itertools import chain
-from pathlib import Path
 import os
 import pkgutil
 import subprocess
 import sys
+from itertools import chain
+from pathlib import Path
 
 import pytest
 

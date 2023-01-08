@@ -12,10 +12,8 @@ from ..api.raw_client import RawGitHubAPI
 # pylint: disable=relative-beyond-top-level
 from ..api.tokens import GitHubOAuthToken
 # pylint: disable=relative-beyond-top-level
-from ..models import (
-    GitHubAppInstallation as GitHubAppInstallationModel,
-    GitHubInstallationAccessToken,
-)
+from ..models import GitHubAppInstallation as GitHubAppInstallationModel
+from ..models import GitHubInstallationAccessToken
 
 
 if typing.TYPE_CHECKING:

@@ -6,11 +6,11 @@ import contextlib
 import logging
 from typing import Any, Iterable
 
-from anyio import get_cancelled_exc_class, sleep as async_sleep
+from anyio import get_cancelled_exc_class
+from anyio import sleep as async_sleep
+
 import sentry_sdk
 
-# pylint: disable=relative-beyond-top-level,import-error
-from ..runtime.context import RUNTIME_CONTEXT
 # pylint: disable=relative-beyond-top-level,import-error
 from ..github.api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level,import-error
@@ -19,6 +19,8 @@ from ..github.entities.action import GitHubAction
 from ..github.errors import GitHubActionError
 # pylint: disable=relative-beyond-top-level,import-error
 from ..github.models.events import GitHubEvent
+# pylint: disable=relative-beyond-top-level,import-error
+from ..runtime.context import RUNTIME_CONTEXT
 
 
 __all__ = ('route_github_event', )

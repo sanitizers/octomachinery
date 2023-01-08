@@ -12,7 +12,7 @@ from ...github.entities.action import GitHubAction
 from ...github.errors import GitHubActionError
 # pylint: disable=relative-beyond-top-level
 from ...github.models.action_outcomes import (
-    ActionSuccess, ActionNeutral, ActionFailure,
+    ActionFailure, ActionNeutral, ActionSuccess,
 )
 # pylint: disable=relative-beyond-top-level
 from ..config import BotAppConfig
