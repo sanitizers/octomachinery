@@ -41,7 +41,6 @@ repos:
   # Heavy checks:
   - id: check-ast
   - id: debug-statements
-  - id: flake8
 
 - repo: https://github.com/PyCQA/pydocstyle.git
   rev: 4.0.1
@@ -56,6 +55,17 @@ repos:
     files: \.py$
     entry: python -m pylint
     args: []
+
+- repo: https://gitlab.com/PyCQA/flake8.git
+  rev: 4.0.1
+  hooks:
+  - id: flake8
+    language_version: python3
+    additional_dependencies:
+    - flake8-2020>=1.6.0
+    - flake8-docstrings
+    - flake8-pytest-style>=1.0.0
+    - wemake-python-styleguide
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
   rev: v0.910
