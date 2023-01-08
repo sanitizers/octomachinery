@@ -17,7 +17,7 @@ repos:
     files: README.rst
 
 - repo: https://github.com/pre-commit/pre-commit-hooks.git
-  rev: v2.0.0
+  rev: v2.3.0
   hooks:
   # Side-effects:
   - id: trailing-whitespace
