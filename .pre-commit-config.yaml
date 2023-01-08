@@ -47,7 +47,7 @@ repos:
   hooks:
   - id: pydocstyle
 
-- repo: https://github.com/codespell-project/codespell
+- repo: https://github.com/codespell-project/codespell.git
   rev: v2.0.0
   hooks:
   - id: codespell
