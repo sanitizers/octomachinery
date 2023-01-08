@@ -1,11 +1,11 @@
 ---
 repos:
-- repo: git://github.com/asottile/add-trailing-comma
+- repo: https://github.com/asottile/add-trailing-comma.git
   rev: v0.7.1
   hooks:
   - id: add-trailing-comma
 
-- repo: git://github.com/Lucas-C/pre-commit-hooks
+- repo: https://github.com/Lucas-C/pre-commit-hooks.git
   rev: v1.1.1
   hooks:
   - id: remove-tabs
@@ -16,7 +16,7 @@ repos:
   - id: rst-linter
     files: README.rst
 
-- repo: git://github.com/pre-commit/pre-commit-hooks
+- repo: https://github.com/pre-commit/pre-commit-hooks.git
   rev: v2.0.0
   hooks:
   # Side-effects:
@@ -43,7 +43,7 @@ repos:
   - id: debug-statements
   - id: flake8
 
-- repo: git://github.com/pycqa/pydocstyle.git
+- repo: https://github.com/PyCQA/pydocstyle.git
   rev: 4.0.1
   hooks:
   - id: pydocstyle
@@ -57,7 +57,7 @@ repos:
     entry: python -m pylint
     args: []
 
-- repo: git://github.com/pre-commit/mirrors-mypy.git
+- repo: https://github.com/pre-commit/mirrors-mypy.git
   rev: v0.910
   hooks:
   - id: mypy
