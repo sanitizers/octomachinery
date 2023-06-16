@@ -132,10 +132,24 @@ jobs:
         --parallel-live
         -vv
 
+  check:  # This job does nothing and is only used for the branch protection
+    if: always()
+
+    needs:
+    - tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Decide whether the needed jobs succeeded or failed
+      uses: re-actors/alls-green@release/v1
+      with:
+        jobs: ${{ toJSON(needs) }}
+
   publish:
     name: Validate metadata and optionally publish 🐍📦 to PyPI
     needs:
-    - tests
+    - check
     runs-on: ${{ matrix.os }}
     strategy:
       # NOTE: Even though it's one job, it's easier to keep the params in one
