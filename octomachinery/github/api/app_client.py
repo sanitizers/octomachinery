@@ -107,7 +107,7 @@ class GitHubApp:
     async def get_installation(self, event):
         """Retrieve an installation creds from store."""
         if 'installation' not in event.payload:
-            raise LookupError('This event occured outside of an installation')
+            raise LookupError('This event occurred outside of an installation')
 
         install_id = event.payload['installation']['id']
         return await self.get_installation_by_id(install_id)

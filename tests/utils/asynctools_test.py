@@ -11,7 +11,7 @@ def sync_power2(val):
 
 
 async def async_power2(val):
-    """Raise x to the power of 2 asyncronously."""
+    """Raise x to the power of 2 asynchronously."""
     return sync_power2(val)
 
 

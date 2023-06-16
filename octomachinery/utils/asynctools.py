@@ -78,7 +78,7 @@ async def try_await(potentially_awaitable):
 
 
 async def amap(callback, async_iterable):
-    """Map asyncronous generator with a coroutine or a function."""
+    """Map asynchronous generator with a coroutine or a function."""
     async for async_value in async_iterable:
         yield await try_await(callback(async_value))
 
