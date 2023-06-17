@@ -10,9 +10,9 @@
    :target: https://tidelift.com/subscription/pkg/pypi-octomachinery?utm_source=pypi-octomachinery&utm_medium=readme
    :alt: octomachinery is available as part of the Tidelift Subscription
 
-.. image:: https://github.com/sanitizers/octomachinery/workflows/Build%2FTest%2FPublish/badge.svg
-   :target: https://github.com/sanitizers/octomachinery/actions?workflow=Build%2FTest%2FPublish
-   :alt: GitHub Actions CI/CD build status — Python package
+.. image:: https://github.com/sanitizers/octomachinery/actions/workflows/ci-cd.yml/badge.svg?event=push
+   :target: https://github.com/sanitizers/octomachinery/actions/workflows/ci-cd.yml?query=event:push
+   :alt: GitHub Actions CI/CD workflows status
 
 .. image:: https://img.shields.io/matrix/octomachinery:matrix.org?label=Discuss%20on%20Matrix%20at%20%23pip-tools%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat
    :target: https://matrix.to/#/%23octomachinery:matrix.org
