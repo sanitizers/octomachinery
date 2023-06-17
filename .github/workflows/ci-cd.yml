@@ -327,6 +327,17 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: 3.11
+
+    - name: Grab the source from Git
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: >-
+          ${{
+              fromJSON(needs.pre-setup.outputs.release-requested)
+              && 1 || 0
+          }}
+        ref: ${{ github.event.inputs.release-committish }}
+
     - name: >-
         Calculate Python interpreter version hash value
         for use in the cache key
@@ -369,16 +380,6 @@ jobs:
         pip install
         --user
         tox
-
-    - name: Grab the source from Git
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: >-
-          ${{
-              fromJSON(needs.pre-setup.outputs.release-requested)
-              && 1 || 0
-          }}
-        ref: ${{ github.event.inputs.release-committish }}
 
     - name: Pre-populate the tox env
       run: >-
