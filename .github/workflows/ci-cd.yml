@@ -496,6 +496,17 @@ jobs:
           python-version: 3.9
           toxenv: build-dists
 
+    continue-on-error: >-
+      ${{
+          (
+            fromJSON(needs.pre-setup.outputs.is-yolo-mode) ||
+            (
+              startsWith(matrix.python-version, '~')
+            ) ||
+            contains(matrix.python-version, 'alpha')
+          ) && true || false
+      }}
+
     env:
       TOXENV: ${{ matrix.toxenv }}
 
