@@ -571,6 +571,11 @@ jobs:
     - name: Decide whether the needed jobs succeeded or failed
       uses: re-actors/alls-green@release/v1
       with:
+        allowed-failures: >-
+          ${{
+            fromJSON(needs.pre-setup.outputs.is-yolo-mode)
+            && 'tests' || ''
+          }}
         jobs: ${{ toJSON(needs) }}
 
   publish-pypi:
