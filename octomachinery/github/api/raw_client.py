@@ -55,6 +55,7 @@ class RawGitHubAPI(GitHubAPI):
             jwt: Optional[str] = None,
             oauth_token: Optional[str] = None,
             content_type: str = JSON_CONTENT_TYPE,
+            extra_headers: Optional[Dict[str, str]] = None,
     ) -> Tuple[bytes, Optional[str]]:
         token = self._token
         # pylint: disable=fixme
@@ -67,6 +68,17 @@ class RawGitHubAPI(GitHubAPI):
         if isinstance(token, GitHubJWTToken):
             jwt = str(token)
             oauth_token = None
+        optional_kwargs = {
+            # NOTE: GidgetHub v5.3.0 introduced a new `extra_headers` argument
+            # NOTE: in this private method and the public ones. Its default
+            # NOTE: value is `None` in all cases so the only case when it's set
+            # NOTE: is when the end-users call corresponding methods with it.
+            # NOTE: And that would only be the case with modern versions of
+            # NOTE: GidgetHub. Here, we rely on this side effect to only pass
+            # NOTE: this value down the stack when the chances that GidgetHub
+            # NOTE: is modern enough are close to 100%.
+            'extra_headers': extra_headers,
+        } if extra_headers is not None else {}
         return await super()._make_request(
             method=method,
             url=url,
@@ -76,6 +88,7 @@ class RawGitHubAPI(GitHubAPI):
             oauth_token=oauth_token,
             jwt=jwt,
             content_type=content_type,
+            **optional_kwargs,
         )
 
     getitem = accept_preview_version(GitHubAPI.getitem)
