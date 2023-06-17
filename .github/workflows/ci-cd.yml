@@ -513,6 +513,8 @@ jobs:
     steps:
     - name: Grab the source from Git
       uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.inputs.release-committish }}
 
     - name: Download all the dists
       uses: actions/download-artifact@v3
