@@ -166,7 +166,7 @@ jobs:
         with Path(environ['GITHUB_OUTPUT']).open(
                 mode=FILE_APPEND_MODE,
         ) as outputs_file:
-            print(f'py_hash_key={hash}', file=outputs_file)
+            print(f'py-hash-key={hash}', file=outputs_file)
     - name: >-
         Calculate dependency files' combined hash value
         for use in the cache key
@@ -344,7 +344,7 @@ jobs:
         with Path(environ['GITHUB_OUTPUT']).open(
                 mode=FILE_APPEND_MODE,
         ) as outputs_file:
-            print(f'py_hash_key={hash}', file=outputs_file)
+            print(f'py-hash-key={hash}', file=outputs_file)
       shell: python
     - name: Get pip cache dir
       id: pip-cache-dir
