@@ -90,6 +90,14 @@ jobs:
         ${{
             steps.request-check.outputs.release-requested || false
         }}
+      is-yolo-mode: >-
+        ${{
+          (
+            steps.request-check.outputs.release-requested == 'true'
+            && github.event.inputs.YOLO
+          )
+          && true || false
+        }}
       cache-key-files: >-
         ${{ steps.calc-cache-key-files.outputs.files-hash-key }}
       git-tag: ${{ steps.git-tag.outputs.tag }}
