@@ -40,6 +40,16 @@ on:  # yamllint disable-line rule:truthy
         type: boolean
         required: false
 
+concurrency:
+  group: >-
+    ${{
+        github.workflow
+    }}-${{
+        github.ref_type
+    }}-${{
+        github.event.pull_request.number || github.sha
+    }}
+  cancel-in-progress: true
 
 env:
   FORCE_COLOR: 1  # Request colored output from CLI tools supporting it
