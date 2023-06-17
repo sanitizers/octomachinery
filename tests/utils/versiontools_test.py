@@ -104,11 +104,19 @@ def test_get_self_version_outside_git_repo(temporary_working_directory):
 def test_cut_local_version_on_upload(monkeypatch, tmp_git_repo):
     """Test that PEP440 local version isn't emitted when upload."""
     scm_node = 'gfe99188'
-    ver = setuptools_scm.version.ScmVersion(
-        'v1.1.4',
-        distance=3, node='gfe99188',
-        dirty=False, branch='master',
-    )
+    try:
+        ver = setuptools_scm.version.ScmVersion(
+            'v1.1.4',
+            distance=3, node='gfe99188',
+            dirty=False, branch='master',
+            config=setuptools_scm.config.Configuration(),
+        )
+    except AttributeError:
+        ver = setuptools_scm.version.ScmVersion(
+            'v1.1.4',
+            distance=3, node='gfe99188',
+            dirty=False, branch='master',
+        )
     assert cut_local_version_on_upload(ver) == f'+{scm_node}'
 
     with monkeypatch.context() as mp_ctx:
