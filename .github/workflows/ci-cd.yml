@@ -41,6 +41,25 @@ on:  # yamllint disable-line rule:truthy
         required: false
 
 
+env:
+  FORCE_COLOR: 1  # Request colored output from CLI tools supporting it
+  MYPY_FORCE_COLOR: 1  # MyPy's color enforcement
+  PIP_DISABLE_PIP_VERSION_CHECK: 1  # Hide "there's a newer pip" message
+  PIP_NO_PYTHON_VERSION_WARNING: 1  # Hide "this Python is deprecated" message
+  PIP_NO_WARN_SCRIPT_LOCATION: 1  # Hide "script dir is not in $PATH" message
+  PRE_COMMIT_COLOR: 1
+  PY_COLORS: 1  # Recognized by the `py` package, dependency of `pytest`
+  PYTHONIOENCODING: utf-8
+  PYTHONUTF8: 1
+  TOX_PARALLEL_NO_SPINNER: 1  # Disable tox's parallel run spinner animation
+  TOX_TESTENV_PASSENV: >-
+    FORCE_COLOR
+    MYPY_FORCE_COLOR
+    NO_COLOR
+    PY_COLORS
+    PYTEST_THEME
+    PYTEST_THEME_MODE
+
 jobs:
   pre-setup:
     name: ⚙️ Pre-set global build settings
@@ -460,9 +479,7 @@ jobs:
           toxenv: build-dists
 
     env:
-      PY_COLORS: 1
       TOXENV: ${{ matrix.toxenv }}
-      TOX_PARALLEL_NO_SPINNER: 1
 
     steps:
     - name: Grab the source from Git
