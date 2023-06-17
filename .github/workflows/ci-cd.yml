@@ -18,8 +18,8 @@ on:  # yamllint disable-line rule:truthy
         description: >-
           Target PEP440-compliant version to release.
           Please, don't prepend `v`.
-        type: string
         required: true
+        type: string
       release-committish:
         # github.event_name == 'workflow_dispatch'
         # && github.event.inputs.release-committish
@@ -29,7 +29,6 @@ on:  # yamllint disable-line rule:truthy
           in Git as `release-version`. Normally, you
           should keep this empty.
         type: string
-        required: false
       YOLO:
         default: false
         description: >-
@@ -39,7 +38,6 @@ on:  # yamllint disable-line rule:truthy
           extraordinary circumstances to ignore the test
           failures and cut the release regardless.
         type: boolean
-        required: false
 
 concurrency:
   group: >-
