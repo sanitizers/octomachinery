@@ -85,6 +85,11 @@ def test_no_warnings(import_path):
         'Python 3.3,and in 3.9 it will stop working:'
         'DeprecationWarning:jwt.api_jwt',
 
+        # NOTE: Triggered by the `octomachinery.utils.versiontools`
+        # NOTE: command via `tox -e old-deps`:
+        '-W', "ignore:pkg_resources is deprecated as an API:"
+        'DeprecationWarning:pkg_resources',
+
         '-W', 'ignore:"@coroutine" decorator is deprecated '
         'since Python 3.8, use "async def" instead:'
         'DeprecationWarning:aiohttp.helpers',
