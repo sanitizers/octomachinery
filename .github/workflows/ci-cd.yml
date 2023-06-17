@@ -634,4 +634,134 @@ jobs:
       with:
         repository-url: https://test.pypi.org/legacy/
 
+  post-release-repo-update:
+    name: >-
+      Publish post-release Git tag
+      for ${{ needs.pre-setup.outputs.git-tag }}
+    needs:
+    - publish-pypi
+    - pre-setup  # transitive, for accessing settings
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: >-
+        Check if the requested tag ${{ needs.pre-setup.outputs.git-tag }}
+        is present and is pointing at the required commit ${{
+          github.event.inputs.release-committish
+        }}
+      id: existing-remote-tag-check
+      run: |
+        REMOTE_TAGGED_COMMIT_SHA="$(
+          git ls-remote --tags --refs $(git remote get-url origin) '${{
+            needs.pre-setup.outputs.git-tag
+          }}' | awk '{print $1}'
+        )"
+
+        if [[ "${REMOTE_TAGGED_COMMIT_SHA}" == '${{
+          github.event.inputs.release-committish
+        }}' ]]
+        then
+          echo "already-exists=true" >> "${GITHUB_OUTPUT}"
+        fi
+
+    - name: Fetch the src snapshot
+      if: steps.existing-remote-tag-check.outputs.already-exists == 'true'
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        ref: ${{ github.event.inputs.release-committish }}
+    - name: Setup git user as [bot]
+      if: steps.existing-remote-tag-check.outputs.already-exists == 'true'
+      uses: fregante/setup-git-user@v1.1.0
+    - name: >-
+        Tag the release in the local Git repo
+        as ${{ needs.pre-setup.outputs.git-tag }}
+      if: steps.existing-remote-tag-check.outputs.already-exists == 'true'
+      run: >-
+        git tag
+        -m '${{ needs.pre-setup.outputs.git-tag }}'
+        -m 'Published at https://pypi.org/project/octomachinery/${{
+          needs.pre-setup.outputs.dist-version
+        }}'
+        -m 'This release has been produced by the following workflow run: ${{
+          github.server_url
+        }}/${{
+          github.repository
+        }}/actions/runs/${{
+          github.run_id
+        }}'
+        '${{ needs.pre-setup.outputs.git-tag }}'
+        --
+        ${{ github.event.inputs.release-committish }}
+    - name: >-
+        Push ${{ needs.pre-setup.outputs.git-tag }} tag corresponding
+        to the just published release back to GitHub
+      if: steps.existing-remote-tag-check.outputs.already-exists == 'true'
+      run: >-
+        git push --atomic origin '${{ needs.pre-setup.outputs.git-tag }}'
+
+  publish-github-release:
+    name: >-
+      Publish a GitHub Release for
+      ${{ needs.pre-setup.outputs.git-tag }}
+    needs:
+    - post-release-repo-update
+    - pre-setup  # transitive, for accessing settings
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      discussions: write
+
+    steps:
+    - name: Download all the dists
+      uses: actions/download-artifact@v3
+      with:
+        name: python-package-distributions
+        path: dist/
+
+    - name: >-
+        Publish a GitHub Release for
+        ${{ needs.pre-setup.outputs.git-tag }}
+      uses: ncipollo/release-action@v1.11.1
+      with:
+        allowUpdates: false
+        artifactErrorsFailBuild: false
+        artifacts: |
+          dist/${{ needs.pre-setup.outputs.sdist-artifact-name }}
+          dist/${{ needs.pre-setup.outputs.wheel-artifact-name }}
+        artifactContentType: raw  # Because whl and tgz are of different types
+        body: >
+          # Release ${{ needs.pre-setup.outputs.git-tag }}
+
+
+          This release is published to
+          https://pypi.org/project/octomachinery/${{
+            needs.pre-setup.outputs.dist-version
+          }}.
+
+
+          This release has been produced by the following workflow run: ${{
+            github.server_url
+          }}/${{
+            github.repository
+          }}/actions/runs/${{
+            github.run_id
+          }}.
+        # bodyFile:  # FIXME: Use once Towncrier is integrated.
+        commit: ${{ github.event.inputs.release-committish }}
+        discussionCategory: Announcements
+        draft: false
+        name: ${{ needs.pre-setup.outputs.git-tag }}
+        # omitBody: false
+        omitBodyDuringUpdate: true
+        omitName: false
+        omitNameDuringUpdate: true
+        omitPrereleaseDuringUpdate: true
+        prerelease: false
+        removeArtifacts: false
+        replacesArtifacts: false
+        tag: ${{ needs.pre-setup.outputs.git-tag }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+
 ...
