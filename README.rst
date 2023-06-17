@@ -14,6 +14,14 @@
    :target: https://github.com/sanitizers/octomachinery/actions?workflow=Build%2FTest%2FPublish
    :alt: GitHub Actions CI/CD build status — Python package
 
+.. image:: https://img.shields.io/matrix/octomachinery:matrix.org?label=Discuss%20on%20Matrix%20at%20%23pip-tools%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat
+   :target: https://matrix.to/#/%23octomachinery:matrix.org
+   :alt: Matrix Room — #octomachinery:matrix.org
+
+.. image:: https://img.shields.io/matrix/pyba:matrix.org?label=Discuss%20on%20Matrix%20at%20%23jazzband%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat
+   :target: https://matrix.to/#/%23pyba:matrix.org
+   :alt: Matrix Space — #pyba:matrix.org
+
 .. DO-NOT-REMOVE-docs-badges-END
 
 .. image:: https://img.shields.io/readthedocs/octomachinery/latest.svg?logo=Read%20The%20Docs&logoColor=white
