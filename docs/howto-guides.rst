@@ -7,7 +7,7 @@ Running a one-off task against GitHub API
 
 Sometimes you need to run a series of queries against GitHub API.
 To do this, initialize a token (it's taken from the ``GITHUB_TOKEN`` env
-var in the example below), constuct a GitHub API wrapper and you are
+var in the example below), construct a GitHub API wrapper and you are
 good to go.
 
 :py:class:`~octomachinery.github.api.raw_client.RawGitHubAPI` is a

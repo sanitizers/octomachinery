@@ -133,7 +133,7 @@ def webhook_request_to_event(wrapped_function):
 @validate_allowed_http_methods('POST')
 @webhook_request_to_event
 async def route_github_webhook_event(*, github_event, github_app):
-    """Dispatch incoming webhook events to corresponsing handlers."""
+    """Dispatch incoming webhook events to corresponding handlers."""
     asyncio.create_task(route_github_event(
         github_event=github_event,
         github_app=github_app,

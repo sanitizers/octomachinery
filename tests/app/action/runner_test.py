@@ -17,7 +17,7 @@ from octomachinery.github.models.action_outcomes import ActionNeutral
 
 @process_event('unmatched_event', action='happened')
 async def unmatched_event_happened(action):  # pylint: disable=unused-argument
-    """Handle an unmached event."""
+    """Handle an unmatched event."""
 
 
 @process_event('check_run', action='created')

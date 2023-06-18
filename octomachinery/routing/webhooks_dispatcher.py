@@ -35,7 +35,7 @@ async def route_github_event(  # type: ignore[return]  # FIXME
         github_event: GitHubEvent,
         github_app: GitHubApp,
 ) -> Iterable[Any]:
-    """Dispatch GitHub event to corresponsing handlers.
+    """Dispatch GitHub event to corresponding handlers.
 
     Set up ``RUNTIME_CONTEXT`` before doing that. This is so
     the concrete event handlers have access to the API client
@@ -66,7 +66,7 @@ async def route_github_event(  # type: ignore[return]  # FIXME
             Some events (like `ping`) are
             happening application/GitHub-wide and are not bound to
             a specific installation. The webhook payloads of such events
-            don't contain any reference to an installaion.
+            don't contain any reference to an installation.
             Some events don't even refer to a GitHub App
             (e.g. `security_advisory`).
             """
