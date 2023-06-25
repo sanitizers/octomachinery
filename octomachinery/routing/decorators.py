@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from ..github.models.events import GitHubEvent
 
 
-__all__ = ('process_webhook_payload', )
+__all__ = ('process_webhook_payload',)
 
 
 def process_webhook_payload(wrapped_function):

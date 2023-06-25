@@ -146,10 +146,12 @@ class GitHubEvent:
         if ctx is None:
             ctx = {}
 
-        return await aio_gather(*(
-            r.dispatch(self, **ctx)
-            for r in routers
-        ))
+        return await aio_gather(
+            *(
+                r.dispatch(self, **ctx)
+                for r in routers
+            )
+        )
 
 
 @attr.dataclass(frozen=True)

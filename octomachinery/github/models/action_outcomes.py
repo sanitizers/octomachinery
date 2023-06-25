@@ -5,7 +5,7 @@ import logging
 import attr
 
 
-__all__ = ('ActionSuccess', 'ActionNeutral', 'ActionFailure', )
+__all__ = ('ActionSuccess', 'ActionNeutral', 'ActionFailure')
 
 
 logger = logging.getLogger(__name__)

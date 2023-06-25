@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from ..github.models.events import GitHubEvent
 
 
-__all__ = ('OctomachineryRouterBase', )
+__all__ = ('OctomachineryRouterBase',)
 
 
 class OctomachineryRouterBase(metaclass=ABCMeta):

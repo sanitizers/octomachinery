@@ -116,11 +116,13 @@ class GitHubApp:
         """Retrieve an installation with access tokens via API."""
         return GitHubAppInstallation(
             GitHubAppInstallationModel(
-                **(await self.api_client.getitem(
-                    '/app/installations/{installation_id}',
-                    url_vars={'installation_id': install_id},
-                    preview_api_version='machine-man',
-                )),
+                **(
+                    await self.api_client.getitem(
+                        '/app/installations/{installation_id}',
+                        url_vars={'installation_id': install_id},
+                        preview_api_version='machine-man',
+                    )
+                ),
             ),
             self,
         )

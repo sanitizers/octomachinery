@@ -41,13 +41,15 @@ class GitHubAppInstallation:
 
     async def get_token(self):
         """Retrieve installation access token from GitHub API."""
-        return GitHubInstallationAccessToken(**(
-            await self.app.api_client.post(
-                self._metadata.access_tokens_url,
-                data=b'',
-                preview_api_version='machine-man',
+        return GitHubInstallationAccessToken(
+            **(
+                await self.app.api_client.post(
+                    self._metadata.access_tokens_url,
+                    data=b'',
+                    preview_api_version='machine-man',
+                )
             )
-        ))
+        )
 
     async def _refresh_api_token(self):
         """Extract installation access token value.

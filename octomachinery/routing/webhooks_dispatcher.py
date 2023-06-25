@@ -23,7 +23,7 @@ from ..github.models.events import GitHubEvent
 from ..runtime.context import RUNTIME_CONTEXT
 
 
-__all__ = ('route_github_event', )
+__all__ = ('route_github_event',)
 
 
 logger = logging.getLogger(__name__)

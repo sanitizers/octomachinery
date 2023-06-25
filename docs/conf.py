@@ -64,7 +64,7 @@ PRJ_PY_VER_RANGE = get_supported_pythons(PRJ_META.get_all('Classifier'))
 PRJ_PY_MIN_SUPPORTED, PRJ_PY_MAX_SUPPORTED = map('.'.join, PRJ_PY_VER_RANGE)
 PRJ_GITHUB_USER, PRJ_GITHUB_REPO = get_github_data(
     chain(
-        (PRJ_META['Home-page'], ),
+        (PRJ_META['Home-page'],),
         PRJ_META.get_all('Project-URL'),
     ),
 )

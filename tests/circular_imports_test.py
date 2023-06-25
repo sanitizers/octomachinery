@@ -46,11 +46,11 @@ def _discover_path_importables(pkg_pth, pkg_name):
             continue
 
         rel_pt = pkg_dir_path.relative_to(pkg_pth)
-        pkg_pref = '.'.join((pkg_name, ) + rel_pt.parts)
+        pkg_pref = '.'.join((pkg_name,) + rel_pt.parts)
         yield from (
             pkg_path
             for _, pkg_path, _ in pkgutil.walk_packages(
-                (str(pkg_dir_path), ), prefix=f'{pkg_pref}.',
+                (str(pkg_dir_path),), prefix=f'{pkg_pref}.',
             )
         )
 

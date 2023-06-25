@@ -37,7 +37,7 @@ def temporary_working_directory():
 @pytest.fixture
 def git_cmd():
     """Provide a Git command helper."""
-    git_cmd_ = ('git', )
+    git_cmd_ = ('git',)
     # pylint: disable=unexpected-keyword-arg
     return lambda *args: subprocess.check_output(git_cmd_ + args, text=True)
 
@@ -45,7 +45,7 @@ def git_cmd():
 @pytest.fixture
 def git_init_cmd(git_cmd):
     """Provide a Git init command helper."""
-    return lambda *args: git_cmd(*(('init', ) + args))
+    return lambda *args: git_cmd(*(('init',) + args))
 
 
 @pytest.fixture
@@ -63,7 +63,7 @@ def git_commit_cmd(git_cmd):
 @pytest.fixture
 def git_tag_cmd(git_cmd):
     """Provide a Git tag command helper."""
-    return lambda *args: git_cmd(*(('tag', ) + args))
+    return lambda *args: git_cmd(*(('tag',) + args))
 
 
 @pytest.fixture

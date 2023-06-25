@@ -15,7 +15,7 @@ def _probe_yaml(event_file_fd):
         http_headers, event, extra = itertools.islice(
             itertools.chain(
                 yaml.safe_load_all(event_file_fd),
-                (None, ) * 3,
+                (None,) * 3,
             ),
             3,
         )

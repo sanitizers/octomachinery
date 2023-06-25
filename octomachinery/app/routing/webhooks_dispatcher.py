@@ -16,7 +16,7 @@ from ...github.models.events import GidgetHubWebhookEvent
 from ...routing.webhooks_dispatcher import route_github_event
 
 
-__all__ = ('route_github_webhook_event', )
+__all__ = ('route_github_webhook_event',)
 
 
 logger = logging.getLogger(__name__)
@@ -134,10 +134,12 @@ def webhook_request_to_event(wrapped_function):
 @webhook_request_to_event
 async def route_github_webhook_event(*, github_event, github_app):
     """Dispatch incoming webhook events to corresponding handlers."""
-    asyncio.create_task(route_github_event(
-        github_event=github_event,
-        github_app=github_app,
-    ))
+    asyncio.create_task(
+        route_github_event(
+            github_event=github_event,
+            github_app=github_app,
+        ),
+    )
     event_ack_msg = (
         'GitHub event received and scheduled for processing. '
         f'It is {github_event!r}'
