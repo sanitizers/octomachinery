@@ -8,9 +8,9 @@ build:
 python:
   version: 3
   install:
-  #- requirements: .docs-requirements.txt
-  #- method: pip
-  #  path: pip >= 19.0.3
+  # - requirements: .docs-requirements.txt
+  # - method: pip
+  #   path: pip >= 19.0.3
   - method: pip
     path: .
     extra_requirements:
