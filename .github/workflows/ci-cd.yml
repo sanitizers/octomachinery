@@ -569,8 +569,10 @@ jobs:
         --installpkg 'dist/${{ needs.pre-setup.outputs.wheel-artifact-name }}'
         --notest
     - name: Initialize pre-commit envs if needed
-      run: |
-        test -d .tox/pre-commit && .tox/pre-commit/bin/python -m pre_commit install-hooks || :
+      run: >-
+        test -d .tox/pre-commit
+        && .tox/pre-commit/bin/python -m pre_commit install-hooks
+        || :
     - name: Test with tox
       run: >-
         python -m
