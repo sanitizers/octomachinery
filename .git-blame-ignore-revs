@@ -1,1 +1,8 @@
 34dd2240adeb4d82e44a072dead0cc7197bc8f61  # A trailing comma reformatting caused by d3bee014f474d502d330c1c4919046c9714a6e4c ⇪ Bump add-trailing-comma @ pre-commit to v2.5.1
+
+# START yamllint-driven YAML formatting for consistency
+8365edc0ef8e898aad55dab1a78b7dc2e4f4ee97  # 🎨 Fix yamllint leading space @ comment warnings
+762437c1193a6b54c739edf4e62a999badbf9d75  # 🎨 Add YAML document start marker @ RTD config
+a7b255a6d44aa70dbb4062f76c7722c9dc02d0e7  # 🎨 Add YAML document end marker @ RTD config
+b1209aaa51e25e8b6ea88aa1682d1475382f31e7  # 🎨 Keep line length short @ GHA config
+# END yamllint-driven YAML formatting for consistency
