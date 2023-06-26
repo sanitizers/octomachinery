@@ -60,7 +60,7 @@ repos:
   - id: codespell
 
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.28.0
+  rev: v1.32.0
   hooks:
   - id: yamllint
     types:
