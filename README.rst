@@ -14,11 +14,11 @@
    :target: https://github.com/sanitizers/octomachinery/actions/workflows/ci-cd.yml?query=event:push
    :alt: GitHub Actions CI/CD workflows status
 
-.. image:: https://img.shields.io/matrix/octomachinery:matrix.org?label=Discuss%20on%20Matrix%20at%20%23pip-tools%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat
+.. image:: https://img.shields.io/matrix/octomachinery:matrix.org?label=Discuss%20on%20Matrix%20at%20%23octomachinery%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat
    :target: https://matrix.to/#/%23octomachinery:matrix.org
    :alt: Matrix Room — #octomachinery:matrix.org
 
-.. image:: https://img.shields.io/matrix/pyba:matrix.org?label=Discuss%20on%20Matrix%20at%20%23jazzband%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat
+.. image:: https://img.shields.io/matrix/pyba:matrix.org?label=Discuss%20on%20Matrix%20at%20%23pyba%3Amatrix.org&logo=matrix&server_fqdn=matrix.org&style=flat
    :target: https://matrix.to/#/%23pyba:matrix.org
    :alt: Matrix Space — #pyba:matrix.org
 
