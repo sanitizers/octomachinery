@@ -50,7 +50,7 @@ class GitHubApp:
         converter=frozenset,
     )
 
-    def __attrs_post_init__(self) -> None:  # pylint: disable=no-self-use
+    def __attrs_post_init__(self) -> None:
         """Initialize the Sentry SDK library."""
         # NOTE: Under the hood, it will set up the DSN from `SENTRY_DSN`
         # NOTE: env var. We don't need to care about it not existing as

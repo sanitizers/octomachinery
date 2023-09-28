@@ -32,7 +32,6 @@ class GitHubAction(GitHubApp):
     _metadata: GitHubActionConfig = attr.ib(default=None)
     """A GitHub Action metadata from envronment vars."""
 
-    # pylint: disable=no-self-use
     @_metadata.validator
     def _verify_metadata_is_set(self, attribute, value):
         if value is None:

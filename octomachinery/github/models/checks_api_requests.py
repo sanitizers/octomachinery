@@ -96,7 +96,7 @@ class CheckActions:
     identifier: str = str_attrib()
 
     @label.validator
-    def label_up_to_20(self, attribute, value):  # pylint: disable=no-self-use
+    def label_up_to_20(self, attribute, value):
         """Ensure that label is under 20."""
         if len(value) > 20:
             raise ValueError(
@@ -106,7 +106,6 @@ class CheckActions:
     @description.validator
     def description_up_to_40(self, attribute, value):
         """Ensure that description is under 40."""
-        # pylint: disable=no-self-use
         if len(value) > 40:
             raise ValueError(
                 f'`{attribute.name}` must not exceed 40 characters.',
@@ -115,7 +114,6 @@ class CheckActions:
     @identifier.validator
     def identifier_up_to_20(self, attribute, value):
         """Ensure that identifier is under 20."""
-        # pylint: disable=no-self-use
         if len(value) > 20:
             raise ValueError(
                 f'`{attribute.name}` must not exceed 20 characters.',
@@ -190,7 +188,7 @@ class BaseCheckRequestMixin:
         ),
     )
 
-    @conclusion.validator  # pylint: disable=no-self-use
+    @conclusion.validator
     def depends_on_status(self, attribute, value):
         """Ensure that conclusion is present if there's status."""
         if self.status == 'completed' and not value:
@@ -198,7 +196,7 @@ class BaseCheckRequestMixin:
                 f'`{attribute.name}` must be provided if status is completed',
             )
 
-    @completed_at.validator  # pylint: disable=no-self-use
+    @completed_at.validator
     def depends_on_conclusion(self, attribute, value):
         """Ensure that completed is present if there's conclusion."""
         if self.conclusion is not None and not value:
@@ -208,7 +206,7 @@ class BaseCheckRequestMixin:
             )
 
     @actions.validator
-    def actions_up_to_3(self, attribute, value):  # pylint: disable=no-self-use
+    def actions_up_to_3(self, attribute, value):
         """Ensure that the number of actions is below 3."""
         if value is not None and len(value) > 3:
             raise ValueError(f'`{attribute.name}` must not exceed 3 items.')

@@ -16,7 +16,7 @@ __all__ = ('OctomachineryRouterBase',)
 class OctomachineryRouterBase(metaclass=ABCMeta):
     """Octomachinery router base."""
 
-    # pylint: disable=no-self-use,unused-argument
+    # pylint: disable=unused-argument
     def emit_routes_for(
             self, event_name: str, event_payload: Any,
     ) -> Iterator[AsyncCallback]:
@@ -28,7 +28,7 @@ class OctomachineryRouterBase(metaclass=ABCMeta):
         :yields: coroutine event handlers
         """
 
-    # pylint: disable=no-self-use,unused-argument
+    # pylint: disable=unused-argument
     async def dispatch(
             self, event: 'GitHubEvent',
             *args: Any, **kwargs: Any,

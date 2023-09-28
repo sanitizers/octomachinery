@@ -43,7 +43,7 @@ class ActionFailure(ActionOutcome):
     return_code: int = attr.ib(default=1)
 
     @return_code.validator
-    def _validate_return_code(  # pylint: disable=no-self-use
+    def _validate_return_code(
             self,
             attribute,  # pylint: disable=unused-argument
             value,

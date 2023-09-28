@@ -58,7 +58,6 @@ class GitHubEvent:
     payload: Mapping[str, Any] = attr.ib(converter=_to_dict)
     """Event payload object."""
 
-    # pylint: disable=no-self-use
     @payload.validator
     def _is_payload_dict(
             self, attribute: str, value: Mapping[str, Any],
@@ -163,7 +162,6 @@ class GitHubWebhookEvent(GitHubEvent):
     delivery_id: uuid.UUID = attr.ib(converter=_to_uuid4)
     """A unique UUID4 identifier of the event delivery on GH side."""
 
-    # pylint: disable=no-self-use
     @delivery_id.validator
     def _is_delivery_id(self, attribute: str, value: uuid.UUID) -> None:
         """Verify that the attribute value is UUID v4.
