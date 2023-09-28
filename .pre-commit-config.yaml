@@ -139,6 +139,8 @@ repos:
   rev: v1.4.1
   hooks:
   - id: mypy
+    alias: mypy-py312
+    name: MyPy, for Python 3.12
     additional_dependencies:
     - .
     - attrs
@@ -146,6 +148,79 @@ repos:
     args:
     - --namespace-packages
     - --pretty
+    - --python-version=3.12
+    - --show-column-numbers
+    - --show-error-codes
+    - --show-error-context
+    - --strict-optional
+    - -p
+    - octomachinery
+    - -p
+    - tests
+    pass_filenames: false
+
+- repo: https://github.com/pre-commit/mirrors-mypy.git
+  rev: v1.4.1
+  hooks:
+  - id: mypy
+    alias: mypy-py310
+    name: MyPy, for Python 3.10
+    additional_dependencies:
+    - .
+    - attrs
+    - types-PyYAML
+    args:
+    - --namespace-packages
+    - --pretty
+    - --python-version=3.10
+    - --show-column-numbers
+    - --show-error-codes
+    - --show-error-context
+    - --strict-optional
+    - -p
+    - octomachinery
+    - -p
+    - tests
+    pass_filenames: false
+
+- repo: https://github.com/pre-commit/mirrors-mypy.git
+  rev: v1.4.1
+  hooks:
+  - id: mypy
+    alias: mypy-py38
+    name: MyPy, for Python 3.8
+    additional_dependencies:
+    - .
+    - attrs
+    - types-PyYAML
+    args:
+    - --namespace-packages
+    - --pretty
+    - --python-version=3.8
+    - --show-column-numbers
+    - --show-error-codes
+    - --show-error-context
+    - --strict-optional
+    - -p
+    - octomachinery
+    - -p
+    - tests
+    pass_filenames: false
+
+- repo: https://github.com/pre-commit/mirrors-mypy.git
+  rev: v1.4.1
+  hooks:
+  - id: mypy
+    alias: mypy-py37
+    name: MyPy, for Python 3.7
+    additional_dependencies:
+    - .
+    - attrs
+    - types-PyYAML
+    args:
+    - --namespace-packages
+    - --pretty
+    - --python-version=3.8
     - --show-column-numbers
     - --show-error-codes
     - --show-error-context
