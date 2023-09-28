@@ -24,6 +24,7 @@ async def _send_task_res_to_q(res_q, task_id, aio_task):
         task_res = exc
         raise
     finally:
+        # pylint: disable-next=used-before-assignment  # <-- false-positive
         await res_q.put((task_id, task_res))
 
 
