@@ -113,4 +113,4 @@ async def get_installation_config(
     if config_content is None:
         return {}
 
-    return yaml.load(StringIO(config_content))
+    return yaml.load(StringIO(config_content), Loader=yaml.SafeLoader)
