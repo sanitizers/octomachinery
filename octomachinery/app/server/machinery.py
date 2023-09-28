@@ -2,6 +2,7 @@
 
 import functools
 import logging
+from typing import Union
 
 import anyio
 from aiohttp import web
@@ -67,7 +68,7 @@ async def _prepare_github_app(github_app):
 async def _launch_web_server_and_wait_until_it_stops(
         web_server_config,
         github_app: GitHubApp,
-        webhook_secret: str = None,
+        webhook_secret: Union[str, None] = None,
 ) -> None:
     """Start a web server.
 
@@ -84,7 +85,7 @@ async def _launch_web_server_and_wait_until_it_stops(
 
 async def setup_server_runner(
         github_app: GitHubApp,
-        webhook_secret: str = None,
+        webhook_secret: Union[str, None] = None,
 ) -> web.ServerRunner:
     """Return a server runner with a webhook dispatcher set up."""
     return await get_server_runner(

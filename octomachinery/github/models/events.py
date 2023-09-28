@@ -94,7 +94,7 @@ class GitHubEvent:
             cls: Type[GitHubEvent],
             event_fixture_fd: TextIO,
             *,
-            event: str = None,
+            event: Union[str, None] = None,
     ) -> GitHubEvent:
         """Make a GitHubEvent from a fixture fd and an optional name."""
         headers, payload = parse_event_stub_from_fd(event_fixture_fd)
@@ -111,7 +111,7 @@ class GitHubEvent:
             cls: Type[GitHubEvent],
             event_fixture_path: Union[pathlib.Path, str],
             *,
-            event: str = None,
+            event: Union[str, None] = None,
     ) -> GitHubEvent:
         """Make a GitHubEvent from a fixture and an optional name."""
         with pathlib.Path(
@@ -138,7 +138,7 @@ class GitHubEvent:
     async def dispatch_via(
             self,
             *routers: OctomachineryRouterBase,
-            ctx: Mapping[str, Any] = None,
+            ctx: Union[Mapping[str, Any], None] = None,
     ) -> Iterable[Any]:
         """Invoke this event handlers from different routers."""
         if not routers:
@@ -192,7 +192,7 @@ class GitHubWebhookEvent(GitHubEvent):
             cls: Type[GitHubWebhookEvent],
             event_fixture_fd: TextIO,
             *,
-            event: str = None,
+            event: Union[str, None] = None,
     ) -> GitHubWebhookEvent:
         """Make GitHubWebhookEvent from fixture fd and optional name."""
         headers, payload = parse_event_stub_from_fd(event_fixture_fd)
@@ -216,7 +216,7 @@ class GitHubWebhookEvent(GitHubEvent):
             cls: Type[GitHubWebhookEvent],
             event_fixture_path: Union[pathlib.Path, str],
             *,
-            event: str = None,
+            event: Union[str, None] = None,
     ) -> GitHubWebhookEvent:
         """Make a GitHubWebhookEvent from fixture and optional name."""
         with pathlib.Path(

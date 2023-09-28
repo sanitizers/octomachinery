@@ -146,7 +146,7 @@ async def receive(  # pylint: disable=too-many-arguments,too-many-locals
 
 
 def load_event_routers(
-        entrypoint_module: str = None,
+        entrypoint_module: Union[str, None] = None,
         event_routers: Union[FrozenSet[str], Set[str]] = frozenset(),
 ) -> Iterator[OctomachineryRouterBase]:
     """Yield event routers from strings."""

@@ -1,7 +1,7 @@
 """A very low-level GitHub API client."""
 
 from asyncio import iscoroutinefunction
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple, Union
 
 from gidgethub.abc import JSON_CONTENT_TYPE
 from gidgethub.aiohttp import GitHubAPI
@@ -51,7 +51,7 @@ class RawGitHubAPI(GitHubAPI):
     # pylint: disable=too-many-arguments
     async def _make_request(
             self, method: str, url: str, url_vars: Dict[str, str],
-            data: Any, accept: str = None,
+            data: Any, accept: Union[str, None] = None,
             jwt: Optional[str] = None,
             oauth_token: Optional[str] = None,
             content_type: str = JSON_CONTENT_TYPE,
