@@ -19,7 +19,7 @@ def fake_event_handler(*, arg1, arg2):
         ({'arg0': 'p', 'arg1': 'u', 'arg2': 'n'}, False),
         ({'arg1': 'z'}, False),
         ({'arg3': 's'}, False),
-        (dict(), False),
+        ({}, False),
     ),
 )
 def test_process_webhook_payload(incoming_event, is_successful):
