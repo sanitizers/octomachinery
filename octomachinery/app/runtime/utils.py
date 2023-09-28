@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def detect_env_mode():
     """Figure out whether we're under GitHub Action environment."""
-    for var_suffix in {
+    for var_suffix in (
             'WORKFLOW',
             'ACTION', 'ACTOR',
             'REPOSITORY',
@@ -17,7 +17,7 @@ def detect_env_mode():
             'WORKSPACE',
             'SHA', 'REF',
             'TOKEN',
-    }:
+    ):
         if f'GITHUB_{var_suffix}' not in os.environ:
             logger.info(
                 'Detected GitHub App mode since '
