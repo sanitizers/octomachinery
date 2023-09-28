@@ -80,18 +80,18 @@ async def get_event_from_request(request, webhook_secret):
             no_signature_exc,
         )
         raise web.HTTPForbidden from no_signature_exc
-    else:
-        event = GidgetHubWebhookEvent.from_http_request(
-            http_req_headers=request.headers,
-            http_req_body=http_req_body,
-        )
-        logger.info(
-            EVENT_LOG_VALID_MSG,
-            event.name,  # pylint: disable=no-member
-            event.delivery_id,
-            webhook_event_signature,
-        )
-        return event
+
+    event = GidgetHubWebhookEvent.from_http_request(
+        http_req_headers=request.headers,
+        http_req_body=http_req_body,
+    )
+    logger.info(
+        EVENT_LOG_VALID_MSG,
+        event.name,  # pylint: disable=no-member
+        event.delivery_id,
+        webhook_event_signature,
+    )
+    return event
 
 
 def validate_allowed_http_methods(*allowed_methods: str):
