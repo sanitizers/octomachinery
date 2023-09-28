@@ -87,7 +87,7 @@ class GitHubEvent:
         # NOTE: Action runtime only has one event to process
         # NOTE: OTOH it may slow-down tests parallelism
         # NOTE: so may deserve to be fixed
-        with pathlib.Path(event_path).open() as event_source:
+        with pathlib.Path(event_path).open(encoding='utf-8') as event_source:
             return cls(event_name, json.load(event_source))
 
     @classmethod
@@ -115,7 +115,9 @@ class GitHubEvent:
             event: str = None,
     ) -> GitHubEvent:
         """Make a GitHubEvent from a fixture and an optional name."""
-        with pathlib.Path(event_fixture_path).open() as event_source:
+        with pathlib.Path(
+                event_fixture_path,
+        ).open(encoding='utf-8') as event_source:
             return cls.from_fixture_fd(event_source, event=event)
 
     @classmethod
@@ -219,7 +221,9 @@ class GitHubWebhookEvent(GitHubEvent):
             event: str = None,
     ) -> GitHubWebhookEvent:
         """Make a GitHubWebhookEvent from fixture and optional name."""
-        with pathlib.Path(event_fixture_path).open() as event_source:
+        with pathlib.Path(
+                event_fixture_path,
+        ).open(encoding='utf-8') as event_source:
             return cls.from_fixture_fd(event_source, event=event)
 
     @classmethod
