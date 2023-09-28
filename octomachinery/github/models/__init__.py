@@ -26,9 +26,13 @@ class GitHubAppInstallation:  # pylint: disable=too-few-public-methods
 
     # FIXME: unignore once this is solved:  # pylint: disable=fixme
     # https://github.com/python/mypy/issues/6172#issuecomment-515718727
-    created_at: datetime = attr.ib(converter=convert_datetime)  # type: ignore
+    created_at: datetime = attr.ib(
+        converter=convert_datetime,  # type: ignore[misc]
+    )
     """Date time when the installation has been installed."""
-    updated_at: datetime = attr.ib(converter=convert_datetime)  # type: ignore
+    updated_at: datetime = attr.ib(
+        converter=convert_datetime,  # type: ignore[misc]
+    )
     """Date time when the installation was last updated."""
 
     account: typing.Dict[str, typing.Any]
@@ -69,7 +73,9 @@ class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
 
     token: SecretStr = attr.ib(converter=SecretStr)
     """Access token for GitHub App Installation."""
-    expires_at: datetime = attr.ib(converter=convert_datetime)  # type: ignore
+    expires_at: datetime = attr.ib(
+        converter=convert_datetime,  # type: ignore[misc]
+    )
     """Token expiration time."""
     permissions: typing.Dict[str, str]
     """Permission levels of access to API endpoints types."""
