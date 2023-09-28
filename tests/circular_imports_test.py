@@ -87,7 +87,7 @@ def test_no_warnings(import_path):
 
         # NOTE: Triggered by the `octomachinery.utils.versiontools`
         # NOTE: command via `tox -e old-deps`:
-        '-W', "ignore:pkg_resources is deprecated as an API:"
+        '-W', 'ignore:pkg_resources is deprecated as an API:'
         'DeprecationWarning:pkg_resources',
 
         '-W', 'ignore:"@coroutine" decorator is deprecated '
