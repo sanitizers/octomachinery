@@ -1,6 +1,6 @@
 """Octomachinery router base interface definitions."""
 
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from typing import TYPE_CHECKING, Any, Iterator
 
 from gidgethub.routing import AsyncCallback
@@ -17,6 +17,7 @@ class OctomachineryRouterBase(metaclass=ABCMeta):
     """Octomachinery router base."""
 
     # pylint: disable=unused-argument
+    @abstractmethod
     def emit_routes_for(
             self, event_name: str, event_payload: Any,
     ) -> Iterator[AsyncCallback]:
@@ -29,6 +30,7 @@ class OctomachineryRouterBase(metaclass=ABCMeta):
         """
 
     # pylint: disable=unused-argument
+    @abstractmethod
     async def dispatch(
             self, event: 'GitHubEvent',
             *args: Any, **kwargs: Any,
