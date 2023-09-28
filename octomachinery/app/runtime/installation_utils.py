@@ -22,7 +22,7 @@ def _get_file_contents_from_fs(file_name: str) -> typing.Optional[str]:
     It doesn't matter much in GitHub Actions
     but can be refactored later.
     """
-    config_path = (Path('.') / file_name)
+    config_path = Path('.') / file_name
 
     try:
         return config_path.read_text()
