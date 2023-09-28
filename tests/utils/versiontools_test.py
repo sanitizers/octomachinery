@@ -112,6 +112,7 @@ def test_cut_local_version_on_upload(monkeypatch, tmp_git_repo):
             config=setuptools_scm.config.Configuration(),
         )
     except AttributeError:
+        # pylint: disable-next=no-value-for-parameter
         ver = setuptools_scm.version.ScmVersion(
             'v1.1.4',
             distance=3, node='gfe99188',
