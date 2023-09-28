@@ -58,10 +58,8 @@ class RawGitHubAPI(GitHubAPI):
             extra_headers: Optional[Dict[str, str]] = None,
     ) -> Tuple[bytes, Optional[str]]:
         token = self._token
-        # pylint: disable=fixme
-        if iscoroutinefunction(token):  # type: ignore[arg-type]  # FIXME
-            # pylint: disable=fixme
-            token = await token()  # type: ignore[misc,operator]  # FIXME
+        if iscoroutinefunction(token):
+            token = await token()
         if isinstance(token, GitHubOAuthToken):
             oauth_token = str(token)
             jwt = None
