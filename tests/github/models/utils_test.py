@@ -110,7 +110,7 @@ def test_convert_datetime(input_date_string, expected_date_object):
         -float('Inf'),
         object(),
         {},
-        dict(),
+        set(),
         [],
         frozenset(),
         (),
