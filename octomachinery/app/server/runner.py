@@ -51,7 +51,7 @@ def run(
             app_url=url,
         )
         if len(sys.argv) > 2:
-            config = attr.evolve(
+            config = attr.evolve(  # type: ignore[misc]
                 config,
                 server=WebServerConfig(*sys.argv[1:3]),
             )
