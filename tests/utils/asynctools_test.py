@@ -10,6 +10,7 @@ def sync_power2(val):
     return val ** 2
 
 
+@pytest.mark.anyio
 async def async_power2(val):
     """Raise x to the power of 2 asynchronously."""
     return sync_power2(val)
@@ -22,6 +23,8 @@ async def async_power2(val):
         async_power2,
     ),
 )
+@pytest.mark.anyio
+@pytest.mark.usefixtures('event_loop')
 async def test_amap(callback_func):
     """Test that async map works for both sync and async callables."""
     async def async_iter(*args, **kwargs):
@@ -46,6 +49,8 @@ async def test_amap(callback_func):
         async_power2,
     ),
 )
+@pytest.mark.anyio
+@pytest.mark.usefixtures('event_loop')
 async def test_dict_to_kwargs_cb(callback_func):
     """Test that input dict is turned into given (a)sync callable args."""
     test_val = 5
@@ -63,6 +68,8 @@ async def test_dict_to_kwargs_cb(callback_func):
         (async_power2, 8),
     ),
 )
+@pytest.mark.anyio
+@pytest.mark.usefixtures('event_loop')
 async def test_try_await(callback_func, callback_arg):
     """Test that result is awaited regardless of (a)sync func type."""
     actual_result = await try_await(callback_func(callback_arg))
@@ -70,6 +77,8 @@ async def test_try_await(callback_func, callback_arg):
     assert actual_result == expected_result
 
 
+@pytest.mark.anyio
+@pytest.mark.usefixtures('event_loop')
 async def test_try_await_bypass_errors():
     """Test that internal callback exceptions are propagated."""
     async def break_callback():

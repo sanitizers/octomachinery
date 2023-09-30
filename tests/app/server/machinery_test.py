@@ -66,7 +66,7 @@ def octomachinery_config_server(octomachinery_config):
 
 
 @pytest.fixture
-async def aiohttp_client_session(loop) -> ClientSession:
+async def aiohttp_client_session(event_loop) -> ClientSession:
     """Initialize an aiohttp HTTP client session."""
     async with ClientSession() as http_session:
         yield http_session
@@ -132,6 +132,7 @@ async def send_webhook_event(
     return _send_event
 
 
+@pytest.mark.anyio
 async def test_ping_response(send_webhook_event, github_app_id):
     """Test that ping webhook event requests receive a HTTP response."""
     async with send_webhook_event(
