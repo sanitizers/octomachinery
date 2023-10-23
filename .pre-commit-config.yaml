@@ -34,7 +34,7 @@ repos:
     - yaml
 
 - repo: https://github.com/asottile/add-trailing-comma.git
-  rev: v2.5.1
+  rev: v3.1.0
   hooks:
   - id: add-trailing-comma
 
@@ -46,18 +46,18 @@ repos:
     - --honor-noqa
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-  rev: v1.1.6
+  rev: v1.5.4
   hooks:
   - id: remove-tabs
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks-markup.git
-  rev: v1.0.0
+  rev: v1.0.1
   hooks:
   - id: rst-linter
     files: README.rst
 
 - repo: https://github.com/pre-commit/pre-commit-hooks.git
-  rev: v2.3.0
+  rev: v4.5.0
   hooks:
   # Side-effects:
   - id: trailing-whitespace
@@ -83,12 +83,12 @@ repos:
   - id: debug-statements
 
 - repo: https://github.com/PyCQA/pydocstyle.git
-  rev: 6.1.1
+  rev: 6.3.0
   hooks:
   - id: pydocstyle
 
 - repo: https://github.com/codespell-project/codespell.git
-  rev: v2.2.5
+  rev: v2.2.6
   hooks:
   - id: codespell
 
@@ -103,7 +103,7 @@ repos:
     - --strict
 
 - repo: https://github.com/PyCQA/flake8.git
-  rev: 6.0.0
+  rev: 6.1.0
   hooks:
   - id: flake8
     alias: flake8-no-wps
@@ -123,7 +123,7 @@ repos:
 
 - repo: https://github.com/PyCQA/flake8.git
   # NOTE: This is kept at v4 for until WPS starts supporting flake v5.
-  rev: 4.0.1  # enforce-version: 4.0.1
+  rev: 6.1.0  # enforce-version: 4.0.1
   hooks:
   - id: flake8
     alias: flake8-only-wps
@@ -136,7 +136,7 @@ repos:
     language_version: python3
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.4.1
+  rev: v1.6.1
   hooks:
   - id: mypy
     alias: mypy-py312
@@ -160,7 +160,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.4.1
+  rev: v1.6.1
   hooks:
   - id: mypy
     alias: mypy-py310
@@ -184,7 +184,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.4.1
+  rev: v1.6.1
   hooks:
   - id: mypy
     alias: mypy-py38
@@ -208,7 +208,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.4.1
+  rev: v1.6.1
   hooks:
   - id: mypy
     alias: mypy-py37
@@ -232,7 +232,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/PyCQA/pylint.git
-  rev: v2.17.6
+  rev: v3.0.1
   hooks:
   - id: pylint
     additional_dependencies:
