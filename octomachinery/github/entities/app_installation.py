@@ -48,7 +48,7 @@ class GitHubAppInstallation:
                     data=b'',
                     preview_api_version='machine-man',
                 )
-            )
+            ),
         )
 
     async def _refresh_api_token(self):
