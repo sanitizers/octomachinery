@@ -151,7 +151,7 @@ class GitHubEvent:
             *(
                 r.dispatch(self, **ctx)
                 for r in routers
-            )
+            ),
         )
 
 

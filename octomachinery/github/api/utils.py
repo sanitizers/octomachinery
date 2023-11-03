@@ -25,7 +25,7 @@ def accept_preview_version(wrapped_coroutine):
     """Extend keyword-args with `preview_api_version`."""
     @wraps(wrapped_coroutine)
     def coroutine_wrapper(
-            *args: Tuple[Any], **kwargs: Dict[str, Any]
+            *args: Tuple[Any], **kwargs: Dict[str, Any],
     ) -> AsyncGeneratorType:  # type: ignore[type-arg]
         accept_media = kwargs.pop('accept', None)
         preview_api_version = kwargs.pop('preview_api_version', None)
