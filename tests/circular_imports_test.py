@@ -90,6 +90,44 @@ def test_no_warnings(import_path):
         '-W', 'ignore:pkg_resources is deprecated as an API:'
         'DeprecationWarning:pkg_resources',
 
+        # NOTE: Triggered by the `octomachinery.utils.versiontools`
+        # NOTE: command via `tox -e old-deps`:
+        '-W', 'ignore:The distutils package is deprecated and slated for '
+        'removal in Python 3.12. Use setuptools or check PEP 632 for '
+        'potential alternatives:'
+        'DeprecationWarning:',
+
+        # NOTE: Triggered by the `octomachinery.utils.versiontools`
+        # NOTE: command via `tox -e old-deps`:
+        '-W', "ignore:module 'sre_constants' is deprecated:"
+        'DeprecationWarning:',
+
+        # NOTE: Triggered by the `octomachinery.utils.versiontools`
+        # NOTE: command via `tox -e old-deps`:
+        '-W', 'ignore:_SixMetaPathImporter.exec_module() not found; '
+        'falling back to load_module():ImportWarning:',
+
+        # NOTE: Triggered by the `octomachinery.utils.versiontools`
+        # NOTE: command via `tox -e old-deps`:
+        '-W', 'ignore:_SixMetaPathImporter.find_spec() not found; '
+        'falling back to find_module():ImportWarning:',
+
+        # NOTE: Triggered by the `octomachinery.utils.versiontools`
+        # NOTE: command via `tox -e old-deps`:
+        '-W', 'ignore:VendorImporter.exec_module() not found; '
+        'falling back to load_module():ImportWarning:',
+
+        # NOTE: Triggered by the `octomachinery.utils.versiontools`
+        # NOTE: command via `tox -e old-deps`:
+        '-W', 'ignore:VendorImporter.find_spec() not found; '
+        'falling back to find_module():ImportWarning:',
+
+        # NOTE: Triggered by the `octomachinery.routing.routers`
+        # NOTE: command via `tox -e old-deps`:
+        '-W', "ignore:'cgi' is deprecated and slated for removal "
+        'in Python 3.13:'
+        'DeprecationWarning:gidgethub.sansio',
+
         '-W', 'ignore:"@coroutine" decorator is deprecated '
         'since Python 3.8, use "async def" instead:'
         'DeprecationWarning:aiohttp.helpers',
