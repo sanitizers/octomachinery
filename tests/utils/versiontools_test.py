@@ -5,6 +5,7 @@ import os
 import pathlib
 import subprocess
 import tempfile
+import time
 
 import pytest
 
@@ -81,7 +82,9 @@ def test_get_self_version_in_git_repo(
         git_cmd, git_commit_cmd, git_tag_cmd,
 ):
     """Check that get_self_version works properly in existing Git repo."""
-    assert get_self_version() == '0.1.dev0'
+    # setuptools_scm 8+ includes a date stamp here.
+    now = time.strftime('%Y%m%d')
+    assert get_self_version() in {'0.1.dev0', f'0.1.dev0+d{now}'}
 
     git_commit_cmd('-m', 'Test commit')
     git_tag_cmd('v1.3.9')
@@ -109,7 +112,7 @@ def test_cut_local_version_on_upload(monkeypatch, tmp_git_repo):
             'v1.1.4',
             distance=3, node='gfe99188',
             dirty=False, branch='master',
-            config=setuptools_scm.config.Configuration(),
+            config=setuptools_scm.Configuration(),
         )
     except AttributeError:
         # pylint: disable-next=no-value-for-parameter
@@ -131,7 +134,9 @@ def test_get_version_from_scm_tag_in_git_repo(
         git_cmd, git_commit_cmd, git_tag_cmd,
 ):
     """Check that get_version_from_scm_tag works properly in Git repo."""
-    assert get_self_version() == '0.1.dev0'
+    # setuptools_scm 8+ includes a date stamp here.
+    now = time.strftime('%Y%m%d')
+    assert get_self_version() in {'0.1.dev0', f'0.1.dev0+d{now}'}
 
     git_commit_cmd('-m', 'Test commit')
     git_tag_cmd('v1.3.9')
