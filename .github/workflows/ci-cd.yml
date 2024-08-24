@@ -5,8 +5,8 @@ name: 🧪
 on:
   push:  # publishes to TestPyPI pushes to the main branch
     branches-ignore:
-    - dependabot/**
-    - pre-commit-ci-update-config
+    - dependabot/**  # Dependabot always creates PRs
+    - pre-commit-ci-update-config  # pre-commit.ci always creates a PR
   pull_request:
   schedule:
   - cron: 1 0 * * *  # Run daily at 0:01 UTC
