@@ -1,10 +1,15 @@
 """Asynchronous tools set."""
 
 from functools import wraps
+from inspect import signature as _inspect_signature
+from logging import getLogger as _get_logger
 from operator import itemgetter
 
 from anyio import create_queue
 from anyio import create_task_group as all_subtasks_awaited
+
+
+logger = _get_logger(__name__)
 
 
 def auto_cleanup_aio_tasks(async_func):
@@ -86,6 +91,24 @@ async def amap(callback, async_iterable):
 
 def dict_to_kwargs_cb(callback):
     """Return a callback mapping dict to keyword arguments."""
+    cb_arg_names = set(_inspect_signature(callback).parameters.keys())
+
     async def callback_wrapper(args_dict):
-        return await try_await(callback(**args_dict))
+        excessive_arg_names = set(args_dict.keys()) - cb_arg_names
+        filtered_args_dict = {
+            arg_name: arg_value for arg_name, arg_value in args_dict.items()
+            if arg_name not in excessive_arg_names
+        } if excessive_arg_names else args_dict
+        if excessive_arg_names:
+            logger.warning(
+                'Excessive arguments passed to callback %(callable)s',
+                {'callable': callback},
+                extra={
+                    'callable': callback,
+                    'excessive-arg-names': excessive_arg_names,
+                    'passed-in-args': args_dict,
+                    'forwarded-args': filtered_args_dict,
+                },
+            )
+        return await try_await(callback(**filtered_args_dict))
     return callback_wrapper
