@@ -71,7 +71,7 @@ env:
   PYTHONIOENCODING: utf-8
   PYTHONUTF8: 1
   TOX_PARALLEL_NO_SPINNER: 1  # Disable tox's parallel run spinner animation
-  TOX_TESTENV_PASSENV: >-
+  TOX_TESTENV_PASSENV: >-  # Make tox-wrapped tools see color requests
     FORCE_COLOR
     MYPY_FORCE_COLOR
     NO_COLOR
