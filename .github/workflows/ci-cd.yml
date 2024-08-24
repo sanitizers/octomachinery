@@ -6,6 +6,9 @@ on:
   push:  # publishes to TestPyPI pushes to the main branch
     branches-ignore:
     - dependabot/**  # Dependabot always creates PRs
+    - maintenance/pip-tools-constraint-lockfiles  # Lock files through PRs
+    - maintenance/pip-tools-constraint-lockfiles-**  # Lock files through PRs
+    - patchback/backports/**  # Patchback always creates PRs
     - pre-commit-ci-update-config  # pre-commit.ci always creates a PR
   pull_request:
   schedule:
