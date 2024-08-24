@@ -85,6 +85,8 @@ env:
     PYTHONIOENCODING
     PYTHONLEGACYWINDOWSSTDIO
     PYTHONUTF8
+  UPSTREAM_REPOSITORY_ID: >-
+    164512032
 
 run-name: >-
   ${{
@@ -144,6 +146,7 @@ jobs:
       git-tag: ${{ steps.git-tag.outputs.tag }}
       sdist-artifact-name: ${{ steps.artifact-name.outputs.sdist }}
       wheel-artifact-name: ${{ steps.artifact-name.outputs.wheel }}
+      upstream-repository-id: ${{ env.UPSTREAM_REPOSITORY_ID }}
     steps:
     - name: Switch to using Python v3.11 by default
       uses: actions/setup-python@v5
@@ -651,6 +654,8 @@ jobs:
     - pre-setup  # transitive, for accessing settings
     if: >-
       fromJSON(needs.pre-setup.outputs.release-requested)
+      && needs.pre-setup.outputs.upstream-repository-id == github.repository_id
+
     runs-on: ubuntu-latest
 
     permissions:
@@ -681,6 +686,8 @@ jobs:
     if: >-
       fromJSON(needs.pre-setup.outputs.is-untagged-devel)
       || fromJSON(needs.pre-setup.outputs.release-requested)
+      && needs.pre-setup.outputs.upstream-repository-id == github.repository_id
+
     runs-on: ubuntu-latest
 
     permissions:
