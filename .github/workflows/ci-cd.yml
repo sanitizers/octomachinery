@@ -250,7 +250,7 @@ jobs:
     - name: Set up pip cache
       if: >-
         steps.request-check.outputs.release-requested != 'true'
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ steps.pip-cache-dir.outputs.dir }}
         key: >-
@@ -412,7 +412,7 @@ jobs:
       run: >-
         echo "dir=$(python -m pip cache dir)" >> "${GITHUB_OUTPUT}"
     - name: Set up pip cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ steps.pip-cache-dir.outputs.dir }}
         key: >-
@@ -579,7 +579,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Pip cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: >-
           ${{
