@@ -660,7 +660,9 @@ jobs:
     - check
     - pre-setup  # transitive, for accessing settings
     if: >-
-      fromJSON(needs.pre-setup.outputs.release-requested)
+      always()
+      && needs.check.result == 'success'
+      && fromJSON(needs.pre-setup.outputs.release-requested)
       && needs.pre-setup.outputs.upstream-repository-id == github.repository_id
 
     runs-on: ubuntu-latest
@@ -692,8 +694,12 @@ jobs:
     - check
     - pre-setup  # transitive, for accessing settings
     if: >-
-      fromJSON(needs.pre-setup.outputs.is-untagged-devel)
-      || fromJSON(needs.pre-setup.outputs.release-requested)
+      always()
+      && needs.check.result == 'success'
+      && (
+        fromJSON(needs.pre-setup.outputs.is-untagged-devel)
+        || fromJSON(needs.pre-setup.outputs.release-requested)
+      )
       && needs.pre-setup.outputs.upstream-repository-id == github.repository_id
 
     runs-on: ubuntu-latest
@@ -794,6 +800,9 @@ jobs:
     needs:
     - post-release-repo-update
     - pre-setup  # transitive, for accessing settings
+    if: >-
+      always()
+      && needs.post-release-repo-update.result == 'success'
     runs-on: ubuntu-latest
 
     permissions:
