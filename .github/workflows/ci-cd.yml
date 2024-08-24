@@ -13,6 +13,11 @@ on:
     - patchback/backports/**  # Patchback always creates PRs
     - pre-commit-ci-update-config  # pre-commit.ci always creates a PR
   pull_request:
+    types:
+    - opened  # default
+    - synchronize  # default
+    - reopened  # default
+    - ready_for_review  # used in PRs created from the release workflow
   schedule:
   - cron: 1 0 * * *  # Run daily at 0:01 UTC
   workflow_dispatch:
