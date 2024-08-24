@@ -67,6 +67,7 @@ env:
   PIP_NO_PYTHON_VERSION_WARNING: 1  # Hide "this Python is deprecated" message
   PIP_NO_WARN_SCRIPT_LOCATION: 1  # Hide "script dir is not in $PATH" message
   PRE_COMMIT_COLOR: always
+  PROJECT_NAME: octomachinery
   PY_COLORS: 1  # Recognized by the `py` package, dependency of `pytest`
   PYTHONIOENCODING: utf-8
   PYTHONUTF8: 1
@@ -324,11 +325,12 @@ jobs:
 
         FILE_APPEND_MODE = 'a'
 
+        dist_file_prj_base_name = '${{ env.PROJECT_NAME }}'.replace('-', '_')
         with Path(environ['GITHUB_OUTPUT']).open(
                 mode=FILE_APPEND_MODE,
         ) as outputs_file:
             print(
-                "sdist=octomachinery-${{
+                f"sdist={dist_file_prj_base_name !s}-${{
                     steps.request-check.outputs.release-requested == 'true'
                     && github.event.inputs.release-version
                     || steps.scm-version.outputs.dist-version
@@ -336,7 +338,7 @@ jobs:
                 file=outputs_file,
             )
             print(
-                "wheel=octomachinery-${{
+                f"wheel={dist_file_prj_base_name !s}-${{
                     steps.request-check.outputs.release-requested == 'true'
                     && github.event.inputs.release-version
                     || steps.scm-version.outputs.dist-version
@@ -664,7 +666,7 @@ jobs:
     environment:
       name: pypi
       url: >-
-        https://pypi.org/project/octomachinery/${{
+        https://pypi.org/project/${{ env.PROJECT_NAME }}/${{
           needs.pre-setup.outputs.dist-version
         }}
 
@@ -696,7 +698,7 @@ jobs:
     environment:
       name: testpypi
       url: >-
-        https://test.pypi.org/project/octomachinery/${{
+        https://test.pypi.org/project/${{ env.PROJECT_NAME }}/${{
           needs.pre-setup.outputs.dist-version
         }}
 
@@ -758,7 +760,7 @@ jobs:
       run: >-
         git tag
         -m '${{ needs.pre-setup.outputs.git-tag }}'
-        -m 'Published at https://pypi.org/project/octomachinery/${{
+        -m 'Published at https://pypi.org/project/${{ env.PROJECT_NAME }}/${{
           needs.pre-setup.outputs.dist-version
         }}'
         -m 'This release has been produced by the following workflow run: ${{
@@ -814,7 +816,7 @@ jobs:
 
 
           This release is published to
-          https://pypi.org/project/octomachinery/${{
+          https://pypi.org/project/${{ env.PROJECT_NAME }}/${{
             needs.pre-setup.outputs.dist-version
           }}.
 
