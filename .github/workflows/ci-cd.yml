@@ -1,6 +1,6 @@
 ---
 
-name: Build/Test/Publish
+name: 🧪
 
 on:
   push:  # publishes to TestPyPI pushes to the main branch
