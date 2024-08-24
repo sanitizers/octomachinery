@@ -498,17 +498,17 @@ jobs:
   tests:
     name: >-
       ${{
-        (matrix.toxenv == 'python' || matrix.toxenv == 'old-deps')
+        (matrix.toxenv == 'py' || matrix.toxenv == 'old-deps')
         && 'py' || ''
       }}${{
-        (matrix.toxenv == 'python' || matrix.toxenv == 'old-deps')
+        (matrix.toxenv == 'py' || matrix.toxenv == 'old-deps')
         && matrix.python-version || matrix.toxenv
       }}
       ${{ matrix.toxenv == 'old-deps' && '|' || '' }}
       ${{ matrix.toxenv == 'old-deps' && matrix.toxenv || '' }}
       |
       ${{
-        (matrix.toxenv == 'python' || matrix.toxenv == 'old-deps')
+        (matrix.toxenv == 'py' || matrix.toxenv == 'old-deps')
         && matrix.runner-vm-os || 'tox'
       }}
     needs:
@@ -536,7 +536,7 @@ jobs:
         - ubuntu-20.04
         - macOS-latest
         toxenv:
-        - python
+        - py
         - old-deps
         include:
         - os: ubuntu-latest
