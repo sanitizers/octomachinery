@@ -600,6 +600,11 @@ jobs:
         - runner-vm-os: ubuntu-latest
           python-version: 3.9
           toxenv: build-dists
+        exclude:
+        - runner-vm-os: macos-14
+          python-version: 3.7
+        - runner-vm-os: ubuntu-20.04
+          python-version: 3.7
 
     continue-on-error: >-
       ${{
