@@ -119,6 +119,9 @@ jobs:
     name: ⚙️ Pre-set global build settings
 
     runs-on: ubuntu-latest
+
+    timeout-minutes: 1
+
     defaults:
       run:
         shell: python
@@ -374,6 +377,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    timeout-minutes: 2
+
     env:
       TOXENV: build-dists
 
@@ -518,6 +523,8 @@ jobs:
 
     runs-on: ${{ matrix.runner-vm-os }}
 
+    timeout-minutes: ${{ matrix.toxenv == 'py' && 5 || 2 }}
+
     strategy:
       fail-fast: true
       matrix:
@@ -651,6 +658,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    timeout-minutes: 1
+
     steps:
     - name: Decide whether the needed jobs succeeded or failed
       uses: re-actors/alls-green@release/v1
@@ -675,6 +684,8 @@ jobs:
       && needs.pre-setup.outputs.upstream-repository-id == github.repository_id
 
     runs-on: ubuntu-latest
+
+    timeout-minutes: 1
 
     environment:
       name: pypi
@@ -714,6 +725,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    timeout-minutes: 1
+
     environment:
       name: testpypi
       url: >-
@@ -747,6 +760,8 @@ jobs:
     - pre-setup  # transitive, for accessing settings
 
     runs-on: ubuntu-latest
+
+    timeout-minutes: 1
 
     steps:
     - name: >-
@@ -817,6 +832,8 @@ jobs:
       && needs.post-release-repo-update.result == 'success'
 
     runs-on: ubuntu-latest
+
+    timeout-minutes: 1
 
     permissions:
       contents: write
