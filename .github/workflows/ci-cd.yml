@@ -377,7 +377,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    timeout-minutes: 2
+    timeout-minutes: 1
 
     env:
       TOXENV: build-dists
@@ -562,7 +562,7 @@ jobs:
 
     runs-on: ${{ matrix.runner-vm-os }}
 
-    timeout-minutes: ${{ matrix.toxenv == 'py' && 5 || 2 }}
+    timeout-minutes: 2
 
     strategy:
       fail-fast: true
