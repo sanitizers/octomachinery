@@ -588,16 +588,16 @@ jobs:
         - py
         - old-deps
         include:
-        - os: ubuntu-latest
+        - runner-vm-os: ubuntu-latest
           python-version: 3.9
           toxenv: pre-commit
-        - os: ubuntu-latest
+        - runner-vm-os: ubuntu-latest
           python-version: 3.9
           toxenv: check-docs
-        - os: ubuntu-latest
+        - runner-vm-os: ubuntu-latest
           python-version: 3.9
           toxenv: build-docs
-        - os: ubuntu-latest
+        - runner-vm-os: ubuntu-latest
           python-version: 3.9
           toxenv: build-dists
 
