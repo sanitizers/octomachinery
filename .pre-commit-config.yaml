@@ -5,37 +5,6 @@ ci:
 
 repos:
 
-- repo: local
-  hooks:
-  - id: enforced-flake8-version
-    name: Verify that enforced flake8 version stays unchanged
-    description: >-
-      This is a sanity check and fixer that makes sure that
-      the `flake8` version in this file remains matching the
-      corresponding request in the `# enforce-version` comment.
-    # Using Python here because using
-    # shell test does not always work in CIs:
-    entry: >-
-      python -c 'import pathlib, re, sys;
-      pre_commit_config = pathlib.Path(sys.argv[1]);
-      cfg_txt = pre_commit_config.read_text();
-      new_cfg_txt = re.sub(
-      r"(?P<spaces>\s+)rev:\s(?:\d+\.\d+\.\d+)\s{0,2}"
-      r"#\senforce-version:\s(?P<enforced_version>\d+\.\d+\.\d+)"
-      r"[ \t\f\v]*",
-      r"\g<spaces>rev: \g<enforced_version>  "
-      r"# enforce-version: \g<enforced_version>",
-      cfg_txt,
-      );
-      cfg_txt != new_cfg_txt and
-      pre_commit_config.write_text(new_cfg_txt)
-      '
-    pass_filenames: true
-    language: system
-    files: >-
-      ^\.pre-commit-config\.ya?ml$
-    types:
-    - yaml
 
 - repo: https://github.com/asottile/add-trailing-comma.git
   rev: v3.1.0
@@ -124,7 +93,7 @@ repos:
     - --strict
 
 - repo: https://github.com/PyCQA/flake8.git
-  rev: 6.1.0
+  rev: 7.1.1
   hooks:
   - id: flake8
     alias: flake8-no-wps
@@ -143,8 +112,7 @@ repos:
     language_version: python3
 
 - repo: https://github.com/PyCQA/flake8.git
-  # NOTE: This is kept at v4 for until WPS starts supporting flake v5.
-  rev: 4.0.1  # enforce-version: 4.0.1
+  rev: 7.1.1
   hooks:
   - id: flake8
     alias: flake8-only-wps
@@ -153,7 +121,7 @@ repos:
     - --select
     - WPS
     additional_dependencies:
-    - wemake-python-styleguide ~= 0.17.0
+    - wemake-python-styleguide ~= 0.19.2
     language_version: python3
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
