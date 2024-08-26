@@ -118,9 +118,9 @@ async def route_github_event(  # type: ignore[return]  # FIXME
         )
         delivery_id_msg = (
             '' if is_gh_action
-            else ' (Delivery ID: '  # type: ignore[attr-defined]
+            else ' (Delivery ID: '
             # FIXME:  # pylint: disable=fixme
-            f'{github_event.delivery_id!s})'
+            f'{github_event.delivery_id!s})'  # type: ignore[attr-defined]
         )
         logger.debug(
             'The payload of "%s" event%s is: %r',
