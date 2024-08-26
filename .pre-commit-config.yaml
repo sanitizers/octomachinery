@@ -1,4 +1,8 @@
 ---
+
+ci:
+  autoupdate_schedule: quarterly  # low frequency to reduce maintenance noise
+
 repos:
 
 - repo: local
