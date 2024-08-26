@@ -237,7 +237,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/PyCQA/pylint.git
-  rev: v2.17.6
+  rev: v3.2.6
   hooks:
   - id: pylint
     additional_dependencies:
@@ -254,7 +254,7 @@ repos:
     - sentry_sdk
     - setuptools_scm
     # test deps:
-    - pylint-pytest < 1.1.0
+    - pylint-pytest ~= 2.0.0a0
     - pytest
     - pytest-aiohttp
     - pytest-cov
