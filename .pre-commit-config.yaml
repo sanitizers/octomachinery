@@ -175,10 +175,6 @@ repos:
     - -p
     - tests
     pass_filenames: false
-
-- repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.6.1
-  hooks:
   - id: mypy
     alias: mypy-py310
     name: MyPy, for Python 3.10
@@ -199,10 +195,6 @@ repos:
     - -p
     - tests
     pass_filenames: false
-
-- repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.6.1
-  hooks:
   - id: mypy
     alias: mypy-py38
     name: MyPy, for Python 3.8
@@ -223,10 +215,6 @@ repos:
     - -p
     - tests
     pass_filenames: false
-
-- repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.6.1
-  hooks:
   - id: mypy
     alias: mypy-py37
     name: MyPy, for Python 3.7
