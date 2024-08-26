@@ -115,7 +115,7 @@ class GitHubApp:
     async def get_installation_by_id(self, install_id):
         """Retrieve an installation with access tokens via API."""
         return GitHubAppInstallation(
-            dict_to_kwargs_cb(GitHubAppInstallationModel)(
+            await dict_to_kwargs_cb(GitHubAppInstallationModel)(
                 await self.api_client.getitem(
                     '/app/installations/{installation_id}',
                     url_vars={'installation_id': install_id},
