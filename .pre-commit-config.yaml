@@ -7,24 +7,24 @@ repos:
 
 
 - repo: https://github.com/asottile/add-trailing-comma.git
-  rev: v3.1.0
+  rev: v4.0.0
   hooks:
   - id: add-trailing-comma
 
 - repo: https://github.com/PyCQA/isort.git
-  rev: 5.13.2
+  rev: 9.0.0a3
   hooks:
   - id: isort
     args:
     - --honor-noqa
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks.git
-  rev: v1.5.5
+  rev: v1.5.6
   hooks:
   - id: remove-tabs
 
 - repo: https://github.com/python-jsonschema/check-jsonschema.git
-  rev: 0.29.1
+  rev: 0.37.4
   hooks:
   - id: check-github-workflows
     files: ^\.github/workflows/[^/]+$
@@ -47,7 +47,7 @@ repos:
     files: README.rst
 
 - repo: https://github.com/pre-commit/pre-commit-hooks.git
-  rev: v4.6.0
+  rev: v6.0.0
   hooks:
   # Side-effects:
   - id: trailing-whitespace
@@ -78,12 +78,12 @@ repos:
   - id: pydocstyle
 
 - repo: https://github.com/codespell-project/codespell.git
-  rev: v2.3.0
+  rev: v2.4.2
   hooks:
   - id: codespell
 
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.35.1
+  rev: v1.38.0
   hooks:
   - id: yamllint
     types:
@@ -93,7 +93,7 @@ repos:
     - --strict
 
 - repo: https://github.com/PyCQA/flake8.git
-  rev: 7.1.1
+  rev: 7.3.0
   hooks:
   - id: flake8
     alias: flake8-no-wps
@@ -112,7 +112,7 @@ repos:
     language_version: python3
 
 - repo: https://github.com/PyCQA/flake8.git
-  rev: 7.1.1
+  rev: 7.3.0
   hooks:
   - id: flake8
     alias: flake8-only-wps
@@ -125,7 +125,7 @@ repos:
     language_version: python3.11  # flake8-commas doesn't work w/ Python 3.12
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.11.2
+  rev: v2.1.0
   hooks:
   - id: mypy
     alias: mypy-py313
@@ -209,7 +209,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/PyCQA/pylint.git
-  rev: v3.2.6
+  rev: v4.0.6
   hooks:
   - id: pylint
     additional_dependencies:
