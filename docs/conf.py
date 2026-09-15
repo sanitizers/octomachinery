@@ -295,6 +295,13 @@ intersphinx_mapping = {
     'tutorial': ('https://tutorial.octomachinery.dev/en/latest/', None),
 }
 
+# -- Options for linkcheck builder -------------------------------------------
+
+# NOTE: Matrix.to is a JS app, its `#/...` anchors aren't present in HTML
+linkcheck_anchors_ignore_for_url = [
+    r'https://matrix\.to/',
+]
+
 # -- Options for todo extension ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
