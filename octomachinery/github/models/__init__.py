@@ -1,11 +1,11 @@
 """Models representing objects in GitHub API."""
 
 import typing
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import attr
 
-from .utils import SecretStr, convert_datetime
+from .utils import MAX_CLOCK_SKEW_SECONDS, SecretStr, convert_datetime
 
 
 @attr.dataclass
@@ -94,5 +94,8 @@ class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
 
     @property
     def expired(self):
-        """Check whether this token has expired already."""
-        return datetime.now(timezone.utc) > self.expires_at
+        """Check whether this token has expired or is about to."""
+        # NOTE: Refreshing early keeps requests sent right before the expiry
+        # NOTE: from being rejected due to clock drift or network latency.
+        clock_skew = timedelta(seconds=MAX_CLOCK_SKEW_SECONDS)
+        return datetime.now(timezone.utc) + clock_skew > self.expires_at
