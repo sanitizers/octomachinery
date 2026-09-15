@@ -5,6 +5,10 @@ from datetime import datetime, timezone
 from functools import singledispatch
 
 
+MAX_CLOCK_SKEW_SECONDS = 60
+"""Tolerated clock offset between this host and GitHub, in seconds."""
+
+
 @singledispatch
 def convert_datetime(datetime_obj) -> datetime:
     """Convert arbitrary object into a datetime instance."""
