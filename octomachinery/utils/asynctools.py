@@ -1,6 +1,7 @@
 """Asynchronous tools set."""
 
 from functools import wraps
+from inspect import isawaitable as _is_awaitable
 from inspect import signature as _inspect_signature
 from logging import getLogger as _get_logger
 from operator import itemgetter
@@ -66,19 +67,8 @@ async def aio_gather(*aio_tasks):
 
 async def try_await(potentially_awaitable):
     """Try awaiting the arg and return it regardless."""
-    valid_exc_str = (
-        "can't be used in 'await' expression"
-    )
-
-    try:
+    if _is_awaitable(potentially_awaitable):
         return await potentially_awaitable
-    except TypeError as type_err:
-        type_err_msg = str(type_err)
-        if not (
-                type_err_msg.startswith('object ')
-                and type_err_msg.endswith(valid_exc_str)
-        ):
-            raise
 
     return potentially_awaitable
 
