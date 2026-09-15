@@ -98,7 +98,7 @@ def test_github_private_key__make_jwt_for(
     payload = parse_jwt(
         jwt_string.encode('utf-8'), rsa_public_key_bytes, algorithms='RS256',
     )
-    assert payload['iss'] == github_app_id
+    assert payload['iss'] == str(github_app_id)
     assert payload['exp'] - payload['iat'] == 60
 
 

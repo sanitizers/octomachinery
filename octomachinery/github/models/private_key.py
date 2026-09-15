@@ -139,7 +139,9 @@ class GitHubPrivateKey:
         payload = {
             'iat': now,
             'exp': now + time_offset,
-            'iss': app_id,
+            # NOTE: PyJWT 2.10+ rejects non-string issuers.
+            # Ref: https://github.com/jpadilla/pyjwt/issues/1039
+            'iss': str(app_id),
         }
 
         return compute_jwt(
