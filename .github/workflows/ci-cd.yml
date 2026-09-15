@@ -583,7 +583,7 @@ jobs:
         - ubuntu-24.04
         - ubuntu-22.04
         - macos-14  # ARM64
-        - macos-13  # Intel
+        - macos-15-intel  # Intel
         toxenv:
         - py
         - old-deps
@@ -603,7 +603,7 @@ jobs:
         exclude:
         - runner-vm-os: macos-14
           python-version: 3.7
-        - runner-vm-os: ubuntu-20.04
+        - runner-vm-os: ubuntu-24.04
           python-version: 3.7
 
     continue-on-error: >-
