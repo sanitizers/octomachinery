@@ -10,6 +10,9 @@ build:
     # NOTE: `docs/conf.py` uses `importlib.metadata`, which needs Python 3.8+.
     python: "3.11"
 
+sphinx:
+  configuration: docs/conf.py
+
 python:
   install:
   # - requirements: .docs-requirements.txt
