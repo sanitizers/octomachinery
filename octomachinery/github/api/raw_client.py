@@ -1,14 +1,33 @@
 """A very low-level GitHub API client."""
 
+import logging
 from inspect import iscoroutinefunction
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Dict, Mapping, Optional, Tuple, Union
 
+from aiohttp.client_exceptions import (
+    ClientConnectorError, ClientOSError, ServerDisconnectedError,
+)
 from gidgethub.abc import JSON_CONTENT_TYPE
 from gidgethub.aiohttp import GitHubAPI
 
 # pylint: disable=relative-beyond-top-level
 from .tokens import GitHubJWTToken, GitHubOAuthToken, GitHubToken
 from .utils import accept_preview_version, mark_uninitialized_in_repr
+
+
+logger = logging.getLogger(__name__)
+
+
+IDEMPOTENT_HTTP_METHODS = frozenset({
+    'DELETE', 'GET', 'HEAD', 'OPTIONS', 'PUT', 'TRACE',
+})
+"""HTTP methods that are safe to repeat per RFC 9110, section 9.2.2."""
+
+TRANSIENT_REQUEST_ATTEMPTS = 3
+"""How many times to send an idempotent request before giving up."""
+
+TRANSIENT_RETRY_BASE_DELAY = 0.5
+"""Seconds to wait before the first retry, doubled on each next one."""
 
 
 @mark_uninitialized_in_repr
@@ -45,6 +64,36 @@ class RawGitHubAPI(GitHubAPI):
             f'user_agent={self.requester!r}'
         )
         return f'{cls_name}({init_args})'
+
+    async def _request(
+            self, method: str, url: str,
+            headers: Mapping[str, str], body: bytes = b'',
+    ) -> Tuple[int, Mapping[str, str], bytes]:
+        """Send an HTTP request, retrying idempotent ones on disconnects.
+
+        The server or a middlebox may drop a connection before the
+        response arrives. For idempotent methods, repeating the request
+        is safe. Other methods are not retried because the server may
+        have processed the request already. Connection establishment
+        errors are not retried either, matching aiohttp's own policy.
+        """
+        for attempt in range(1, TRANSIENT_REQUEST_ATTEMPTS):
+            try:
+                return await super()._request(method, url, headers, body)
+            except ClientConnectorError:
+                raise
+            except (ClientOSError, ServerDisconnectedError) as conn_err:
+                if method not in IDEMPOTENT_HTTP_METHODS:
+                    raise
+                retry_delay = TRANSIENT_RETRY_BASE_DELAY * 2 ** (attempt - 1)
+                logger.warning(
+                    'GitHub API connection failed during %s %s: %r. '
+                    'Retrying in %s seconds (attempt %d of %d)...',
+                    method, url, conn_err, retry_delay,
+                    attempt + 1, TRANSIENT_REQUEST_ATTEMPTS,
+                )
+                await self.sleep(retry_delay)
+        return await super()._request(method, url, headers, body)
 
     # pylint: disable=arguments-differ
     # pylint: disable=keyword-arg-before-vararg
