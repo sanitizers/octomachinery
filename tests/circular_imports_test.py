@@ -122,6 +122,16 @@ def test_no_warnings(import_path):
         '-W', 'ignore:VendorImporter.find_spec() not found; '
         'falling back to find_module():ImportWarning:',
 
+        # NOTE: Triggered by the `octomachinery.utils.versiontools`
+        # NOTE: command via `tox -e old-deps` (`packaging < 22`):
+        '-W', 'ignore:Creating a LegacyVersion has been deprecated and will '
+        'be removed in the next major release:DeprecationWarning:',
+
+        # NOTE: `cryptography` warns on import under EOL Pythons:
+        '-W', f'ignore:Python {sys.version_info.major}.'
+        f'{sys.version_info.minor} is no longer supported by the Python '
+        'core team:Warning:',
+
         # NOTE: Triggered by the `octomachinery.routing.routers`
         # NOTE: command via `tox -e old-deps`:
         '-W', "ignore:'cgi' is deprecated and slated for removal "
