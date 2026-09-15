@@ -102,6 +102,7 @@ class GitHubApp:
             token=self.gh_jwt,
             session=self._http_session,
             user_agent=self._config.user_agent,
+            base_url=self._config.api_base_url,
         )
 
     async def get_installation(self, event):

@@ -71,4 +71,6 @@ class GitHubAppInstallation:
             session=self.app._http_session,
             # pylint: disable=protected-access
             user_agent=self.app._config.user_agent,
+            # pylint: disable=protected-access
+            base_url=self.app._config.api_base_url,
         )

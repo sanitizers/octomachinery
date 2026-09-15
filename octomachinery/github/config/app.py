@@ -1,4 +1,6 @@
 """Config schema for a GitHub App instance details."""
+from gidgethub.sansio import DOMAIN as GITHUB_API_URL
+
 import environ
 
 # pylint: disable=relative-beyond-top-level
@@ -69,6 +71,16 @@ class GitHubAppIntegrationConfig:  # pylint: disable=too-few-public-methods
     app_name = environ.var(None, name='OCTOMACHINERY_APP_NAME')
     app_version = environ.var(None, name='OCTOMACHINERY_APP_VERSION')
     app_url = environ.var(None, name='OCTOMACHINERY_APP_URL')
+
+    ghe_host = environ.var(None, name='GHE_HOST')
+    ghe_protocol = environ.var(None, name='GHE_PROTOCOL')
+
+    @property
+    def api_base_url(self):  # noqa: D401
+        """The GitHub API root URL, GitHub Enterprise one if configured."""
+        if not self.ghe_host:
+            return GITHUB_API_URL
+        return f'{self.ghe_protocol or "https"}://{self.ghe_host}/api/v3'
 
     @property
     def user_agent(self):  # noqa: D401

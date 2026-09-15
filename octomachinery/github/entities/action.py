@@ -59,4 +59,8 @@ class GitHubAction(GitHubApp):
             token=self.token,
             session=self._http_session,
             user_agent=self._config.user_agent,
+            base_url=(
+                self._metadata.api_url  # pylint: disable=no-member
+                or self._config.api_base_url
+            ),
         )

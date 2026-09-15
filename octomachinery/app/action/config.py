@@ -44,3 +44,6 @@ class GitHubActionConfig:  # pylint: disable=too-few-public-methods
         None, name='GITHUB_TOKEN',
         converter=lambda t: t if t is None else SecretStr(t),
     )
+    api_url = environ.var(
+        None, name='GITHUB_API_URL',
+    )
