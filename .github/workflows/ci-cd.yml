@@ -407,7 +407,10 @@ jobs:
         runner-vm-os:
         - ubuntu-latest
         python-version:
-        - 3.9
+        # NOTE: `.pre-commit-config.yaml` pins one hook to
+        # NOTE: `language_version: python3.11`, so that interpreter must be
+        # NOTE: on `${PATH}` for `virtualenv`'s discovery to find it.
+        - 3.11
         toxenv:
         - pre-commit
         - check-docs
