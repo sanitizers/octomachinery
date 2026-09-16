@@ -23,8 +23,35 @@ def current_event_loop():
     try:
         yield loop
     finally:
+        _shut_down_event_loop(loop)
         asyncio.set_event_loop(None)
         loop.close()
+
+
+def _shut_down_event_loop(loop):
+    """Drain the leftovers of the event loop before closing it.
+
+    Closing a loop right away leaves the fire-and-forget tasks and the
+    transports that only complete closing on the next iteration hanging
+    around. The garbage collector then emits a ``ResourceWarning`` for
+    each of them, which ``pytest`` turns into an error attributed to
+    whatever test happens to be running at that moment.
+    """
+    leftover_tasks = [
+        task for task in asyncio.all_tasks(loop) if not task.done()
+    ]
+    for task in leftover_tasks:
+        task.cancel()
+    if leftover_tasks:
+        loop.run_until_complete(
+            asyncio.gather(*leftover_tasks, return_exceptions=True),
+        )
+
+    loop.run_until_complete(loop.shutdown_asyncgens())
+
+    # NOTE: `transport.close()` only schedules the connection loss
+    # NOTE: callback, so the loop needs one more iteration to invoke it.
+    loop.run_until_complete(asyncio.sleep(0))
 
 
 @pytest.fixture

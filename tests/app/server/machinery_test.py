@@ -97,8 +97,15 @@ def github_app(
 
 @pytest.fixture
 async def octomachinery_app_server_runner(github_app):
-    """Set up an HTTP handler for webhooks."""
-    return await setup_server_runner(github_app)
+    """Set up an HTTP handler for webhooks and tear it down after."""
+    aiohttp_server_runner = await setup_server_runner(github_app)
+    try:
+        yield aiohttp_server_runner
+    finally:
+        # NOTE: Stopping the site only closes the listening socket. The
+        # NOTE: runner clean-up is what shuts down the connections that
+        # NOTE: have already been accepted, along with their transports.
+        await aiohttp_server_runner.cleanup()
 
 
 @pytest.fixture
