@@ -22,7 +22,7 @@ Runtime pre-requisites
      those. One example of such tool is `Pipenv`_.
 
      .. _`Pipenv`:
-        https://pipenv.readthedocs.io/en/latest/advanced/
+        https://pipenv.pypa.io/en/latest/advanced.html
         #automatic-loading-of-env
 
   For the production deployments, please use a way of supplying env vars

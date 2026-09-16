@@ -144,6 +144,16 @@ exclude_patterns = []
 # pygments_dark_style = 'monokai'
 
 
+# -- Options for linkcheck builder -------------------------------------------
+
+# matrix.to is a client-side JS app: it serves the same static HTML for every
+# room and resolves the `#/...` fragment in the browser, so no such anchor can
+# ever be found in the fetched markup.
+linkcheck_anchors_ignore_for_url = (
+    r'https://matrix\.to/.*',
+)
+
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
