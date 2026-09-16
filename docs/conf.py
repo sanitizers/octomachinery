@@ -153,6 +153,12 @@ linkcheck_anchors_ignore_for_url = (
     r'https://matrix\.to/.*',
 )
 
+# The Tidelift subscription URL redirects to `www.sonarsource.com`, which sits
+# behind a bot filter that drops the connection on requests coming from CI.
+linkcheck_ignore = [
+    r'https://tidelift\.com/subscription/pkg/.*',
+]
+
 
 # -- Options for HTML output -------------------------------------------------
 
