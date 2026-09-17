@@ -184,6 +184,7 @@ repos:
     additional_dependencies:
     - .
     - attrs
+    - typed-ast
     - types-PyYAML
     args:
     - --namespace-packages
