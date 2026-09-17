@@ -32,7 +32,9 @@ def get_supported_pythons(classifiers):
     vers = map(lambda c: c[len(py_ver_classifier):], vers)
     vers = filter(lambda c: c[0].isdigit() and '.' in c, vers)
     vers = map(lambda c: tuple(c.split('.')), vers)
-    vers = sorted(vers)
+    # NOTE: Sorted numerically — a plain sort would order the string
+    # NOTE: tuples lexicographically, putting '3.10' before '3.9'.
+    vers = sorted(vers, key=lambda v: tuple(map(int, v)))
     del vers[1:-1]
     if len(vers) < 2:
         vers *= 2
