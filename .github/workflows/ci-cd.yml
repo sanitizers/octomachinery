@@ -471,13 +471,11 @@ jobs:
         # NOTE: to improve the responsiveness. It's nice to see the most
         # NOTE: important results first.
         - ~3.13.0-0
-        - 3.7
+        - 3.9
         - 3.12
         - 3.11
         - >-
           3.10
-        - 3.9
-        - 3.8
         runner-vm-os:
         - ubuntu-24.04
         - ubuntu-22.04
@@ -488,11 +486,6 @@ jobs:
         - old-deps
         xfail:
         - false
-        exclude:
-        - runner-vm-os: macos-14
-          python-version: 3.7
-        - runner-vm-os: ubuntu-24.04
-          python-version: 3.7
 
     uses: tox-dev/workflow/.github/workflows/reusable-tox.yml@1bb961580e20073f66ccb9024f248357f8c8fecb  # yamllint disable-line rule:line-length
     with:

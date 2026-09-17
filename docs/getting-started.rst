@@ -9,7 +9,7 @@ write them with octomachinery.
 Runtime pre-requisites
 ----------------------
 
-* Python 3.7+ as octomachinery relies on :py:mod:`contextvars` which
+* Python 3.9+ as octomachinery relies on :py:mod:`contextvars` which
   doesn't have a backport.
 * GitHub App credentials and GitHub Action events are supplied via
   environment variables. They are also loaded from a ``.env`` file if it
