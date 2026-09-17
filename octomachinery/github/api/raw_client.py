@@ -48,7 +48,7 @@ class RawGitHubAPI(GitHubAPI):
 
     # pylint: disable=arguments-differ
     # pylint: disable=keyword-arg-before-vararg
-    # pylint: disable=too-many-arguments
+    # pylint: disable-next=too-many-arguments,too-many-positional-arguments
     async def _make_request(
             self, method: str, url: str, url_vars: Dict[str, str],
             data: Any, accept: Union[str, None] = None,
