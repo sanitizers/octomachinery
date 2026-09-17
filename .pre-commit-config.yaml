@@ -217,7 +217,7 @@ repos:
     # test deps:
     - pylint-pytest ~= 2.0.0a0
     - pytest
-    - pytest-aiohttp
+    - pytest-asyncio
     - pytest-cov
     - pytest-xdist
 
