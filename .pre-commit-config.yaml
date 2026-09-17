@@ -112,7 +112,10 @@ repos:
     # NOTE: `flake8-logging-format` imports `pkg_resources`, which
     # NOTE: setuptools v81+ deprecated and v84 dropped entirely.
     - setuptools < 81
-    language_version: python3
+    # NOTE: `flake8-annotations` v2 imports `ast.Ellipsis`, which
+    # NOTE: Python 3.14 dropped, and pre-commit.ci runs the hooks
+    # NOTE: under Python 3.14 unless pinned otherwise.
+    language_version: python3.11
 
 - repo: https://github.com/PyCQA/flake8.git
   rev: 7.1.1
