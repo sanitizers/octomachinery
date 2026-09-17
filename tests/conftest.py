@@ -16,7 +16,8 @@ def current_event_loop():
 
     ``anyio < 2`` runs async tests and fixtures in the loop returned by
     ``asyncio.get_event_loop()`` so one must be set explicitly. This
-    replaces the ``event_loop`` fixture removed in ``pytest-asyncio`` 1.0.
+    stands in for the ``event_loop`` fixture that ``pytest-asyncio`` used
+    to provide, which is no longer installed at all.
     """
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
