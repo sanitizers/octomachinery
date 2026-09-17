@@ -6,10 +6,10 @@ full list see the documentation:
 http://www.sphinx-doc.org/en/master/config
 """
 
-from email import message_from_string
+from importlib.metadata import metadata
 from itertools import chain
 
-import pkg_resources
+from packaging.version import Version
 
 
 # -- Path setup --------------------------------------------------------------
@@ -53,9 +53,7 @@ def get_github_data(project_urls):
 
 PYTHON_DISTRIBUTION_NAME = 'octomachinery'
 
-PRJ_DIST = pkg_resources.get_distribution(PYTHON_DISTRIBUTION_NAME)
-PRJ_PKG_INFO = PRJ_DIST.get_metadata(PRJ_DIST.PKG_INFO)
-PRJ_META = message_from_string(PRJ_PKG_INFO)
+PRJ_META = metadata(PYTHON_DISTRIBUTION_NAME)
 PRJ_AUTHOR = PRJ_META['Author']
 PRJ_LICENSE = PRJ_META['License']
 PRJ_SUMMARY = PRJ_META['Summary']
@@ -69,15 +67,15 @@ PRJ_GITHUB_USER, PRJ_GITHUB_REPO = get_github_data(
     ),
 )
 
-project = PRJ_DIST.project_name  # pylint: disable=invalid-name
+project = PRJ_META['Name']  # pylint: disable=invalid-name
 author = PRJ_AUTHOR  # pylint: disable=invalid-name
 copyright = f'2019, {author}'  # pylint: disable=invalid-name,redefined-builtin
 
 # The full version, including alpha/beta/rc tags
-release = PRJ_DIST.version  # pylint: disable=invalid-name
+release = PRJ_META['Version']  # pylint: disable=invalid-name
 # The short X.Y version
 # pylint: disable=invalid-name
-version = pkg_resources.parse_version(release).base_version
+version = Version(release).base_version
 
 rst_epilog = f"""
 .. |project| replace:: {project}
