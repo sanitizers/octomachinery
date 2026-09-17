@@ -13,6 +13,12 @@ ko_fi: webknjaz
 
 liberapay: webknjaz
 
+open_collective: webknjaz
+
 tidelift: pypi/octomachinery
+
+# patreon: webknjaz  # not in use because of the ties with ruscism
+
+thanks_dev: u/gh/webknjaz
 
 ...
