@@ -65,7 +65,8 @@ def run_async(orig_async_func: Callable[..., Any]):
 )
 @click.pass_context
 @run_async
-async def receive(  # pylint: disable=too-many-arguments,too-many-locals
+# pylint: disable=too-many-arguments,too-many-positional-arguments,too-many-locals
+async def receive(
         ctx: click.Context,
         event: str, event_payload: TextIOWrapper,
         token: str,
