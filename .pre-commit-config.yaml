@@ -199,6 +199,7 @@ repos:
     - -p
     - tests
     pass_filenames: false
+    language_version: python3.11  # typed-ast doesn't work w/ Python 3.14
 
 - repo: https://github.com/PyCQA/pylint.git
   rev: v4.0.6
