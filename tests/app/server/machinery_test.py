@@ -66,10 +66,8 @@ def octomachinery_config_server(octomachinery_config):
 
 
 @pytest.fixture
-async def aiohttp_client_session(event_loop) -> ClientSession:
+async def aiohttp_client_session() -> ClientSession:
     """Initialize an aiohttp HTTP client session."""
-    # `event_loop` is requested to bind the session to the running loop:
-    # pylint: disable=unused-argument
     async with ClientSession() as http_session:
         yield http_session
 
