@@ -10,7 +10,7 @@ from ..models.utils import SecretStr
 def validate_is_not_none_if_app(
         self,  # pylint: disable=unused-argument
         attr, value,
-):
+) -> None:
     """Forbid None value in a GitHub App context."""
     # pylint: disable=relative-beyond-top-level,import-outside-toplevel
     from ...app.runtime.utils import detect_env_mode
@@ -21,7 +21,7 @@ def validate_is_not_none_if_app(
         )
 
 
-def validate_fingerprint_if_present(instance, _attribute, value):
+def validate_fingerprint_if_present(instance, _attribute, value) -> None:
     r"""Validate that the private key matches the fingerprint pin.
 
     :raises ValueError: if the fingerprint pin is present \
@@ -71,6 +71,6 @@ class GitHubAppIntegrationConfig:  # pylint: disable=too-few-public-methods
     app_url = environ.var(None, name='OCTOMACHINERY_APP_URL')
 
     @property
-    def user_agent(self):  # noqa: D401
+    def user_agent(self) -> str:  # noqa: D401
         """The User-Agent value to use when hitting GitHub API."""
         return f'{self.app_name}/{self.app_version} (+{self.app_url})'

@@ -41,7 +41,7 @@ class BotAppConfig:
             app_name: Optional[str] = None,
             app_version: Optional[str] = None,
             app_url: Optional[str] = None,
-    ):
+    ) -> 'BotAppConfig':
         """Return an initialized dev config instance.
 
         Read .env into env vars before that.
@@ -63,7 +63,7 @@ class BotAppConfig:
             app_name: Optional[str] = None,
             app_version: Optional[str] = None,
             app_url: Optional[str] = None,
-    ):
+    ) -> 'BotAppConfig':
         """Return an initialized config instance."""
         env_vars = dict(os.environ)
         if app_name is not None:

@@ -20,6 +20,8 @@ from ..models.events import GidgetHubActionEvent
 if typing.TYPE_CHECKING:
     # pylint: disable=relative-beyond-top-level
     from ...app.action.config import GitHubActionConfig
+    # pylint: disable=relative-beyond-top-level
+    from ..models.events import GitHubEvent
 
 
 logger = logging.getLogger(__name__)
@@ -33,12 +35,12 @@ class GitHubAction(GitHubApp):
     """A GitHub Action metadata from envronment vars."""
 
     @_metadata.validator
-    def _verify_metadata_is_set(self, attribute, value):
+    def _verify_metadata_is_set(self, attribute, value) -> None:
         if value is None:
             raise ValueError(f'{attribute} must be set.')
 
     @property
-    def event(self):  # noqa: D401
+    def event(self) -> GitHubEvent:  # noqa: D401
         """Parsed GitHub Action event data."""
         return GidgetHubActionEvent.from_file(
             self._metadata.event_name,  # pylint: disable=no-member
@@ -46,14 +48,14 @@ class GitHubAction(GitHubApp):
         )
 
     @property
-    def token(self):
+    def token(self) -> GitHubOAuthToken:
         """Return GitHub Action access token."""
         return GitHubOAuthToken(
             self._metadata.token,  # pylint: disable=no-member
         )
 
     @property
-    def api_client(self):  # noqa: D401
+    def api_client(self) -> RawGitHubAPI:  # noqa: D401
         """The GitHub App client."""
         return RawGitHubAPI(
             token=self.token,

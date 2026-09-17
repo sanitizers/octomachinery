@@ -13,7 +13,7 @@ class ContextLookupError(AttributeError):
 class _ContextMap:
     __slots__ = '__map__', '__token_map__'
 
-    def __init__(self, **initial_vars):
+    def __init__(self, **initial_vars: typing.Any) -> None:
         self.__map__: typing.Dict[str, ContextVar[typing.Any]] = {
             k: ContextVar(v) for k, v in initial_vars.items()
         }
@@ -22,11 +22,11 @@ class _ContextMap:
         self.__token_map__: typing.Dict[str, Token[typing.Any]] = {}
         """Storage for individual context var reset tokens."""
 
-    def __dir__(self):
+    def __dir__(self) -> typing.Iterable[str]:
         """Render a list of public attributes."""
         return self.__map__.keys()
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> typing.Any:
         if name in ('__map__', '__token_map__'):
             return getattr(self, name)
         try:
@@ -36,7 +36,7 @@ class _ContextMap:
                 f'No `{name}` present in the context',
             ) from None
 
-    def __setattr__(self, name, value):
+    def __setattr__(self, name: str, value: typing.Any) -> None:
         if name in ('__map__', '__token_map__'):
             object.__setattr__(self, name, value)
         elif name in self.__map__:
@@ -45,7 +45,7 @@ class _ContextMap:
         else:
             raise ContextLookupError(f'No `{name}` present in the context')
 
-    def __delattr__(self, name):
+    def __delattr__(self, name: str) -> None:
         if name not in self.__map__:
             raise ContextLookupError(f'No `{name}` present in the context')
         reset_token = self.__token_map__[name]

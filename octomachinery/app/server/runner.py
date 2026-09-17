@@ -31,7 +31,7 @@ def run(
         url: Optional[str] = None,
         config: Optional[BotAppConfig] = None,
         event_routers: Optional[Iterable[OctomachineryRouterBase]] = None,
-):
+) -> None:
     """Start up a server using CLI args for host and port."""
     if event_routers is None:
         event_routers = {WEBHOOK_EVENTS_ROUTER}

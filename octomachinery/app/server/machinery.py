@@ -46,7 +46,7 @@ async def get_server_runner(http_handler):
     return aiohttp_server_runner
 
 
-async def _prepare_github_app(github_app):
+async def _prepare_github_app(github_app: GitHubApp) -> None:
     """Set GitHub App in the context."""
     logger.info('Starting the following GitHub App:')
     logger.info(
@@ -97,7 +97,7 @@ async def setup_server_runner(
     )
 
 
-async def _stop_site_on_cancel(aiohttp_tcp_site):
+async def _stop_site_on_cancel(aiohttp_tcp_site: web.TCPSite) -> None:
     """Stop the server after SIGINT."""
     try:
         await anyio.sleep(float('inf'))
@@ -106,7 +106,9 @@ async def _stop_site_on_cancel(aiohttp_tcp_site):
         await aiohttp_tcp_site.stop()
 
 
-def log_webhook_secret_status(webhook_secret):
+def log_webhook_secret_status(
+        webhook_secret: Union[str, None],
+) -> None:
     """Log HTTP body signature verification behavior."""
     webhook_secret_repr = (
         f' ({webhook_secret[:1]}...{webhook_secret[-1:]})'

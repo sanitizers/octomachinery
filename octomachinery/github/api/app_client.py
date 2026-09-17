@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, Dict, Iterable
+from typing import TYPE_CHECKING, Any, Dict, FrozenSet, Iterable
 
 from aiohttp.client import ClientSession
 from aiohttp.client_exceptions import ClientConnectorError
@@ -39,15 +39,31 @@ logger = logging.getLogger(__name__)
 GH_INSTALL_EVENTS = {'integration_installation', 'installation'}
 
 
+def _freeze_event_routers(
+        event_routers: Iterable[OctomachineryRouterBase],
+) -> FrozenSet[OctomachineryRouterBase]:
+    """Make an immutable copy of the event router collection.
+
+    Spelling this out instead of using :py:class:`frozenset` directly
+    keeps the element type visible to the type checkers -- they cannot
+    solve the type variable of a bare built-in used as a converter.
+
+    :param event_routers: the routers to dispatch GitHub events to
+
+    :returns: the same routers, as an immutable set
+    """
+    return frozenset(event_routers)
+
+
 @attr.dataclass
 class GitHubApp:
     """GitHub API wrapper."""
 
     _config: GitHubAppIntegrationConfig
     _http_session: ClientSession
-    _event_routers: Iterable[OctomachineryRouterBase] = attr.ib(
+    _event_routers: FrozenSet[OctomachineryRouterBase] = attr.ib(
         default={WEBHOOK_EVENTS_ROUTER},
-        converter=frozenset,
+        converter=_freeze_event_routers,
     )
 
     def __attrs_post_init__(self) -> None:
@@ -88,7 +104,7 @@ class GitHubApp:
             )
 
     @property
-    def gh_jwt(self):
+    def gh_jwt(self) -> GitHubJWTToken:
         """Generate app's JSON Web Token, valid for 60 seconds."""
         token = self._config.private_key.make_jwt_for(
             app_id=self._config.app_id,
@@ -96,7 +112,7 @@ class GitHubApp:
         return GitHubJWTToken(token)
 
     @property
-    def api_client(self):  # noqa: D401
+    def api_client(self) -> RawGitHubAPI:  # noqa: D401
         """The GitHub App client with an async CM interface."""
         return RawGitHubAPI(
             token=self.gh_jwt,

@@ -27,7 +27,10 @@ from ..routing.webhooks_dispatcher import route_github_event
 logger = logging.getLogger(__name__)
 
 
-async def process_github_action(config, event_routers):
+async def process_github_action(
+        config: BotAppConfig,
+        event_routers: Iterable[OctomachineryRouterBase],
+) -> ActionSuccess:
     """Schedule GitHub Action event for processing."""
     logger.info('Processing GitHub Action event...')
 

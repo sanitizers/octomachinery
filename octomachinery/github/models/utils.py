@@ -37,7 +37,7 @@ def _convert_datetime_from_string(date_string: str) -> datetime:
 class SecretStr(str):
     """String that censors its __repr__ if called from another repr."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Produce a string representation."""
         frame_depth = 1
 
@@ -59,6 +59,6 @@ class SecretStr(str):
 class SuperSecretStr(SecretStr):
     """String that always censors its __repr__."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Produce a string representation."""
         return '<SUPER_SECRET>'

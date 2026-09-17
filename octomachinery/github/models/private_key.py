@@ -1,7 +1,11 @@
 """Private key container."""
+
+from __future__ import annotations
+
 from hashlib import sha1 as compute_sha1_hash
 from pathlib import Path
 from time import time
+from typing import TYPE_CHECKING, Iterator, NoReturn, Union
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.serialization import (
@@ -11,7 +15,17 @@ from cryptography.hazmat.primitives.serialization import (
 from ._compat import compute_jwt
 
 
-def extract_private_key_sha1_fingerprint(rsa_private_key):
+if TYPE_CHECKING:
+    # NOTE: This alias only exists in cryptography v40+, while the
+    # NOTE: runtime floor is v3.4.8. Type checkers always see a
+    # NOTE: modern version, so keeping the import out of runtime
+    # NOTE: preserves compatibility with the oldest supported dep.
+    from cryptography.hazmat.primitives.asymmetric.types import PrivateKeyTypes
+
+
+def extract_private_key_sha1_fingerprint(
+        rsa_private_key: PrivateKeyTypes,
+) -> str:
     r"""Retrieve the private key SHA-1 fingerprint.
 
     :param rsa_private_key: private key object
@@ -30,7 +44,7 @@ def extract_private_key_sha1_fingerprint(rsa_private_key):
         b_rsa_public_key,
     ).hexdigest()
 
-    def emit_chunks(sequence, step):
+    def emit_chunks(sequence: str, step: int) -> Iterator[str]:
         start_pos = 0
         seq_length = len(sequence)
         while start_pos < seq_length:
@@ -49,7 +63,7 @@ class GitHubPrivateKey:
     :param bytes b_raw_data: the contents of a PEM file
     """
 
-    def __init__(self, b_raw_data: bytes):
+    def __init__(self, b_raw_data: bytes) -> None:
         """Initialize GitHubPrivateKey instance."""
         self._rsa_private_key = load_pem_private_key(
             b_raw_data,
@@ -69,7 +83,7 @@ class GitHubPrivateKey:
         """
         return self._col_separated_rsa_public_key_sha1_fingerprint
 
-    def __str__(self):
+    def __str__(self) -> NoReturn:
         """Avoid leaking private key contents via string protocol.
 
         :raises TypeError: always
@@ -80,7 +94,7 @@ class GitHubPrivateKey:
             f'The repr of this instance is {self!r}.',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         r"""Construct a GitHubPrivateKey object representation.
 
         :returns: GitHubPrivateKey object representation \
@@ -92,7 +106,7 @@ class GitHubPrivateKey:
             f"with SHA-1 fingerprint '{self.fingerprint}'>"
         )
 
-    def __eq__(self, other_private_key):
+    def __eq__(self, other_private_key) -> bool:
         r"""Compare equality of our private key with other.
 
         :returns: the result of comparison with another \
@@ -101,7 +115,7 @@ class GitHubPrivateKey:
         """
         return self.matches_fingerprint(other_private_key.fingerprint)
 
-    def matches_fingerprint(self, other_hash):
+    def matches_fingerprint(self, other_hash: str) -> bool:
         """Compare our SHA-1 fingerprint with ``other_hash``.
 
         :returns: the result of own fingerprint comparison with ``other_hash``
@@ -110,7 +124,7 @@ class GitHubPrivateKey:
         return self.fingerprint == other_hash
 
     @classmethod
-    def from_file(cls, path):
+    def from_file(cls, path: Union[Path, str]) -> GitHubPrivateKey:
         r"""Construct a ``GitHubPrivateKey`` instance.
 
         :returns: the ``GitHubPrivateKey`` instance \

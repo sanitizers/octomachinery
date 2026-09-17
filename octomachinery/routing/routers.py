@@ -82,7 +82,7 @@ class ConcurrentRouter(GidgetHubRouterBase):
 class NonBlockingConcurrentRouter(ConcurrentRouter):
     """Non-blocking GitHub event router scheduling handler tasks."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize NonBlockingConcurrentRouter."""
         super().__init__(*args, **kwargs)
         # NOTE: For some reason, mypy doesn't accept anything except Any here:

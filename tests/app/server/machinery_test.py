@@ -1,9 +1,11 @@
 """Test app server machinery."""
 
 import uuid
-from typing import Tuple
+from contextlib import AbstractAsyncContextManager
+from socket import socket
+from typing import Any, FrozenSet, Mapping, Optional, Tuple
 
-from aiohttp.client import ClientSession
+from aiohttp.client import ClientResponse, ClientSession
 from aiohttp.test_utils import get_unused_port_socket
 from aiohttp.web import SockSite
 
@@ -13,13 +15,14 @@ from octomachinery.app.config import BotAppConfig
 from octomachinery.app.routing import WEBHOOK_EVENTS_ROUTER
 from octomachinery.app.server.machinery import setup_server_runner
 from octomachinery.github.api.app_client import GitHubApp
+from octomachinery.routing.routers import ConcurrentRouter
 
 
 IPV4_LOCALHOST = '127.0.0.1'
 
 
 @pytest.fixture
-def ephemeral_port_tcp_sock():
+def ephemeral_port_tcp_sock() -> socket:
     """Initialize an ephemeral TCP socket."""
     return get_unused_port_socket(IPV4_LOCALHOST)
 
@@ -73,7 +76,7 @@ async def aiohttp_client_session() -> ClientSession:
 
 
 @pytest.fixture
-def octomachinery_event_routers():
+def octomachinery_event_routers() -> FrozenSet[ConcurrentRouter]:
     """Construct a set of routers for use in the GitHub App."""
     return frozenset({WEBHOOK_EVENTS_ROUTER})
 
@@ -82,7 +85,7 @@ def octomachinery_event_routers():
 def github_app(
         octomachinery_config_github_app, aiohttp_client_session,
         octomachinery_event_routers,
-):
+) -> GitHubApp:
     """Initizalize a GitHub App instance."""
     return GitHubApp(
         octomachinery_config_github_app,
@@ -130,7 +133,9 @@ async def send_webhook_event(
         octomachinery_app_tcp, aiohttp_client_session,
 ):
     """Return a webhook sender coroutine."""
-    def _send_event(webhook_payload=None):
+    def _send_event(
+            webhook_payload: Optional[Mapping[str, Any]] = None,
+    ) -> AbstractAsyncContextManager[ClientResponse]:
         post_body = {} if webhook_payload is None else webhook_payload
 
         webhook_endpoint_url = octomachinery_app_tcp.name

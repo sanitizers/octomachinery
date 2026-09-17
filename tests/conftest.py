@@ -1,17 +1,21 @@
 """Shared fixtures for tests."""
+
 import asyncio
+from typing import Iterator
 
 import pytest
 
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric.rsa import generate_private_key
+from cryptography.hazmat.primitives.asymmetric.rsa import (
+    RSAPrivateKey, generate_private_key,
+)
 from cryptography.hazmat.primitives.serialization import (
     Encoding, NoEncryption, PrivateFormat,
 )
 
 
 @pytest.fixture
-def rsa_private_key():
+def rsa_private_key() -> RSAPrivateKey:
     """Generate an RSA private key."""
     return generate_private_key(
         public_exponent=65537,
@@ -39,7 +43,7 @@ def rsa_private_key_bytes(rsa_private_key) -> bytes:
 
 
 @pytest.fixture(autouse=True)
-def _current_event_loop():
+def _current_event_loop() -> Iterator[None]:
     """Keep a current event loop set for the duration of each test.
 
     ``anyio`` v1 deliberately grabs the current event loop through

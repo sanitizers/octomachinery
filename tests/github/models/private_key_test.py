@@ -52,13 +52,13 @@ def rsa_private_key_path(
 def test_github_private_key__from_file(
         github_private_key,
         rsa_private_key_path: Path,
-):
+) -> None:
     """Test that GitHubPrivateKey from file and bytes are the same."""
     key_from_file = GitHubPrivateKey.from_file(rsa_private_key_path)
     assert key_from_file == github_private_key
 
 
-def test_github_private_key____repr__(github_private_key):
+def test_github_private_key____repr__(github_private_key) -> None:
     """Verify what repr protocol only exposes fingerprint."""
     repr_pattern = re.compile(
         r"^<GitHubPrivateKey\(b_raw_data=b'<SECRET>'\)\s"
@@ -69,7 +69,7 @@ def test_github_private_key____repr__(github_private_key):
     assert repr_pattern.match(f'{github_private_key!r}')
 
 
-def test_github_private_key____str__(github_private_key):
+def test_github_private_key____str__(github_private_key) -> None:
     """Verify that the string protocol doesn't expose secrets."""
     escaped_private_key_repr = (
         repr(github_private_key).
@@ -91,7 +91,7 @@ def test_github_private_key____str__(github_private_key):
 def test_github_private_key__make_jwt_for(
         github_private_key: GitHubPrivateKey,
         rsa_public_key_bytes,
-):
+) -> None:
     """Verify that e2e encoding-decoding of the JWT works."""
     github_app_id = random.randint(0, 9999999)
     jwt_string = github_private_key.make_jwt_for(app_id=github_app_id)
@@ -102,7 +102,9 @@ def test_github_private_key__make_jwt_for(
     assert payload['exp'] - payload['iat'] == 60
 
 
-def test_github_private_key__make_jwt_for__invalid_timeout(github_private_key):
+def test_github_private_key__make_jwt_for__invalid_timeout(
+        github_private_key,
+) -> None:
     """Verify that time offset can't exceed 10 mins."""
     github_app_id = random.randint(0, 9999999)
     with pytest.raises(

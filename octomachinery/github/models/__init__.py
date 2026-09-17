@@ -93,6 +93,6 @@ class GitHubInstallationAccessToken:  # pylint: disable=too-few-public-methods
     single_file_paths: typing.List[str] = attr.ib(default=None)
 
     @property
-    def expired(self):
+    def expired(self) -> bool:
         """Check whether this token has expired already."""
         return datetime.now(timezone.utc) > self.expires_at

@@ -55,7 +55,7 @@ def event_file(tmp_path_factory, request):
 
 
 @pytest.fixture
-def config(monkeypatch, event_file, request):
+def config(monkeypatch, event_file, request) -> BotAppConfig:
     """Create a dummy GitHub Action config."""
     monkeypatch.setattr(
         'octomachinery.app.runtime.utils.detect_env_mode',
@@ -91,7 +91,7 @@ def config(monkeypatch, event_file, request):
     ),
     indirect=('config', 'event_file'),
 )
-def test_action_processing_return_code(config, expected_return_code):
+def test_action_processing_return_code(config, expected_return_code) -> None:
     """Test an empty action processing run."""
     with pytest.raises(
             SystemExit,

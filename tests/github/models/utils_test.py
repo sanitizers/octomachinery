@@ -2,6 +2,7 @@
 
 from datetime import datetime, timezone
 from functools import partial
+from typing import Optional, Union
 
 import pytest
 
@@ -23,7 +24,7 @@ utc_datetime = partial(datetime, tzinfo=timezone.utc)
 )
 def test_secret_sanitizers_first_repr(
         secret_class, secret_placeholder, visible_first_repr,
-):
+) -> None:
     """Check that immediate repr is rendered correctly."""
     secret_data = 'qwerty'
     super_secret_string = secret_class(secret_data)
@@ -42,7 +43,7 @@ def test_secret_sanitizers_first_repr(
         (SuperSecretStr, '<SUPER_SECRET>'),
     ),
 )
-def test_secret_sanitizers(secret_class, secret_placeholder):
+def test_secret_sanitizers(secret_class, secret_placeholder) -> None:
     """Check that sanitizer classes hide data when needed."""
     secret_data = 'qwerty'
     super_secret_string = secret_class(secret_data)
@@ -50,11 +51,15 @@ def test_secret_sanitizers(secret_class, secret_placeholder):
     assert super_secret_string == secret_data
 
     class _DataStruct:  # pylint: disable=too-few-public-methods
-        def __init__(self, s, o=None):
+        def __init__(
+                self,
+                s: Union['_DataStruct', str],
+                o: Optional[str] = None,
+        ) -> None:
             self._s = s
             self._o = o
 
-        def __repr__(self):
+        def __repr__(self) -> str:
             return (
                 f'{self.__class__.__name__}'
                 f'(s={repr(self._s)}, o={repr(self._o)})'
@@ -96,7 +101,7 @@ def test_secret_sanitizers(secret_class, secret_placeholder):
         ('2032-01-02T05:28:47.000000Z', utc_datetime(2032, 1, 2, 5, 28, 47)),
     ),
 )
-def test_convert_datetime(input_date_string, expected_date_object):
+def test_convert_datetime(input_date_string, expected_date_object) -> None:
     """Test that convert_datetime recognizes supported date formats."""
     assert convert_datetime(input_date_string) == expected_date_object
 
@@ -116,7 +121,7 @@ def test_convert_datetime(input_date_string, expected_date_object):
         (),
     ),
 )
-def test_convert_datetime_negative(input_date_string):
+def test_convert_datetime_negative(input_date_string) -> None:
     """Test that convert_datetime errors out on supported date input."""
     with pytest.raises(
             ValueError,
@@ -125,7 +130,7 @@ def test_convert_datetime_negative(input_date_string):
         convert_datetime(input_date_string)
 
 
-def test_convert_datetime_empty_string():
+def test_convert_datetime_empty_string() -> None:
     """Test that convert_datetime errors out on supported date input."""
     with pytest.raises(
             ValueError,

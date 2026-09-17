@@ -47,7 +47,7 @@ class ActionFailure(ActionOutcome):
             self,
             attribute,  # pylint: disable=unused-argument
             value,
-    ):
+    ) -> None:
         if value in NON_FAIL_MODELS:
             raise ValueError(
                 f'Return code of `{value}` is illegal to use for failure '
