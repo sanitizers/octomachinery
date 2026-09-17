@@ -2,22 +2,16 @@
 
 version: 2
 
-formats: all
-
 build:
   os: "ubuntu-22.04"
   tools:
     # NOTE: `docs/conf.py` uses `importlib.metadata`, which needs Python 3.8+.
     python: "3.11"
-
-python:
-  install:
-  # - requirements: .docs-requirements.txt
-  # - method: pip
-  #   path: pip >= 19.0.3
-  - method: pip
-    path: .
-    extra_requirements:
-    - docs
+  # NOTE: Delegating to tox keeps this build identical to a local
+  # NOTE: `tox -e build-docs`, which writes HTML into `$READTHEDOCS_OUTPUT`
+  # NOTE: when that variable is present.
+  commands:
+  - python -Im pip install --upgrade tox
+  - python -Im tox -e build-docs
 
 ...
