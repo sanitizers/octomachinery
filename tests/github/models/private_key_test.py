@@ -3,6 +3,7 @@ import random
 import re
 from datetime import date
 from pathlib import Path
+from time import time
 
 import pytest
 
@@ -91,15 +92,25 @@ def test_github_private_key____str__(github_private_key):
 def test_github_private_key__make_jwt_for(
         github_private_key: GitHubPrivateKey,
         rsa_public_key_bytes,
+        monkeypatch,
 ):
-    """Verify that e2e encoding-decoding of the JWT works."""
+    """Verify that e2e encoding-decoding of the JWT works.
+
+    The issue time must be backdated to tolerate clock drift.
+    """
     github_app_id = random.randint(0, 9999999)
+    frozen_now = int(time())
+    monkeypatch.setattr(
+        'octomachinery.github.models.private_key.time',
+        lambda: frozen_now,
+    )
     jwt_string = github_private_key.make_jwt_for(app_id=github_app_id)
     payload = parse_jwt(
         jwt_string.encode('utf-8'), rsa_public_key_bytes, algorithms='RS256',
     )
     assert payload['iss'] == str(github_app_id)
-    assert payload['exp'] - payload['iat'] == 60
+    assert payload['iat'] == frozen_now - 60
+    assert payload['exp'] == frozen_now + 60
 
 
 def test_github_private_key__make_jwt_for__invalid_timeout(github_private_key):
