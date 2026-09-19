@@ -11,6 +11,14 @@ from cryptography.hazmat.primitives.serialization import (
 
 
 @pytest.fixture
+def anyio_backend():
+    """Pin the async test backend to asyncio."""
+    # NOTE: aiohttp only supports asyncio, so running the anyio
+    # NOTE: plugin's default trio parametrization makes no sense here.
+    return 'asyncio'
+
+
+@pytest.fixture
 def rsa_private_key():
     """Generate an RSA private key."""
     return generate_private_key(

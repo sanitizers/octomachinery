@@ -208,7 +208,7 @@ repos:
     additional_dependencies:
     # runtime deps:
     - aiohttp
-    - anyio < 2.0.0
+    - anyio >= 3.2.0
     - click
     - cryptography
     - environ-config >= 19.1.0
