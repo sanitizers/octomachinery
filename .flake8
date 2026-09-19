@@ -66,14 +66,6 @@ extend-ignore =
   ANN102,
   # ANN201: Missing return type annotation for public function
   ANN201,
-  # ANN202: Missing return type annotation for protected function
-  ANN202,
-  # ANN204: Missing return type annotation for special method
-  ANN204,
-  # ANN205: Missing return type annotation for staticmethod
-  ANN205,
-  # ANN206: Missing return type annotation for classmethod
-  ANN206,
 
   # FIXME: These `flake8-spellcheck` errors need fixing and removal
   # SC100: Possibly misspelt word / comments

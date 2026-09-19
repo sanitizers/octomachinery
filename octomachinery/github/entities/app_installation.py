@@ -35,7 +35,7 @@ class GitHubAppInstallation:
     """A GitHub Installation token for GitHub API."""
 
     @property
-    def app(self):
+    def app(self) -> GitHubApp:
         """Bound GitHub App instance."""
         return self._github_app
 
@@ -51,7 +51,7 @@ class GitHubAppInstallation:
             ),
         )
 
-    async def _refresh_api_token(self):
+    async def _refresh_api_token(self) -> GitHubOAuthToken:
         """Extract installation access token value.
 
         Refreshes it as needed.
@@ -62,7 +62,7 @@ class GitHubAppInstallation:
         return GitHubOAuthToken(self._token.token)
 
     @property
-    def api_client(self):  # noqa: D401
+    def api_client(self) -> RawGitHubAPI:  # noqa: D401
         """The GitHub App Installation client."""
         return RawGitHubAPI(
             # pylint: disable=fixme

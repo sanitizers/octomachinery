@@ -2,6 +2,7 @@
 
 from io import StringIO
 from textwrap import dedent
+from typing import Mapping
 from uuid import uuid1, uuid4
 
 import multidict
@@ -74,7 +75,7 @@ UNCHANGED_UUID4_STR = str(uuid4())
         ),
     ),
 )
-def test_parse_event_stub_from_fd(vcr_contents, vcr_headers):
+def test_parse_event_stub_from_fd(vcr_contents, vcr_headers) -> None:
     """Check that all of YAML, JSONL and JSON VCR modes are loadable."""
     vcr_event = {
         'hook': {
@@ -128,7 +129,7 @@ def test_parse_event_stub_from_fd(vcr_contents, vcr_headers):
         ),
     ),
 )
-def test_parse_event_stub_from_fd__invalid(vcr_contents):
+def test_parse_event_stub_from_fd__invalid(vcr_contents) -> None:
     """Verify that feeding unconventional VCRs raises ValueError."""
     expected_error_message = (
         r'^The input event VCR file has invalid structure\. '
@@ -168,9 +169,9 @@ def test_parse_event_stub_from_fd__invalid(vcr_contents):
         ),
     ),
 )
-def test_validate_http_headers(http_headers):
+def test_validate_http_headers(http_headers) -> None:
     """Verify that valid headers collections don't raise exceptions."""
-    assert validate_http_headers(http_headers) is None  # no exceptions raised
+    validate_http_headers(http_headers)  # no exceptions raised
 
 
 @pytest.mark.parametrize(
@@ -221,7 +222,7 @@ def test_validate_http_headers(http_headers):
         ),
     ),
 )
-def test_validate_http_headers__invalid(http_headers, error_message):
+def test_validate_http_headers__invalid(http_headers, error_message) -> None:
     """Check that invalid headers cause ValueError."""
     with pytest.raises(ValueError, match=error_message):
         validate_http_headers(http_headers)
@@ -305,11 +306,13 @@ def test_validate_http_headers__invalid(http_headers, error_message):
         ),
     ),
 )
-def test_augment_http_headers(incomplete_http_headers, expected_headers):
+def test_augment_http_headers(
+        incomplete_http_headers, expected_headers,
+) -> None:
     """Check that mandatory headers are present after augmentation."""
     augmented_headers = augment_http_headers(incomplete_http_headers)
 
-    assert validate_http_headers(augmented_headers) is None
+    validate_http_headers(augmented_headers)  # no exceptions raised
 
     original_event = incomplete_http_headers['x-github-event']
     assert augmented_headers['x-github-event'] == original_event
@@ -318,27 +321,33 @@ def test_augment_http_headers(incomplete_http_headers, expected_headers):
         assert augmented_headers[header_name] == header_value
 
 
-def test_make_http_headers_from_event():
+def test_make_http_headers_from_event() -> None:
     """Smoke-test fake HTTP headers constructor."""
     event_name = 'issue_comment'
     http_headers = make_http_headers_from_event(event_name)
 
     assert http_headers['X-GitHub-Event'] == event_name
     assert http_headers['User-Agent'].endswith('/fallback-value')
-    assert validate_http_headers(http_headers) is None
+    validate_http_headers(http_headers)  # no exceptions raised
 
 
-def test__transform_http_headers_list_to_multidict__invalid():
+def test__transform_http_headers_list_to_multidict__invalid() -> None:
     """Check the headers format validation."""
     error_message = (
         '^Headers must be a sequence of mappings '
         'because keys can repeat$'
     )
+    # NOTE: A mapping is exactly what the runtime guard under test
+    # NOTE: exists to reject, so violating the annotation on
+    # NOTE: purpose is the point of this test.
+    mapping_instead_of_sequence: Mapping[str, str] = {}
     with pytest.raises(ValueError, match=error_message):
-        _transform_http_headers_list_to_multidict({})
+        _transform_http_headers_list_to_multidict(
+            mapping_instead_of_sequence,  # type: ignore[arg-type]
+        )
 
 
-def test__probe_json():
+def test__probe_json() -> None:
     """Test that JSON probe loads mappings."""
     vcr_contents = (
         '{\n"hook": {\n"app_id": 0},'
@@ -360,7 +369,7 @@ def test__probe_json():
     assert actual_parsed_vcr == expected_parsed_vcr
 
 
-def test__probe_json__invalid():
+def test__probe_json__invalid() -> None:
     """Verify that non-mapping objects crash pure JSON probe."""
     expected_error_message = '^JSON file must only contain an object mapping$'
     with StringIO('[]') as file_descr, pytest.raises(

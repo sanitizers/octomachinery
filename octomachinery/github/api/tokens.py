@@ -14,7 +14,7 @@ class GitHubToken:  # pylint: disable=too-few-public-methods
         lambda s: SecretStr(s) if s is not None else s,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Render the token as its string value."""
         return str(self._token_value)
 

@@ -229,7 +229,7 @@ class GitHubWebhookEvent(GitHubEvent):
             cls: Type[GitHubWebhookEvent],
             http_req_headers: Mapping[str, str],
             http_req_body: bytes,
-    ):
+    ) -> GitHubWebhookEvent:
         """Make a GitHubWebhookEvent from HTTP req headers and body."""
         return cls(
             name=http_req_headers['x-github-event'],

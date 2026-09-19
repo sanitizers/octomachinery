@@ -7,7 +7,7 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def detect_env_mode():
+def detect_env_mode() -> str:
     """Figure out whether we're under GitHub Action environment."""
     for var_suffix in (
             'WORKFLOW',

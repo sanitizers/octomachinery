@@ -32,11 +32,11 @@ class RawGitHubAPI(GitHubAPI):
         )
 
     @property
-    def is_initialized(self):
+    def is_initialized(self) -> bool:
         """Return GitHub token presence."""
         return self._token is not None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Render a class instance representation."""
         cls_name = self.__class__.__name__
         init_args = (
