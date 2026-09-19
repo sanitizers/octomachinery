@@ -511,7 +511,17 @@ jobs:
         ${{ matrix.python-version }}
       runner-vm-os: >-
         ${{ matrix.runner-vm-os }}
-      timeout-minutes: 5
+      # NOTE: The Intel macOS runners are several times slower than the rest
+      # NOTE: of the matrix: pre-populating the tox envs alone takes ~3 min
+      # NOTE: there, against ~15 s everywhere else. Successful runs peak at
+      # NOTE: ~4m54s, so a flat 5-minute budget leaves no headroom and the
+      # NOTE: job gets killed mid-`pip install`, looking like a flake.
+      timeout-minutes: >-
+        ${{
+          matrix.runner-vm-os == 'macos-15-intel'
+          && 12
+          || 5
+        }}
       toxenv: >-
         ${{ matrix.toxenv }}
       tox-rerun-posargs: >-
