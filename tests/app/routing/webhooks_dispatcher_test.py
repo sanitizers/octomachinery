@@ -12,12 +12,6 @@ from octomachinery.app.routing.webhooks_dispatcher import (
 )
 
 
-@pytest.fixture
-def anyio_backend():
-    """Run the async tests under asyncio."""
-    return 'asyncio'
-
-
 @pytest.mark.anyio
 async def test_ping_healthcheck():
     """Test that ``GET /ping`` gets a ``PONG`` without a GitHub App."""
