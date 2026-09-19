@@ -6,12 +6,14 @@ from typing import Tuple
 from aiohttp.client import ClientSession
 from aiohttp.test_utils import get_unused_port_socket
 from aiohttp.web import SockSite
+from aiohttp.web_runner import GracefulExit
 
 import pytest
 
 from octomachinery.app.config import BotAppConfig
 from octomachinery.app.routing import WEBHOOK_EVENTS_ROUTER
-from octomachinery.app.server.machinery import setup_server_runner
+from octomachinery.app.server import machinery
+from octomachinery.app.server.machinery import run_forever, setup_server_runner
 from octomachinery.github.api.app_client import GitHubApp
 
 
@@ -21,7 +23,17 @@ IPV4_LOCALHOST = '127.0.0.1'
 @pytest.fixture
 def ephemeral_port_tcp_sock():
     """Initialize an ephemeral TCP socket."""
-    return get_unused_port_socket(IPV4_LOCALHOST)
+    tcp_sock = get_unused_port_socket(IPV4_LOCALHOST)
+    try:
+        yield tcp_sock
+    finally:
+        # NOTE: The tests that hand the socket over to a server site
+        # NOTE: get it closed by that site's clean-up. The ones that
+        # NOTE: only need the address it points at would otherwise leak
+        # NOTE: it until the garbage collector emits a
+        # NOTE: `ResourceWarning`, which `filterwarnings = error` turns
+        # NOTE: into a failure of whatever test is running by then.
+        tcp_sock.close()
 
 
 @pytest.fixture
@@ -166,3 +178,30 @@ async def test_ping_response(send_webhook_event, github_app_id):
 
     assert resp_content_type == 'text/plain; charset=utf-8'
     assert resp_body.startswith(expected_response_start)
+
+
+@pytest.mark.parametrize(
+    'startup_exc_type',
+    (GracefulExit, KeyboardInterrupt, LookupError),
+)
+@pytest.mark.anyio
+async def test_run_forever_propagates_startup_failures_as_is(
+        monkeypatch, octomachinery_config, octomachinery_event_routers,
+        startup_exc_type,
+):
+    """Test that a start-up failure reaches the caller unwrapped.
+
+    The CLI runner recognizes the signal-driven shutdown by catching
+    :class:`~aiohttp.web_runner.GracefulExit`, so anything that the
+    server raises must keep its own type on the way out instead of
+    getting wrapped into an exception group.
+    """
+    async def _fail_to_prepare_github_app(_github_app):
+        raise startup_exc_type('Nope')
+
+    monkeypatch.setattr(
+        machinery, '_prepare_github_app', _fail_to_prepare_github_app,
+    )
+
+    with pytest.raises(startup_exc_type, match='Nope'):
+        await run_forever(octomachinery_config, octomachinery_event_routers)

@@ -1,5 +1,4 @@
 """Shared fixtures for tests."""
-import asyncio
 
 import pytest
 
@@ -8,6 +7,17 @@ from cryptography.hazmat.primitives.asymmetric.rsa import generate_private_key
 from cryptography.hazmat.primitives.serialization import (
     Encoding, NoEncryption, PrivateFormat,
 )
+
+
+@pytest.fixture
+def anyio_backend():
+    """Pin the async test backend to asyncio.
+
+    ``aiohttp`` only supports asyncio. The ``anyio`` pytest plugin's
+    own ``anyio_backend`` fixture parametrizes over every backend
+    ``anyio`` knows about, trio included, which makes no sense here.
+    """
+    return 'asyncio'
 
 
 @pytest.fixture
@@ -36,26 +46,3 @@ def rsa_private_key_bytes(rsa_private_key) -> bytes:
         format=PrivateFormat.TraditionalOpenSSL,  # A.K.A. PKCS#1
         encryption_algorithm=NoEncryption(),
     )
-
-
-@pytest.fixture(autouse=True)
-def _current_event_loop():
-    """Keep a current event loop set for the duration of each test.
-
-    ``anyio`` v1 deliberately grabs the current event loop through
-    :func:`asyncio.get_event_loop` rather than :func:`asyncio.run` so
-    that one loop is shared by the separate ``run()`` calls its pytest
-    plugin makes for fixture set-up, the test itself and tear-down.
-    Since Python 3.10, that call emits a :class:`DeprecationWarning`
-    when no loop has been set -- and ``pytest.ini`` turns warnings into
-    errors.
-
-    Drop this fixture once the ``anyio < 2`` runtime pin is lifted.
-    """
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    try:
-        yield
-    finally:
-        asyncio.set_event_loop(None)
-        loop.close()
