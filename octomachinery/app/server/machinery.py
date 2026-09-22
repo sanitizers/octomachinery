@@ -11,8 +11,6 @@ from aiohttp.client import ClientSession
 # pylint: disable=relative-beyond-top-level
 from ...github.api.app_client import GitHubApp
 # pylint: disable=relative-beyond-top-level
-from ...utils.asynctools import auto_cleanup_aio_tasks
-# pylint: disable=relative-beyond-top-level
 from ..routing.webhooks_dispatcher import route_github_webhook_event
 
 
@@ -123,7 +121,6 @@ def log_webhook_secret_status(
     )
 
 
-@auto_cleanup_aio_tasks
 async def run_forever(config, event_routers):
     """Spawn an HTTP server in anyio context."""
     logger.debug('The GitHub App env is set to `%s`', config.runtime.env)
