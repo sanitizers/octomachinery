@@ -160,3 +160,31 @@ endpoint requiring that.
         preview_api_version='squirrel-girl',
         data={'content': 'heart'},
     )
+
+
+Subscribing to all events
+-------------------------
+
+Use the catch-all ``*`` event name to run a handler for every incoming
+event, regardless of its name. This is handy for logging or metrics.
+It can be combined with a payload-based filter too, like ``action``.
+Catch-all handlers run alongside the event-specific ones.
+
+.. code:: python
+
+    import logging
+
+    from octomachinery.routing import process_event, process_event_actions
+
+
+    logger = logging.getLogger(__name__)
+
+
+    @process_event('*')
+    async def log_any_event(event):
+        logger.info('Got a "%s" event', event.name)
+
+
+    @process_event_actions('*', {'opened'})
+    async def on_anything_opened(event):
+        logger.info('Something got opened by a "%s" event', event.name)
