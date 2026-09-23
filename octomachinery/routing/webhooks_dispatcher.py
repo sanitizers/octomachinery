@@ -29,6 +29,27 @@ __all__ = ('route_github_event',)
 logger = logging.getLogger(__name__)
 
 
+async def _provision_installation_client(
+        github_app: GitHubApp,
+        github_event: GitHubEvent,
+) -> None:
+    """Provision an installation API client if possible.
+
+    Some events (like `ping`) are
+    happening application/GitHub-wide and are not bound to
+    a specific installation. The webhook payloads of such events
+    don't contain any reference to an installation.
+    Some events don't even refer to a GitHub App
+    (e.g. `security_advisory`).
+    """
+    with contextlib.suppress(LookupError):
+        github_install = await github_app.get_installation(github_event)
+        # pylint: disable=assigning-non-slot
+        RUNTIME_CONTEXT.app_installation = github_install
+        # pylint: disable=assigning-non-slot
+        RUNTIME_CONTEXT.app_installation_client = github_install.api_client
+
+
 # pylint: disable=fixme
 async def route_github_event(  # type: ignore[return]  # FIXME
         *,
@@ -55,36 +76,22 @@ async def route_github_event(  # type: ignore[return]  # FIXME
 
     # pylint: disable=assigning-non-slot
     RUNTIME_CONTEXT.app_installation = None
-    if is_gh_action:
-        # pylint: disable=assigning-non-slot
-        RUNTIME_CONTEXT.app_installation_client = github_app.api_client
-    else:
-        with contextlib.suppress(LookupError):
-            # pylint: disable=pointless-string-statement
-            """Provision an installation API client if possible.
-
-            Some events (like `ping`) are
-            happening application/GitHub-wide and are not bound to
-            a specific installation. The webhook payloads of such events
-            don't contain any reference to an installation.
-            Some events don't even refer to a GitHub App
-            (e.g. `security_advisory`).
-            """
-            github_install = await github_app.get_installation(github_event)
-            # pylint: disable=assigning-non-slot
-            RUNTIME_CONTEXT.app_installation = github_install
-            # pylint: disable=assigning-non-slot
-            RUNTIME_CONTEXT.app_installation_client = github_install.api_client
-
-        # Give GitHub a sec to deal w/ eventual consistency.
-        # This is only needed for events that arrive over HTTP.
-        # If the dispatcher is invoked from GitHub Actions,
-        # by the time it's invoked the action must be already consistently
-        # distributed within GitHub's systems because spawning VMs takes time
-        # and actions are executed in workflows that rely on those VMs.
-        await async_sleep(1)
-
     try:
+        if is_gh_action:
+            # pylint: disable=assigning-non-slot
+            RUNTIME_CONTEXT.app_installation_client = github_app.api_client
+        else:
+            await _provision_installation_client(github_app, github_event)
+
+            # Give GitHub a sec to deal w/ eventual consistency.
+            # This is only needed for events that arrive over HTTP.
+            # If the dispatcher is invoked from GitHub Actions,
+            # by the time it's invoked the action must be already
+            # consistently distributed within GitHub's systems because
+            # spawning VMs takes time and actions are executed in
+            # workflows that rely on those VMs.
+            await async_sleep(1)
+
         return await github_app.dispatch_event(github_event)
     except GitHubActionError:
         # Bypass GitHub Actions errors as they are supposed to be a
