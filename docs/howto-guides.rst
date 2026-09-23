@@ -133,6 +133,45 @@ Finally, use
     asyncio.run(main())
 
 
+Reading the repository config
+-----------------------------
+
+Bots are often configured per repository with a YAML file in its
+``.github/`` directory. Call
+:py:func:`~octomachinery.app.runtime.installation_utils.get_installation_config`
+from an event handler to read it. It returns a :py:class:`dict` that is
+empty when there's no config file.
+
+The lookup follows the Probot conventions. When a repository doesn't
+have the config file, the one under the same path in the ``.github``
+repository of its owner is used. This way, an organization can
+configure all of its repositories at once.
+
+A config can also inherit keys from another one by referring to it in
+the ``_extends`` key, as ``repo``, ``owner/repo`` or
+``[owner/]repo:path/to/config.yml``. Its own top-level keys override
+the inherited ones.
+
+.. code:: yaml
+
+    # .github/my-bot.yml
+    _extends: bot-settings  # reads .github/my-bot.yml from bot-settings
+    label: needs-review
+
+.. code:: python
+
+    from octomachinery.app.runtime.installation_utils import (
+        get_installation_config,
+    )
+    from octomachinery.routing import process_event_actions
+
+
+    @process_event_actions('pull_request', {'opened'})
+    async def on_pr_opened(**_kwargs):
+        config = await get_installation_config(config_name='my-bot.yml')
+        label = config.get('label', 'triage')
+
+
 Making API queries against preview endpoints
 --------------------------------------------
 
