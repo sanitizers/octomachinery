@@ -42,6 +42,18 @@ API calls return native Python :py:class:`dict` or iterable objects.
     asyncio.run(main())
 
 
+Health-checking a running GitHub App server
+-------------------------------------------
+
+The web server started by
+:py:func:`~octomachinery.app.server.runner.run` answers
+``GET /ping`` requests with ``200 PONG``, just like Probot does.
+Point your load balancer, container orchestrator or uptime monitor at
+this endpoint. It doesn't talk to GitHub, so it only tells whether the
+server process is up and accepting connections. Webhook deliveries are
+unaffected: they are ``POST`` requests, even when sent to ``/ping``.
+
+
 Authenticating as a bot (GitHub App)
 ------------------------------------
 
