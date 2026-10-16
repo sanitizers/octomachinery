@@ -12,7 +12,7 @@ repos:
   - id: add-trailing-comma
 
 - repo: https://github.com/PyCQA/isort.git
-  rev: 9.0.0a3
+  rev: 9.0.2
   hooks:
   - id: isort
     args:
@@ -24,7 +24,7 @@ repos:
   - id: remove-tabs
 
 - repo: https://github.com/python-jsonschema/check-jsonschema.git
-  rev: 0.37.4
+  rev: 0.38.2
   hooks:
   - id: check-github-workflows
     files: ^\.github/workflows/[^/]+$
@@ -78,7 +78,7 @@ repos:
   - id: pydocstyle
 
 - repo: https://github.com/codespell-project/codespell.git
-  rev: v2.4.2
+  rev: v2.4.3
   hooks:
   - id: codespell
 
@@ -93,7 +93,7 @@ repos:
     - --strict
 
 - repo: https://github.com/PyCQA/flake8.git
-  rev: 7.3.0
+  rev: 7.4.1
   hooks:
   - id: flake8
     alias: flake8-no-wps
@@ -116,7 +116,7 @@ repos:
     language_version: python3.11
 
 - repo: https://github.com/PyCQA/flake8.git
-  rev: 7.3.0
+  rev: 7.4.1
   hooks:
   - id: flake8
     alias: flake8-only-wps
@@ -132,7 +132,7 @@ repos:
     language_version: python3.11  # flake8-commas doesn't work w/ Python 3.12
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v2.1.0
+  rev: v2.4.0
   hooks:
   - id: mypy
     alias: mypy-py313
@@ -176,7 +176,7 @@ repos:
     pass_filenames: false
 
 - repo: https://github.com/pre-commit/mirrors-mypy.git
-  rev: v1.2.0
+  rev: v2.4.0
   hooks:
   - id: mypy
     alias: mypy-py39
@@ -202,7 +202,7 @@ repos:
     language_version: python3.11  # typed-ast doesn't work w/ Python 3.14
 
 - repo: https://github.com/PyCQA/pylint.git
-  rev: v4.0.6
+  rev: v4.1.2
   hooks:
   - id: pylint
     additional_dependencies:
