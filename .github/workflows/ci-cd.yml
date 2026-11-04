@@ -479,8 +479,8 @@ jobs:
         runner-vm-os:
         - ubuntu-24.04
         - ubuntu-22.04
-        - macos-14  # ARM64
-        - macos-15-intel  # Intel
+        - macos-26  # ARM64
+        - macos-26-intel  # Intel
         toxenv:
         - py
         - old-deps
@@ -518,7 +518,7 @@ jobs:
       # NOTE: job gets killed mid-`pip install`, looking like a flake.
       timeout-minutes: >-
         ${{
-          matrix.runner-vm-os == 'macos-15-intel'
+          matrix.runner-vm-os == 'macos-26-intel'
           && 12
           || 5
         }}
