@@ -13,6 +13,7 @@ from cryptography.hazmat.primitives.serialization import (
 )
 
 from ._compat import compute_jwt
+from .utils import MAX_CLOCK_SKEW_SECONDS
 
 
 if _t.TYPE_CHECKING:
@@ -137,7 +138,7 @@ class GitHubPrivateKey:
         r"""Generate app's JSON Web Token.
 
         :param int app_id: numeric ID of a GitHub App
-        :param int time_offset: duration of the JWT's validity, in seconds, \
+        :param int time_offset: seconds from now until the JWT expires, \
                                 defaults to 60
 
         :returns: JWT string for a GitHub App valid for the given time
@@ -151,7 +152,9 @@ class GitHubPrivateKey:
 
         now = int(time())
         payload = {
-            'iat': now,
+            # NOTE: GitHub recommends backdating the issue time to tolerate
+            # NOTE: clock drift between this host and GitHub.
+            'iat': now - MAX_CLOCK_SKEW_SECONDS,
             'exp': now + time_offset,
             # NOTE: PyJWT 2.10+ rejects non-string issuers.
             # Ref: https://github.com/jpadilla/pyjwt/issues/1039
