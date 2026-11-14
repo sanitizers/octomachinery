@@ -133,6 +133,27 @@ Finally, use
     asyncio.run(main())
 
 
+Using GitHub Enterprise Server
+------------------------------
+
+By default, octomachinery talks to the public GitHub API at
+https://api.github.com. To target a GitHub Enterprise Server instance,
+set the ``GHE_HOST`` env var to its hostname, for example
+``github.mycompany.com``. API requests will then go to
+``https://github.mycompany.com/api/v3``. Only set ``GHE_PROTOCOL`` to
+``http`` if your instance doesn't serve HTTPS. These env vars have the
+same meaning as in Probot.
+
+When constructing
+:py:class:`~octomachinery.github.config.app.GitHubAppIntegrationConfig`
+by hand, pass the ``ghe_host`` and ``ghe_protocol`` arguments instead.
+
+Under GitHub Actions, the ``GITHUB_API_URL`` env var set by the runner
+takes precedence. For a standalone
+:py:class:`~octomachinery.github.api.raw_client.RawGitHubAPI`, pass the
+API root URL as ``base_url``.
+
+
 Making API queries against preview endpoints
 --------------------------------------------
 
