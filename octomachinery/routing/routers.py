@@ -1,7 +1,6 @@
 """Octomachinery event dispatchers collection."""
 
 import asyncio
-from contextlib import suppress
 from typing import Any, Iterator, Set, Union
 
 from gidgethub.routing import AsyncCallback
@@ -29,26 +28,25 @@ class GidgetHubRouterBase(_GidgetHubRouter, OctomachineryRouterBase):
     ) -> Iterator[AsyncCallback]:
         """Emit callbacks that match given event and payload.
 
+        Callbacks registered for the catch-all ``*`` event name match
+        any event and are emitted after the event-specific ones.
+
         :param str event_name: name of the GitHub event
         :param str event_payload: details of the GitHub event
 
         :yields: coroutine event handlers
         """
-        with suppress(KeyError):
-            yield from self._shallow_routes[event_name]
+        for route_name in dict.fromkeys((event_name, '*')):
+            yield from self._shallow_routes.get(route_name, ())
 
-        try:
-            deep_routes = self._deep_routes[event_name]
-        except KeyError:
-            return
-
-        for payload_key, payload_values in deep_routes.items():
-            if payload_key not in event_payload:
-                continue
-            event_value = event_payload[payload_key]
-            if event_value not in payload_values:
-                continue
-            yield from payload_values[event_value]
+            deep_routes = self._deep_routes.get(route_name, {})
+            for payload_key, payload_values in deep_routes.items():
+                if payload_key not in event_payload:
+                    continue
+                event_value = event_payload[payload_key]
+                if event_value not in payload_values:
+                    continue
+                yield from payload_values[event_value]
 
     async def dispatch(
             self, event: Union[GidgetHubWebhookEvent, _GidgetHubEvent],
