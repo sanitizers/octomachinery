@@ -130,6 +130,21 @@ def webhook_request_to_event(wrapped_function):
     return wrapper
 
 
+def serve_ping_healthcheck(wrapped_function):
+    """Respond to ``GET /ping`` with ``PONG``, like Probot does."""
+    @wraps(wrapped_function)
+    async def wrapper(request, *, github_app, webhook_secret=None):
+        if request.method == 'GET' and request.path == '/ping':
+            return web.Response(text='PONG')
+        return await wrapped_function(
+            request,
+            github_app=github_app,
+            webhook_secret=webhook_secret,
+        )
+    return wrapper
+
+
+@serve_ping_healthcheck
 @validate_allowed_http_methods('POST')
 @webhook_request_to_event
 async def route_github_webhook_event(*, github_event, github_app):
