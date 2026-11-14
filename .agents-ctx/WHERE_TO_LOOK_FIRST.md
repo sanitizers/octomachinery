@@ -14,20 +14,17 @@ Read, in this order:
 
 Here:
 
-1. `pyproject.toml` (build backend and metadata).
-2. `src/pylibsshext/<module>.pyx` and its `.pxd`; libssh
-   declarations live under `src/pylibsshext/includes/`.
-3. `tests/conftest.py` (e.g. the `sshd_addr` fixture), then
-   `tests/unit/<module>_test.py` or `tests/integration/`.
+1. `setup.cfg` (the metadata) and `pyproject.toml` (the build
+   backend and `setuptools-scm`).
+2. `octomachinery/<area>/` -- `app/` for the app runtime, routing
+   and server, `github/` for the GitHub API, models and
+   entities, `utils/` for helpers.
+3. `tests/conftest.py`, then `tests/<area>/.../<module>_test.py`.
 4. As above.
-5. `.github/workflows/ci-cd.yml`, with the `reusable-*.yml`
-   workflows it calls.
+5. `.github/workflows/ci-cd.yml`, which delegates to
+   `tox-dev/workflow`'s `reusable-tox.yml`.
 
 Other places worth knowing:
 
-- `packaging/pep517_backend/` -- the in-tree PEP 517 build backend.
-- `packaging/rpm/` -- RPM packaging, used by `.packit.yml`.
-- `build-scripts/manylinux-container-image/` -- the manylinux
-  images wheels are built in.
-- `docs/` -- Sphinx docs (RST); change notes go under
-  `docs/changelog-fragments/`.
+- `docs/` -- Sphinx docs (RST), published at
+  <https://octomachinery.dev>.

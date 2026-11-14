@@ -25,8 +25,9 @@ whole tree pollute the context window up front.
 - No `tests/__init__.py`. Pytest must not promote the project
   root into `sys.path` via package discovery.
 
-Here: `setup.py` was dropped in `b08a7fd4`. The metadata lives in
-the PEP 621 `[project]` table of `pyproject.toml` (see
+Here: there's no `setup.py`; the metadata is declarative, in
+`setup.cfg` -- moving it into a PEP 621 `[project]` table is a
+separate, deliberate change (see
 [NAMING_THE_DUCKS.md](NAMING_THE_DUCKS.md)).
 
 ## Python
@@ -48,10 +49,9 @@ the PEP 621 `[project]` table of `pyproject.toml` (see
 - Sphinx-native docstrings -- `:param X:`, `:returns:`,
   `:raises X:`. Not Google, not Napoleon, not NumPy.
 
-Here: quotes and `parametrize` tuples are enforced by
-`.ruff.toml`, and the docstring style by `.darglint`. The Cython
-sources and the libssh C API they wrap have conventions of their
-own -- see [CYTHON_AND_LIBSSH.md](CYTHON_AND_LIBSSH.md).
+Here: quotes are enforced by the `double-quote-string-fixer`
+pre-commit hook, import order by isort, and `parametrize` tuples
+by flake8-pytest-style, configured in `.flake8`.
 
 ## Configuration files
 
