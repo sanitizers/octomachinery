@@ -45,7 +45,7 @@ async def _send_task_res_to_q(res_q, task_id, aio_task) -> None:
         res_q.send_nowait((task_id, task_res, None))
 
 
-def _log_leftover_task_failures(res_q):
+def _log_leftover_task_failures(res_q) -> None:
     """Log the task failures that won't be re-raised."""
     while True:
         try:
