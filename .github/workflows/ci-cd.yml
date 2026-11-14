@@ -470,8 +470,9 @@ jobs:
         # NOTE: The latest and the lowest supported Pythons are prioritized
         # NOTE: to improve the responsiveness. It's nice to see the most
         # NOTE: important results first.
-        - 3.13
+        - 3.14
         - 3.9
+        - 3.13
         - 3.12
         - 3.11
         - >-
@@ -486,6 +487,13 @@ jobs:
         - old-deps
         xfail:
         - false
+        exclude:
+        # NOTE: The `old-deps` pins (`cryptography == 3.4.8`, among
+        # NOTE: others) predate Python 3.14 and cannot be installed
+        # NOTE: there. Since 3.14 is not an expected failure, letting
+        # NOTE: those jobs in would cancel the whole `fail-fast` matrix.
+        - python-version: 3.14
+          toxenv: old-deps
 
     uses: tox-dev/workflow/.github/workflows/reusable-tox.yml@1bb961580e20073f66ccb9024f248357f8c8fecb  # yamllint disable-line rule:line-length
     with:
